@@ -1321,14 +1321,14 @@ Item {
     function addHeadBar(eventId){
         //columnHeads.visible=true;
         columnCounter.visible=true;
-        var compHead=Qt.createComponent("https://lxfly2000.github.io/eewcn-res/rectanglehead.qml",Component.Asynchronous);
+        var compHead=Qt.createComponent("https://lxfly2000.github.io/eewcn-res/qml/rectanglehead.qml",Component.Asynchronous);
         compHead.statusChanged.connect(()=>{
             if(compHead.status===Component.Ready){
                 var oHead=compHead.createObject(columnHeads);
                 oHead.setFontFamily(textEEWTime.font.family);
             }
         });
-        var compCounter=Qt.createComponent("https://lxfly2000.github.io/eewcn-res/rowcounter.qml",Component.Asynchronous);
+        var compCounter=Qt.createComponent("https://lxfly2000.github.io/eewcn-res/qml/rowcounter.qml",Component.Asynchronous);
         compCounter.statusChanged.connect(()=>{
             if(compCounter.status===Component.Ready){
                 var oCounter=compCounter.createObject(columnListCounters);
