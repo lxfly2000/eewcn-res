@@ -1321,20 +1321,31 @@ Item {
     function addHeadBar(eventId){
         //columnHeads.visible=true;
         columnCounter.visible=true;
+        //根据 https://doc.qt.io/qt-5/qtqml-javascript-dynamicobjectcreation.html 的文档，创建是有可能直接就完成的
         var compHead=Qt.createComponent("https://lxfly2000.github.io/eewcn-res/qml/rectanglehead.qml",Component.Asynchronous);
-        compHead.statusChanged.connect(()=>{
-            if(compHead.status===Component.Ready){
-                var oHead=compHead.createObject(columnHeads);
-                oHead.setFontFamily(textEEWTime.font.family);
-            }
-        });
+        if(compHead.status===Component.Ready){
+            var oHead=compHead.createObject(columnHeads);
+            oHead.setFontFamily(textEEWTime.font.family);
+        }else{
+            compHead.statusChanged.connect(()=>{
+                if(compHead.status===Component.Ready){
+                    var oHead=compHead.createObject(columnHeads);
+                    oHead.setFontFamily(textEEWTime.font.family);
+                }
+            });
+        }
         var compCounter=Qt.createComponent("https://lxfly2000.github.io/eewcn-res/qml/rowcounter.qml",Component.Asynchronous);
-        compCounter.statusChanged.connect(()=>{
-            if(compCounter.status===Component.Ready){
-                var oCounter=compCounter.createObject(columnListCounters);
-                oCounter.setFontFamily(textEEWTime.font.family);
-            }
-        });
+        if(compCounter.status===Component.Ready){
+            var oCounter=compCounter.createObject(columnListCounters);
+            oCounter.setFontFamily(textEEWTime.font.family);
+        }else{
+            compCounter.statusChanged.connect(()=>{
+                if(compCounter.status===Component.Ready){
+                    var oCounter=compCounter.createObject(columnListCounters);
+                    oCounter.setFontFamily(textEEWTime.font.family);
+                }
+            });
+        }
         eventIdList.push(eventId);
     }
 
