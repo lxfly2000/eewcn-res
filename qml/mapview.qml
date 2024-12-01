@@ -1027,26 +1027,20 @@ Item {
 
     function setHome(latitude,longitude){
         if(homeItem===null){
-            homeItem=Qt.createQmlObject('import QtLocation 5.14; MapQuickItem {}',homeMarkMapView);
-            var img=Qt.createQmlObject('import QtQuick 2.14; Image{}',homeMarkMapView);
-            img.width=img.height=50;
-            img.source='file:Media/green.svg';
-            homeItem.anchorPoint.x=img.width/2;
-            homeItem.anchorPoint.y=img.height/2;
-            homeItem.sourceItem=img;
+            homeItem=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
+                                        'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
+                                        'sourceItem:Image{id:img;width:50;height:50;source:"file:Media/green.svg"}}',homeMarkMapView);
             homeMarkMapView.addMapItem(homeItem);
         }
         homeItem.coordinate=QtPositioning.coordinate(latitude,longitude);
     }
 
     function putEEWMark(eventId,latitude,longitude,intensity){
-        var item=Qt.createQmlObject('import QtLocation 5.14; MapQuickItem {}',eewMarkMapView);
-        var img=Qt.createQmlObject('import QtQuick 2.14; Image{}',eewMarkMapView);
-        img.width=img.height=(3+1.5*Math.exp(0.25*intensity))*5;
-        img.source='file:Media/cross.svg';
-        item.anchorPoint.x=img.width/2;
-        item.anchorPoint.y=img.height/2;
-        item.sourceItem=img;
+        var sl=(3+1.5*Math.exp(0.25*intensity))*5;
+        //注意此处应合并为一个脚本创建，否则会有释放不掉的问题
+        var item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
+                                    'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
+                                    'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"file:Media/cross.svg"}}',eewMarkMapView);
         item.coordinate=QtPositioning.coordinate(latitude,longitude);
         item.visible=!eewMarksTimer.running;
         eewItems[eventId]=item;
@@ -1054,13 +1048,11 @@ Item {
     }
 
     function putHistoryMark(latitude,longitude,intensity){
-        var item=Qt.createQmlObject('import QtLocation 5.14; MapQuickItem {}',historyMarkMapView);
-        var img=Qt.createQmlObject('import QtQuick 2.14; Image{}',historyMarkMapView);
-        img.width=img.height=(3+1.5*Math.exp(0.25*intensity))*5;
-        img.source='file:Media/red.svg';
-        item.anchorPoint.x=img.width/2;
-        item.anchorPoint.y=img.height/2;
-        item.sourceItem=img;
+        var sl=(3+1.5*Math.exp(0.25*intensity))*5;
+        //注意此处应合并为一个脚本创建，否则会有释放不掉的问题
+        var item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
+                                    'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
+                                    'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"file:Media/red.svg"}}',historyMarkMapView);
         item.coordinate=QtPositioning.coordinate(latitude,longitude);
         item.visible=!eewMarksTimer.running;
         historyItems.push(item);
