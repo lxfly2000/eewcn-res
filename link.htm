@@ -20,8 +20,12 @@ if(m===null){
     xhr.onreadystatechange=function(){
         if(xhr.readyState===4&&xhr.status===200){
             var linksdata=JSON.parse(xhr.responseText);
-            sURL.innerText=linksdata[redirectKey];
-            location.href=linksdata[redirectKey];
+            if(linksdata[redirectKey]===null||linksdata[redirectKey]===undefined){
+                document.body.innerText="No URL for “"+redirectKey+"”.";
+            }else{
+                sURL.innerText=linksdata[redirectKey];
+                location.href=linksdata[redirectKey];
+            }
         }
     }
     xhr.send();
