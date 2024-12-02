@@ -23,7 +23,7 @@ if(m===null){
             if(linksdata[redirectKey]===null||linksdata[redirectKey]===undefined){
                 document.body.innerText="No URL for “"+redirectKey+"”.";
             }else{
-                sURL.innerText=linksdata[redirectKey];
+                sURL.innerHTML="<a href=\""+linksdata[redirectKey]+"\">"+linksdata[redirectKey]+"</a>";
                 location.href=linksdata[redirectKey];
             }
         }
