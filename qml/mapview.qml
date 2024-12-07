@@ -783,7 +783,7 @@ Item {
                     Rectangle{
                         width: 20
                         height: 20
-                        color: "#33A1E0BA"
+                        color: "transparent"
                         radius: 10
                         border.color: "white"
                         border.width: 1
@@ -1112,8 +1112,8 @@ Item {
         }
     }
 
-    property var swaveItemsGradientsSize: 60
-    property var swaveItemsGradientsPixelDistance: 180 //所有渐变的累计像素宽度
+    property var swaveItemsGradientsSize: 50
+    property var swaveItemsGradientsPixelDistance: 150 //所有渐变的累计像素宽度
 
     function setEEWCircle(eventId,latitude,longitude,depth,elapsedMilliseconds,radiusPwave,radiusSwave,intensity,iNumber){
         var sii=0;
@@ -1157,8 +1157,12 @@ Item {
         swaveIntensities[eventId]=intensity;
         //swaveItems[eventId].color=intensity===0?'transparent':'#55'+getIntColors(intensity).substr(1);//填充色
         for(sii=0;sii<swaveItemsGradientsSize;sii++){
-            swaveItems[eventId][sii].border.color=getIntLineColor(intensity);//边线色，对mapboxgl貌似不起作用
-            swaveItems[eventId][sii].opacity=sii===0?1.0:(swaveItemsGradientsSize-sii-1)*0.5/swaveItemsGradientsSize;
+            if(sii===0){
+                swaveItems[eventId][sii].border.color=getIntLineColor(intensity);//边线色，对mapboxgl貌似不起作用
+            }else{
+                swaveItems[eventId][sii].border.color='#55'+getIntColors(intensity).substr(1);//填充色
+            }
+            swaveItems[eventId][sii].opacity=(swaveItemsGradientsSize-sii)/swaveItemsGradientsSize;
         }
         if(radiusSwave<0){
             if(barItems[eventId]===undefined){
