@@ -1085,7 +1085,9 @@ Item {
             eewCircleMapView.addMapItem(pwaveItems[item]);
         }
         for(item in swaveItems){
-            eewCircleMapView.addMapItem(swaveItems[item]);
+            for(var sii=0;sii<swaveItemsGradientsSize;sii++){
+                eewCircleMapView.addMapItem(swaveItems[item][sii]);
+            }
         }
         historyMarkMapView.clearMapItems();
         for(item of historyItems){
@@ -1110,19 +1112,29 @@ Item {
         }
     }
 
+    property var swaveItemsGradientsSize: 60
+    property var swaveItemsGradientsPixelDistance: 180 //所有渐变的累计像素宽度
+
     function setEEWCircle(eventId,latitude,longitude,depth,elapsedMilliseconds,radiusPwave,radiusSwave,intensity,iNumber){
+        var sii=0;
         //iNumber用于有多个震源时显示标号，但根据国内的地震速报情况来看，感觉暂时用不到
         if(pwaveItems[eventId]===undefined){
             pwaveItems[eventId]=Qt.createQmlObject('import QtLocation 5.14; MapCircle {}',eewCircleMapView);
-            pwaveItems[eventId].color='#33A1E0BA';//填充色
+            pwaveItems[eventId].color='transparent';//填充色
             pwaveItems[eventId].border.color='white';//边线色，对mapboxgl貌似不起作用
             pwaveItems[eventId].border.width=1;//边线宽，对mapboxgl貌似不起作用
             eewCircleMapView.addMapItem(pwaveItems[eventId]);
         }
         if(swaveItems[eventId]===undefined){
-            swaveItems[eventId]=Qt.createQmlObject('import QtLocation 5.14; MapCircle {}',eewCircleMapView);
-            swaveItems[eventId].border.width=3;//边线宽，对mapboxgl貌似不起作用
-            eewCircleMapView.addMapItem(swaveItems[eventId]);
+            var swaveItemGradients=[]
+            for(sii=0;sii<swaveItemsGradientsSize;sii++){
+                var item=Qt.createQmlObject('import QtLocation 5.14; MapCircle {}',eewCircleMapView);
+                item.border.width=3;//边线宽，对mapboxgl貌似不起作用
+                item.color='transparent';
+                eewCircleMapView.addMapItem(item);
+                swaveItemGradients.push(item);
+            }
+            swaveItems[eventId]=swaveItemGradients;
         }
         if(numberItems[eventId]===undefined){
             numberItems[eventId]=Qt.createQmlObject('import QtLocation 5.14;MapQuickItem{scale:getWindowZoom()}',numberBarMapView);
@@ -1143,8 +1155,11 @@ Item {
         numberItems[eventId].coordinate=QtPositioning.coordinate(latitude,longitude);
 
         swaveIntensities[eventId]=intensity;
-        swaveItems[eventId].color=intensity===0?'transparent':'#55'+getIntColors(intensity).substr(1);//填充色
-        swaveItems[eventId].border.color=getIntLineColor(intensity);//边线色，对mapboxgl貌似不起作用
+        //swaveItems[eventId].color=intensity===0?'transparent':'#55'+getIntColors(intensity).substr(1);//填充色
+        for(sii=0;sii<swaveItemsGradientsSize;sii++){
+            swaveItems[eventId][sii].border.color=getIntLineColor(intensity);//边线色，对mapboxgl貌似不起作用
+            swaveItems[eventId][sii].opacity=sii===0?1.0:(swaveItemsGradientsSize-sii-1)*0.5/swaveItemsGradientsSize;
+        }
         if(radiusSwave<0){
             if(barItems[eventId]===undefined){
                 var item=Qt.createQmlObject('import QtLocation 5.14; MapQuickItem {scale:getWindowZoom()}',numberBarMapView);
@@ -1188,9 +1203,23 @@ Item {
             delete barItems[eventId];
         }
 
-        pwaveItems[eventId].center=swaveItems[eventId].center=QtPositioning.coordinate(latitude,longitude);
+        pwaveItems[eventId].center=QtPositioning.coordinate(latitude,longitude);
         pwaveItems[eventId].radius=Math.max(0,radiusPwave*1000);//单位米，涉及参数较多，在C++中运算
-        swaveItems[eventId].radius=Math.max(0,radiusSwave*1000);//单位米，涉及参数较多，在C++中运算
+        for(sii=0;sii<swaveItemsGradientsSize;sii++){
+            swaveItems[eventId][sii].center=pwaveItems[eventId].center;
+            if(sii===0){
+                swaveItems[eventId][sii].radius=Math.max(0,radiusSwave*1000);//单位米，涉及参数较多，在C++中运算
+            }else{
+                var centerCoord=QtPositioning.coordinate(latitude,longitude);
+                var distantCoord=centerCoord.atDistanceAndAzimuth(100*1000,90);
+                var centerPos=geoToPos(latitude,longitude);
+                var distantPos=geoToPos(distantCoord.latitude,distantCoord.longitude);
+                //100公里在震中点的X轴上的像素长度是abs(centerPos.x-distantPos.x)
+                var surfaceAllGradientDistance=swaveItemsGradientsPixelDistance*100/Math.abs(centerPos.x-distantPos.x);
+                var surfaceEachGradientDistance=surfaceAllGradientDistance/swaveItemsGradientsSize;
+                swaveItems[eventId][sii].radius=Math.max(0,(radiusSwave-sii*surfaceEachGradientDistance)*1000);
+            }
+        }
         if(!eewMarksTimer.running){
             for(var key in eewItems)
                 eewItems[key].visible=false;
@@ -1203,9 +1232,11 @@ Item {
 
     function removeEEWCircle(eventId){
         eewCircleMapView.removeMapItem(pwaveItems[eventId]);
-        eewCircleMapView.removeMapItem(swaveItems[eventId]);
         numberBarMapView.removeMapItem(numberItems[eventId]);
         delete pwaveItems[eventId];
+        for(var sii=0;sii<swaveItemsGradientsSize;sii++){
+            eewCircleMapView.removeMapItem(swaveItems[eventId][sii]);
+        }
         delete swaveItems[eventId];
         delete swaveIntensities[eventId];
         delete numberItems[eventId];
@@ -1265,7 +1296,7 @@ Item {
             topP=-90;
             bottomP=90;
             for(var key in swaveItems){
-                var item=swaveItems[key];
+                var item=swaveItems[key][0];
                 leftP=Math.min(leftP,_PC(item.center.atDistanceAndAzimuth(item.radius,270).longitude));
                 topP=Math.max(topP,item.center.atDistanceAndAzimuth(item.radius,0).latitude);
                 rightP=Math.max(rightP,_PC(item.center.atDistanceAndAzimuth(item.radius,90).longitude));
