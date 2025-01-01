@@ -86,5 +86,21 @@
         "support_time": "2024-12-06 12:47:10",
         "support_qty": 30,
         "support_title": "EEWCN赞助x2"
+    },
+    {
+        "name": "爱发电用户_b3165",
+        "icon": "https://pic1.afdiancdn.com/default/avatar/avatar-purple.png",
+        "url": "https://afdian.com/u/b3165a28c46c11efbc1d52540025c377",
+        "support_time": "2024-12-28 00:08:15",
+        "support_qty": 50,
+        "support_title": "EEWCN-Mapbox复活"
+    },
+    {
+        "name": "爱发电用户_P6Xs",
+        "icon": "https://pic1.afdiancdn.com/default/avatar/avatar-orange.png",
+        "url": "https://afdian.com/u/ace0dc32c73711ef846852540025c377",
+        "support_time": "2024-12-31 13:25:53",
+        "support_qty": 50,
+        "support_title": "EEWCN-Mapbox复活"
     }
 ]
