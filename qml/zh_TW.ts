@@ -39,4 +39,48 @@
         <translation type="unfinished">橫波</translation>
     </message>
 </context>
+<context>
+    <name>tabview</name>
+    <message>
+        <location filename="tabview.qml" line="15"/>
+        <source>Records</source>
+        <translation type="unfinished">地震歷史</translation>
+    </message>
+    <message>
+        <location filename="tabview.qml" line="132"/>
+        <location filename="tabview.qml" line="267"/>
+        <source>View &amp;Intensity on Map</source>
+        <translation type="unfinished">查看烈度分佈(&amp;I)</translation>
+    </message>
+    <message>
+        <location filename="tabview.qml" line="140"/>
+        <location filename="tabview.qml" line="275"/>
+        <source>Time: %1
+Location: %2
+Latitude: %3, Longitude: %4
+Magnitude: %5
+Depth: %6km
+Distance: %7km
+Epicenter Intensity: %8
+Local Intensity: %9</source>
+        <translation type="unfinished">時間：%1
+位置：%2
+緯度：%3 經度：%4
+規模：%5
+深度：%6km
+距離：%7km
+震源烈度：%8
+本地烈度：%9</translation>
+    </message>
+    <message>
+        <location filename="tabview.qml" line="151"/>
+        <source>EEW</source>
+        <translation type="unfinished">地震預警</translation>
+    </message>
+    <message>
+        <location filename="tabview.qml" line="286"/>
+        <source>Station</source>
+        <translation type="unfinished">測站</translation>
+    </message>
+</context>
 </TS>

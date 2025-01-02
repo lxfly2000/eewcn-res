@@ -39,4 +39,48 @@
         <translation type="unfinished">S波</translation>
     </message>
 </context>
+<context>
+    <name>tabview</name>
+    <message>
+        <location filename="tabview.qml" line="15"/>
+        <source>Records</source>
+        <translation type="unfinished">地震履歴</translation>
+    </message>
+    <message>
+        <location filename="tabview.qml" line="132"/>
+        <location filename="tabview.qml" line="267"/>
+        <source>View &amp;Intensity on Map</source>
+        <translation type="unfinished">烈度分布を表示(&amp;I)</translation>
+    </message>
+    <message>
+        <location filename="tabview.qml" line="140"/>
+        <location filename="tabview.qml" line="275"/>
+        <source>Time: %1
+Location: %2
+Latitude: %3, Longitude: %4
+Magnitude: %5
+Depth: %6km
+Distance: %7km
+Epicenter Intensity: %8
+Local Intensity: %9</source>
+        <translation type="unfinished">時間：%1
+位置：%2
+緯度：%3 経度：%4
+マグニチュード：%5
+深さ：%6km
+距離：%7km
+震央烈度：%8
+ローカル烈度：%9</translation>
+    </message>
+    <message>
+        <location filename="tabview.qml" line="151"/>
+        <source>EEW</source>
+        <translation type="unfinished">地震速報</translation>
+    </message>
+    <message>
+        <location filename="tabview.qml" line="286"/>
+        <source>Station</source>
+        <translation type="unfinished">ステーション</translation>
+    </message>
+</context>
 </TS>
