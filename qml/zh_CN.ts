@@ -42,19 +42,30 @@
 <context>
     <name>tabview</name>
     <message>
-        <location filename="tabview.qml" line="15"/>
+        <location filename="tabview.qml" line="157"/>
         <source>Records</source>
         <translation type="unfinished">地震历史</translation>
     </message>
     <message>
-        <location filename="tabview.qml" line="132"/>
-        <location filename="tabview.qml" line="267"/>
+        <location filename="tabview.qml" line="131"/>
         <source>View &amp;Intensity on Map</source>
         <translation type="unfinished">查看烈度分布(&amp;I)</translation>
     </message>
     <message>
-        <location filename="tabview.qml" line="140"/>
-        <location filename="tabview.qml" line="275"/>
+        <location filename="tabview.qml" line="141"/>
+        <source>Location: %1
+Latitude: %2, Longitude: %3
+Height: %4m
+Distance: %5km
+Intensity: %6</source>
+        <translation type="unfinished">位置：%1
+纬度：%2 经度：%3
+高度：%4米
+距离：%5公里
+烈度：%6</translation>
+    </message>
+    <message>
+        <location filename="tabview.qml" line="144"/>
         <source>Time: %1
 Location: %2
 Latitude: %3, Longitude: %4
@@ -73,12 +84,12 @@ Local Intensity: %9</source>
 本地烈度：%9</translation>
     </message>
     <message>
-        <location filename="tabview.qml" line="151"/>
+        <location filename="tabview.qml" line="176"/>
         <source>EEW</source>
         <translation type="unfinished">地震预警</translation>
     </message>
     <message>
-        <location filename="tabview.qml" line="286"/>
+        <location filename="tabview.qml" line="194"/>
         <source>Station</source>
         <translation type="unfinished">测站</translation>
     </message>
