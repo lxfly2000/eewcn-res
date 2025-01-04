@@ -57,7 +57,7 @@ TabView {
                         visible: eqIsHead
                         Text {
                             id: textHeadEqMagnitude
-                            text: "M"+eqMagnitude
+                            text: rectangleRoot.ListView.view.isStation?eqStationData:"M"+eqMagnitude
                             font.pointSize: 12
                             font.family: propFontName()
                         }
@@ -225,6 +225,7 @@ TabView {
                          eqLocation: "Location",
                          eqTime: "0000-00-00 00:00:00",
                          eqMagnitude: 0.0,
+                         eqStationData: "",
                          eqDepth: 0.0,
                          eqDistance: 0.0,
                          eqLongitude: 0.0,
@@ -272,7 +273,7 @@ TabView {
         item.eqIntensity=intensity;
         item.eqTextColor=textColor;
         item.eqBkColor=bkColor;
-        item.eqMagnitude="PGA: %1 gal\nPGV: %2 \u339D/s\nPGD: %3 \u339D".arg(pga).arg(pgv).arg(pgd);
+        item.eqStationData="PGA: %1 gal\nPGV: %2 \u339D/s\nPGD: %3 \u339D".arg(pga).arg(pgv).arg(pgd);
     }
 
     function itemsCount(tabIndex){
