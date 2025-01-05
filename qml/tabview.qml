@@ -315,7 +315,9 @@ TabView {
         var tab=_getTab(tabIndex);
         //Tab的实例化组件在item变量中
         //ScrollView的实例化组件在contentItem,flickableItem（Flickable类型，可控制滚动）变量中
-        tab.item.flickableItem.contentY=0;
+        if(tab.item!==undefined&&tab.item!==null){
+            tab.item.flickableItem.contentY=0;
+        }
     }
     function resizeItems(tabIndex){
         //Nothing
