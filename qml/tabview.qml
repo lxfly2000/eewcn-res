@@ -1,5 +1,6 @@
 import QtQuick 2.14
 import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 2.15 as QControl2
 
 TabView {
@@ -7,6 +8,33 @@ TabView {
     tabPosition: Qt.BottomEdge
     signal tabViewSetMapCenter(double lat,double lng)
     signal tabViewShowIntensity(double lat,double lng,double mag,double depth)
+    style: TabViewStyle {
+        frameOverlap: 1
+        tab: Rectangle {
+            color: styleData.hovered ? Qt.lighter("aqua",1.75) : "lightgray"
+            implicitWidth: Math.max(text.width + 4, 80)
+            implicitHeight: 20
+            Rectangle {
+                visible: styleData.selected
+                x: 1
+                y: 0
+                width: parent.width-2
+                height: parent.height-1
+                color: "white"
+            }
+
+            Label {
+                id: text
+                anchors.centerIn: parent
+                text: styleData.title
+                color: "black"
+            }
+        }
+        frame: Rectangle {
+            color: "white"
+            border.color: "lightgray"
+        }
+    }
     Component{
         id:cmpDelegate
         Rectangle {
