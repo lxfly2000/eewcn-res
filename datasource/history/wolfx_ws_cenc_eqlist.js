@@ -1,9 +1,9 @@
 //=========地震历史数据获取函数=============
 
-function history_url(){return "http://218.5.2.111:9088/earthquakeWarn/bulletin/list.json?pageSize={historyQueryCount}";}
-function history_method(){return "get";}
+function history_url(){return "wss://ws-api.wolfx.jp/cenc_eqlist";}
+function history_method(){return "websocket";}
 function history_header(){return {/*"Accept":"application/json"*/};}
-function history_postdata(){return "";}
+function history_postdata(){return "query_cenceqlist";}
 
 //格式如下：
 //  {shuju:[{id:"字符串型事件ID（在程序中会被转换为32位int型）",
@@ -17,30 +17,34 @@ function history_postdata(){return "";}
 //          LOCATION_C:"字符串型震源地名称"},
 //         {...},{...},{...},...
 //        ]}
+var last_history=null;
 function history_onsuccess(str_response){
-    var original=JSON.parse(str_response).list;
-    var shuju_array=[];
-    for(var i=0;i<original.length;i++){
-        var item=original[i];
-        shuju_array.push({
-            id:item.id.toString(),
-            O_TIME:item.shockTime,
-            EPI_LAT:item.latitude.toString(),
-            EPI_LON:item.longitude.toString(),
-            EPI_DEPTH:item.depth,
-            AUTO_FLAG:item.autoFlag==="I"?"M":item.autoFlag,
-            EQ_TYPE:"M",
-            M:item.magnitude.toString(),
-            LOCATION_C:item.infoTypeName==="[正式测定]"?item.placeName:item.placeName+item.infoTypeName
-        });
+    var original=JSON.parse(str_response);
+    if(original.type==="cenc_eqlist"){
+        var shuju_array=[];
+        for(var i=1;i<=50;i++){
+            var item=original["No"+i];
+            shuju_array.push({
+                id:(fmt_to_msts(item.time+" UTC+8")/1000).toString(),
+                O_TIME:item.time,
+                EPI_LAT:item.latitude,
+                EPI_LON:item.longitude,
+                EPI_DEPTH:parseFloat(item.depth),
+                AUTO_FLAG:(item.type==="automatic")?"(AUTO)":"M",
+                EQ_TYPE:"M",
+                M:item.magnitude,
+                LOCATION_C:item.location
+            });
+        }
+        last_history={shuju:shuju_array};
     }
-    return {shuju:shuju_array};
+    return last_history;
 }
 
 function history_onfail(num_errorcode){logger.error("history_onfail: "+num_errorcode);}
 
 //根据URL判断该URL返回的是否为地震历史数据
-function is_history_data(url){return url.split("?")[0]==="http://218.5.2.111:9088/earthquakeWarn/bulletin/list.json";}
+function is_history_data(url){return url==="wss://ws-api.wolfx.jp/cenc_eqlist";}
 
 
 //=========辅助函数=============

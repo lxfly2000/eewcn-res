@@ -110,5 +110,21 @@
         "support_time": "2025-01-02 22:16:54",
         "support_qty": 50,
         "support_title": "EEWCN-Mapbox复活"
+    },
+    {
+        "name": "TheWhiteStar",
+        "icon": "https://pic1.afdiancdn.com/user/6ea83724de4811ec889652540025c377/avatar/46d3ad8e375d1229eb321e8f343d1b4d_w3456_h4608_s246.jpeg?imageView2/1/w/240/h/240",
+        "url": "https://afdian.com/u/6ea83724de4811ec889652540025c377",
+        "support_time": "2025-01-05 23:38:40",
+        "support_qty": 5,
+        "support_title": "EEWCN赞助"
+    },
+    {
+        "name": "张博洋",
+        "icon": "https://pic1.afdiancdn.com/user/user_upload_osl/f99926feb2c14e656dd9b4bbbe7f5dae_w132_h132_s4.jpeg?imageView2/1/w/240/h/240",
+        "url": "https://afdian.com/u/790ff29cde2311eea4d452540025c377",
+        "support_time": "2025-01-09 20:48:07",
+        "support_qty": 5,
+        "support_title": "EEWCN赞助"
     }
 ]
