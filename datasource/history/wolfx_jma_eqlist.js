@@ -11,7 +11,7 @@ function is_eew_data(url){return url==="";}
 
 //=========地震历史数据获取函数=============
 
-function history_url(){return "http://218.5.2.111:9088/earthquakeWarn/bulletin/list.json?pageSize={historyQueryCount}";}
+function history_url(){return "https://api.wolfx.jp/jma_eqlist.json";}
 function history_method(){return "get";}
 function history_header(){return {/*"Accept":"application/json"*/};}
 function history_postdata(){return "";}
@@ -28,21 +28,32 @@ function history_postdata(){return "";}
 //          LOCATION_C:"字符串型震源地名称"},
 //         {...},{...},{...},...
 //        ]}
+function parse_auto_flag(str){
+    var dict={
+        "震度速報":"(震度速報)",
+        "震源に関する情報":"(震源情報)",
+        "震源・震度情報":"M",
+        "顕著な震源要素更新のお知らせ":"(顕著震源要素更新)",
+        "顕著な地震の震源要素更新のお知らせ":"(顕著震源要素更新)",
+        "遠地地震に関する情報":"(遠地)"
+    };
+    return dict[str]===undefined?"("+str+")":dict[str];
+}
 function history_onsuccess(str_response){
-    var original=JSON.parse(str_response).list;
+    var original=JSON.parse(str_response);
     var shuju_array=[];
-    for(var i=0;i<original.length;i++){
-        var item=original[i];
+    for(var i=1;i<=50;i++){
+        var item=original["No"+i];
         shuju_array.push({
-            id:item.id.toString(),
-            O_TIME:item.shockTime,
-            EPI_LAT:item.latitude.toString(),
-            EPI_LON:item.longitude.toString(),
-            EPI_DEPTH:item.depth,
-            AUTO_FLAG:item.autoFlag==="I"?"M":item.autoFlag,
+            id:(fmt_to_msts(item.time_full+" UTC+9")/1000).toString(),
+            O_TIME:item.time_full,
+            EPI_LAT:item.latitude,
+            EPI_LON:item.longitude,
+            EPI_DEPTH:parseFloat(item.depth.substr(0,item.depth.length-2)),
+            AUTO_FLAG:parse_auto_flag(item.Title),
             EQ_TYPE:"M",
-            M:item.magnitude.toString(),
-            LOCATION_C:item.infoTypeName==="[正式测定]"?item.placeName:item.placeName+item.infoTypeName
+            M:item.magnitude,
+            LOCATION_C:item.location
         });
     }
     return {shuju:shuju_array};
@@ -51,7 +62,7 @@ function history_onsuccess(str_response){
 function history_onfail(num_errorcode){logger.error("history_onfail: "+num_errorcode);}
 
 //根据URL判断该URL返回的是否为地震历史数据
-function is_history_data(url){return url.split("?")[0]==="http://218.5.2.111:9088/earthquakeWarn/bulletin/list.json";}
+function is_history_data(url){return url==="https://api.wolfx.jp/jma_eqlist.json";}
 
 
 //=========测站数据获取函数=============

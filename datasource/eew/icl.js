@@ -35,6 +35,29 @@ function eew_onfail(num_errorcode){logger.error("eew_onfail: "+num_errorcode);}
 function is_eew_data(url){return url==="https://mobile-new.chinaeew.cn/v1/earlywarnings?start_at=&updates=";}
 
 
+//=========地震历史数据获取函数=============
+
+function history_url(){return "";}
+function history_method(){return "get";}
+function history_header(){return {/*"Accept":"application/json"*/};}
+function history_postdata(){return "";}
+function history_onsuccess(str_response){return {};}
+function history_onfail(num_errorcode){logger.error("history_onfail: "+num_errorcode);}
+function is_history_data(url){return url==="";}
+
+
+//=========测站数据获取函数=============
+
+function station_count(){return 0;}
+function station_url(){return [""];}
+function station_method(){return ["websocket"];}
+function station_header(){return [{/*"Accept":"application/json"*/},{}];}
+function station_postdata(){return ["",""];}
+function station_onsuccess(num_index,str_response){return {};}
+function station_onfail(num_errorcode){logger.error("station_onfail: "+num_errorcode);}
+function is_station_data(url){return url==="";}
+
+
 //=========辅助函数=============
 
 //将毫秒数时间戳转为YYYY-MM-DD HH:MM:SS

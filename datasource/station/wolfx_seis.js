@@ -1,3 +1,25 @@
+//===========预警获取函数==============
+
+function eew_url(){return "";}
+function eew_method(){return "get";}
+function eew_header(){return {/*"Accept":"application/json"*/};}
+function eew_postdata(){return "";}
+function eew_onsuccess(str_response){return {};}
+function eew_onfail(num_errorcode){logger.error("eew_onfail: "+num_errorcode);}
+function is_eew_data(url){return url==="";}
+
+
+//=========地震历史数据获取函数=============
+
+function history_url(){return "";}
+function history_method(){return "get";}
+function history_header(){return {/*"Accept":"application/json"*/};}
+function history_postdata(){return "";}
+function history_onsuccess(str_response){return {};}
+function history_onfail(num_errorcode){logger.error("history_onfail: "+num_errorcode);}
+function is_history_data(url){return url==="";}
+
+
 //=========测站数据获取函数=============
 
 var seis_data=[];//Wolfx SEIS格式

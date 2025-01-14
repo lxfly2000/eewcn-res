@@ -1,3 +1,14 @@
+//===========预警获取函数==============
+
+function eew_url(){return "";}
+function eew_method(){return "get";}
+function eew_header(){return {/*"Accept":"application/json"*/};}
+function eew_postdata(){return "";}
+function eew_onsuccess(str_response){return {};}
+function eew_onfail(num_errorcode){logger.error("eew_onfail: "+num_errorcode);}
+function is_eew_data(url){return url==="";}
+
+
 //=========地震历史数据获取函数=============
 
 function history_url(){return "wss://ws-api.wolfx.jp/cenc_eqlist";}
@@ -30,7 +41,7 @@ function history_onsuccess(str_response){
                 EPI_LAT:item.latitude,
                 EPI_LON:item.longitude,
                 EPI_DEPTH:parseFloat(item.depth),
-                AUTO_FLAG:(item.type==="automatic")?"(AUTO)":"M",
+                AUTO_FLAG:(item.type==="automatic")?"(自动测定)":"M",
                 EQ_TYPE:"M",
                 M:item.magnitude,
                 LOCATION_C:item.location
@@ -45,6 +56,18 @@ function history_onfail(num_errorcode){logger.error("history_onfail: "+num_error
 
 //根据URL判断该URL返回的是否为地震历史数据
 function is_history_data(url){return url==="wss://ws-api.wolfx.jp/cenc_eqlist";}
+
+
+//=========测站数据获取函数=============
+
+function station_count(){return 0;}
+function station_url(){return [""];}
+function station_method(){return ["websocket"];}
+function station_header(){return [{/*"Accept":"application/json"*/},{}];}
+function station_postdata(){return ["",""];}
+function station_onsuccess(num_index,str_response){return {};}
+function station_onfail(num_errorcode){logger.error("station_onfail: "+num_errorcode);}
+function is_station_data(url){return url==="";}
 
 
 //=========辅助函数=============

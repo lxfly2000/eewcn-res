@@ -1,16 +1,16 @@
 //===========预警获取函数==============
 
 //指定一个URL，若不想使用脚本的预警或地震历史功能请将相应的URL指定为空字符串，即""
-function eew_url(){return "wss://ws-api.wolfx.jp/sc_eew";}
+function eew_url(){return "https://api.wolfx.jp/jma_eew.json";}
 
 //指定请求方式，"get"或"post"等，还可指定为"websocket"使用WebSocket连接（此时URL应为ws或wss协议）
-function eew_method(){return "websocket";}
+function eew_method(){return "get";}
 
 //指定HTTP请求头，以JSON形式返回，使用WebSocket时此函数不会被调用
 function eew_header(){return {/*"Accept":"application/json"*/};}
 
 //请求方式为POST时提交的数据，或WebSocket连接成功后要发送的数据，字符串形式，空字符串表示不发送
-function eew_postdata(){return "query_sceew";}
+function eew_postdata(){return "";}
 
 //成功返回数据时请将响应内容转换为指定的JSON形式
 //格式如下：
@@ -24,30 +24,31 @@ function eew_postdata(){return "query_sceew";}
 //          magnitude:数值型震级},
 //         {...},{...},{...},...
 //        ]}
-var last_eew=null;
 function eew_onsuccess(str_response){
     var original=JSON.parse(str_response);
-    if(original.type==="sc_eew"){
-        var converted={
-            eventId:original.ID,
-            updates:original.ReportNum,
-            latitude:original.Latitude,
-            longitude:original.Longitude,
-            depth:original.Depth,
-            epicenter:original.HypoCenter,
-            startAt:fmt_to_msts(original.OriginTime+" UTC+8"),//注意时区问题
-            magnitude:original.Magunitude
-        };
-        last_eew={data:[converted]};
-    }
-    return last_eew;
+    var converted={
+        eventId:fmt_to_msts(original.EventID.substr(0,4)+"-"+
+                            original.EventID.substr(4,2)+"-"+
+                            original.EventID.substr(6,2)+" "+
+                            original.EventID.substr(8,2)+":"+
+                            original.EventID.substr(10,2)+":"+
+                            original.EventID.substr(12,2)+" UTC+9")/1000,
+        updates:original.Serial,
+        latitude:original.Latitude,
+        longitude:original.Longitude,
+        depth:original.Depth,
+        epicenter:original.Hypocenter+(original.Title==="緊急地震速報（警報）"?"(警報)":""),
+        startAt:fmt_to_msts(original.OriginTime+" UTC+9"),//注意时区问题
+        magnitude:original.Magunitude
+    };
+    return {data:[converted]};
 }
 
 //失败时的调用，参数为一个数值型的错误码
 function eew_onfail(num_errorcode){logger.error("eew_onfail: "+num_errorcode);}
 
-//根据URL判断该URL返回的是否为EEW数据
-function is_eew_data(url){return url==="wss://ws-api.wolfx.jp/sc_eew";}
+//根据URL判断该URL返回的是否为EEW数据，使用WebSocket时此函数不会被调用
+function is_eew_data(url){return url==="https://api.wolfx.jp/jma_eew.json";}
 
 
 //=========地震历史数据获取函数=============
@@ -55,7 +56,7 @@ function is_eew_data(url){return url==="wss://ws-api.wolfx.jp/sc_eew";}
 function history_url(){return "";}
 function history_method(){return "get";}
 function history_header(){return {/*"Accept":"application/json"*/};}
-function history_postdata(){return "query_sceew";}
+function history_postdata(){return "";}
 function history_onsuccess(str_response){return {};}
 function history_onfail(num_errorcode){logger.error("history_onfail: "+num_errorcode);}
 function is_history_data(url){return url==="";}
@@ -85,3 +86,4 @@ function msts_to_fmt(msts){
 function fmt_to_msts(fmt){
     return new Date(fmt).getTime();
 }
+
