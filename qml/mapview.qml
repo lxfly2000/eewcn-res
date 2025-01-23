@@ -1006,6 +1006,9 @@ Item {
     property var stationItems: []
 
     function setMapboxParam(a,s){
+        if(a==="pk.eyJ1IjoibHhmbHkyMDAwIiwiYSI6ImNrcHMwenM2ZzAyeWUydXM0dWE5aGs0cjgifQ.h_6WnVVn5tltXvJRI8BK1g"){
+            a="pk.eyJ1IjoibHhmbHkyMDAwIiwiYSI6ImNtNjlkdWZ2ZDA5N2cya3F1OGw2b3ZseDkifQ.LpSPrjVvQwUAOgfrzaVAqg";
+        }
         mapboxAccessToken.value=a;
         mapboxStyle.value=s;
     }
