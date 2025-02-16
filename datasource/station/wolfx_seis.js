@@ -71,7 +71,7 @@ function station_onsuccess(num_index,str_response){
             delete index_seis_data[seis_data[i].type];
             for(let k in index_seis_data){
             	if(index_seis_data[k]>i){
-            	    index_seis_data[k]--:
+            	    index_seis_data[k]--;
             	}
             }
         }else{
