@@ -67,8 +67,8 @@ function station_onsuccess(num_index,str_response){
     }
     for(var i=0;i<seis_data.length;){
         if(fmt_to_msts(seis_data[i].update_at+" UTC+8")+5000<Date.now()){
-            seis_data.splice(i,1);
             delete index_seis_data[seis_data[i].type];
+            seis_data.splice(i,1);
             for(let k in index_seis_data){
             	if(index_seis_data[k]>i){
             	    index_seis_data[k]--;
