@@ -65,8 +65,21 @@ function station_onsuccess(num_index,str_response){
             seis_data[index_seis_data[original.type]]=original;
         }
     }
+    for(var i=0;i<seis_data.length;){
+        if(fmt_to_msts(seis_data[i].update_at+" UTC+8")+5000<Date.now()){
+            seis_data.splice(i,1);
+            delete index_seis_data[seis_data[i].type];
+            for(let k in index_seis_data){
+            	if(index_seis_data[k]>i){
+            	    index_seis_data[k]--:
+            	}
+            }
+        }else{
+            i++;
+        }
+    }
     var jsonArray=[];
-    for(var i=0;i<seis_data.length;i++){
+    for(i=0;i<seis_data.length;i++){
         jsonArray.push({name:seis_data[i].region,//测站名或位置等信息
             longitude:seis_data[i].longitude,//测站经度
             latitude:seis_data[i].latitude,//测站纬度
