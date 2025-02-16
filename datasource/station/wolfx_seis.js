@@ -66,7 +66,7 @@ function station_onsuccess(num_index,str_response){
         }
     }
     for(var i=0;i<seis_data.length;i++){
-        if(fmt_to_msts(seis_data[i].update_at+" UTC+8")+5000<Date.now()){
+        if(fmt_to_msts(seis_data[i].update_at+" UTC+8")+30000<Date.now()){
             seis_data[i].PGA=0;
             seis_data[i].PGV=0;
             seis_data[i].PGD=0;
