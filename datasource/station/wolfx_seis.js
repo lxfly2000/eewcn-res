@@ -65,17 +65,12 @@ function station_onsuccess(num_index,str_response){
             seis_data[index_seis_data[original.type]]=original;
         }
     }
-    for(var i=0;i<seis_data.length;){
+    for(var i=0;i<seis_data.length;i++){
         if(fmt_to_msts(seis_data[i].update_at+" UTC+8")+5000<Date.now()){
-            delete index_seis_data[seis_data[i].type];
-            seis_data.splice(i,1);
-            for(let k in index_seis_data){
-            	if(index_seis_data[k]>i){
-            	    index_seis_data[k]--;
-            	}
-            }
-        }else{
-            i++;
+            seis_data[i].PGA=0;
+            seis_data[i].PGV=0;
+            seis_data[i].PGD=0;
+            seis_data[i].Intensity=0;
         }
     }
     var jsonArray=[];
