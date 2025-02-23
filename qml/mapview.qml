@@ -1005,12 +1005,74 @@ Item {
     property var swaveIntensities: ({})
     property var stationItems: []
 
+    Rectangle{
+        id:rectangleWarnInfoCenter
+        visible:true
+        anchors.horizontalCenter:parent.horizontalCenter
+        anchors.verticalCenter:parent.verticalCenter
+        width:textWarnInfoCenter.width
+        height:textWarnInfoCenter.height
+        color:"#993f3f3f"
+        Text{
+            id:textWarnInfoCenter
+            leftPadding:20
+            rightPadding:20
+            topPadding:8
+            bottomPadding:8
+            text:"WarnInfoCenter"
+            font.pixelSize:24*getWindowZoom()
+            font.bold:true
+            font.family:"Sarasa Gothic SC";color:"yellow"
+            style:Text.Outline
+            anchors.horizontalCenter:parent.horizontalCenter
+            wrapMode:Text.Wrap
+            width:Math.min(textWarnInfoCenter2.width,parent.parent.width)
+        }
+        Text{
+            id:textWarnInfoCenter2
+            leftPadding:20
+            rightPadding:20
+            topPadding:8
+            bottomPadding:8
+            text:textWarnInfoCenter.text
+            font.pixelSize:24*getWindowZoom()
+            font.bold:true
+            font.family:"Sarasa Gothic SC"
+            style:Text.Outline
+            anchors.horizontalCenter:parent.horizontalCenter
+            visible:false
+        }
+    }
+
+    function showWarningCenter(bVisible,sText){
+        rectangleWarnInfoCenter.visible=bVisible;
+        textWarnInfoCenter.text=sText;
+    }
+
     function setMapboxParam(a,s){
         if(a==="pk.eyJ1IjoibHhmbHkyMDAwIiwiYSI6ImNrcHMwenM2ZzAyeWUydXM0dWE5aGs0cjgifQ.h_6WnVVn5tltXvJRI8BK1g"){
             a="pk.eyJ1IjoibHhmbHkyMDAwIiwiYSI6ImNtNjlkdWZ2ZDA5N2cya3F1OGw2b3ZseDkifQ.LpSPrjVvQwUAOgfrzaVAqg";
+            //检查Token是否可检索Style
+            var xhr=new XMLHttpRequest();
+            var stylePath=s.substr(s.indexOf("/styles/")+8);
+            xhr.open("GET","https://api.mapbox.com/styles/v1/"+stylePath+"?access_token="+a,true);
+            xhr.onreadystatechange=function(){
+                if(xhr.readyState===4&&xhr.status===200){
+                    mapboxAccessToken.value=a;
+                    mapboxStyle.value=s;
+                    showWarningCenter(false,"");
+                }else{
+                    showWarningCenter(true,"程序内置的Mapbox Token暂时不可用，\n请更换Token.\n"+
+                        "The built-in Mapbox token is currently unavailable,\nplease use another token.\n"+
+                        "ご使用中の内蔵Mapbox Tokenは現在利用できません。\n別のTokenに交換してください。");
+                }
+            }
+            xhr.send();
+        }else{
+            mapboxAccessToken.value=a;
+            mapboxStyle.value=s;
+            showWarningCenter(false,"");
         }
-        mapboxAccessToken.value=a;
-        mapboxStyle.value=s;
     }
 
     function setMapboxLogoVisible(v){
