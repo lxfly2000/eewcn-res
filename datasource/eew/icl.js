@@ -25,7 +25,11 @@ function eew_postdata(){return "";}
 //         {...},{...},{...},...
 //        ]}
 function eew_onsuccess(str_response){
-    return JSON.parse(str_response);
+    var original=JSON.parse(str_response);
+    for(var i=0;i<original.data.length;i++){
+        original.data[i].magnitude=parseFloat(original.data[i].magnitude.toFixed(1));
+    }
+    return original;
 }
 
 //失败时的调用，参数为一个数值型的错误码

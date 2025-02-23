@@ -85,12 +85,12 @@ TabView {
                         visible: eqIsHead
                         Text {
                             id: textHeadEqMagnitude
-                            text: rectangleRoot.ListView.view.isStation?eqStationData:"M"+eqMagnitude
+                            text: rectangleRoot.ListView.view.isStation?(eqStationData):("M"+eqMagnitude)
                             font.pointSize: 12
                             font.family: propFontName()
                         }
                         Text {
-                            text: eqDepth+"km"
+                            text: eqDepth+(rectangleRoot.ListView.view.isStation?"m":"km")
                             font.pointSize: 12
                             font.family: propFontName()
                             width: parent.width-textHeadEqMagnitude.width
