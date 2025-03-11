@@ -1,7 +1,7 @@
 //===========预警获取函数==============
 
 //指定一个URL，若不想使用脚本的预警或地震历史功能请将相应的URL指定为空字符串，即""
-function eew_url(){return "https://mobile-new.chinaeew.cn/v1/earlywarnings?start_at="+parseInt(Math.random()*1000000)+"&updates=";}
+function eew_url(){return "https://mobile-new.chinaeew.cn/v1/earlywarnings?page_num=1&page_size={eewQueryCount}";}
 
 //指定请求方式，"get"或"post"等，还可指定为"websocket"使用WebSocket连接（此时URL应为ws或wss协议）
 function eew_method(){return "get";}
