@@ -1177,8 +1177,8 @@ Item {
         }
     }
 
-    property var swaveItemsGradientsSize: 50
-    property var swaveItemsGradientsPixelDistance: 150 //所有渐变的累计像素宽度
+    property var swaveItemsGradientsSize: 5
+    //property var swaveItemsGradientsPixelDistance: 150 //所有渐变的累计像素宽度
 
     function setEEWCircle(eventId,latitude,longitude,depth,elapsedMilliseconds,radiusPwave,radiusSwave,intensity,iNumber){
         var sii=0;
@@ -1227,7 +1227,7 @@ Item {
             }else{
                 swaveItems[eventId][sii].border.color='#55'+getIntColors(intensity).substr(1);//填充色
             }
-            swaveItems[eventId][sii].opacity=(swaveItemsGradientsSize-sii)/swaveItemsGradientsSize;
+            swaveItems[eventId][sii].opacity=(swaveItemsGradientsSize-1-sii)/(swaveItemsGradientsSize-1);
         }
         if(radiusSwave<0){
             if(barItems[eventId]===undefined){
@@ -1280,13 +1280,14 @@ Item {
                 swaveItems[eventId][sii].radius=Math.max(0,radiusSwave*1000);//单位米，涉及参数较多，在C++中运算
             }else{
                 var centerCoord=QtPositioning.coordinate(latitude,longitude);
-                var distantCoord=centerCoord.atDistanceAndAzimuth(100*1000,90);
+                var distantCoord=centerCoord.atDistanceAndAzimuth(swaveItems[eventId][0].radius,90);
                 var centerPos=geoToPos(latitude,longitude);
                 var distantPos=geoToPos(distantCoord.latitude,distantCoord.longitude);
-                //100公里在震中点的X轴上的像素长度是abs(centerPos.x-distantPos.x)
-                var surfaceAllGradientDistance=swaveItemsGradientsPixelDistance*100/Math.abs(centerPos.x-distantPos.x);
-                var surfaceEachGradientDistance=surfaceAllGradientDistance/swaveItemsGradientsSize;
-                swaveItems[eventId][sii].radius=Math.max(0,(radiusSwave-sii*surfaceEachGradientDistance)*1000);
+                //S波半径在震中点的X轴上的像素长度是abs(centerPos.x-distantPos.x)
+                var surfaceAllGradientPixelDistance=Math.abs(centerPos.x-distantPos.x);
+                var surfaceEachGradientDistance=surfaceAllGradientPixelDistance/swaveItemsGradientsSize;
+                swaveItems[eventId][sii].border.width=surfaceAllGradientPixelDistance/(swaveItemsGradientsSize-1);
+                swaveItems[eventId][sii].radius=swaveItems[eventId][0].radius*(1-(sii-0.5)/(swaveItemsGradientsSize-1));
             }
         }
         if(!eewMarksTimer.running){
