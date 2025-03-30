@@ -1,6 +1,7 @@
 import QtQuick 2.14
 import QtLocation 5.15
 import QtPositioning 5.15
+import QtGraphicalEffects 1.12
 
 Item {
     visible: true
@@ -806,97 +807,205 @@ Item {
                             width: 20
                             height: 20
                             radius: 10
-                            color: '#55'+getIntColors(1).substr(1)
+                            color: 'transparent'
                             border.color: getIntLineColor(1)
                             border.width: 1
+                            RadialGradient {
+                                anchors.fill: parent
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: "transparent" }
+                                    GradientStop { position: 0.25; color: "transparent" }
+                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(1).substr(1) }
+                                    GradientStop { position: 0.5; color: "transparent" }
+                                }
+                            }
                         }
                         Rectangle{
                             width: 20
                             height: 20
                             radius: 10
-                            color: '#55'+getIntColors(2).substr(1)
+                            color: 'transparent'
                             border.color: getIntLineColor(2)
                             border.width: 1
+                            RadialGradient {
+                                anchors.fill: parent
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: "transparent" }
+                                    GradientStop { position: 0.25; color: "transparent" }
+                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(2).substr(1) }
+                                    GradientStop { position: 0.5; color: "transparent" }
+                                }
+                            }
                         }
                         Rectangle{
                             width: 20
                             height: 20
                             radius: 10
-                            color: '#55'+getIntColors(3).substr(1)
+                            color: 'transparent'
                             border.color: getIntLineColor(3)
                             border.width: 1
+                            RadialGradient {
+                                anchors.fill: parent
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: "transparent" }
+                                    GradientStop { position: 0.25; color: "transparent" }
+                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(3).substr(1) }
+                                    GradientStop { position: 0.5; color: "transparent" }
+                                }
+                            }
                         }
                         Rectangle{
                             width: 20
                             height: 20
                             radius: 10
-                            color: '#55'+getIntColors(4).substr(1)
+                            color: 'transparent'
                             border.color: getIntLineColor(4)
                             border.width: 1
+                            RadialGradient {
+                                anchors.fill: parent
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: "transparent" }
+                                    GradientStop { position: 0.25; color: "transparent" }
+                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(4).substr(1) }
+                                    GradientStop { position: 0.5; color: "transparent" }
+                                }
+                            }
                         }
                         Rectangle{
                             width: 20
                             height: 20
                             radius: 10
-                            color: '#55'+getIntColors(5).substr(1)
+                            color: 'transparent'
                             border.color: getIntLineColor(5)
                             border.width: 1
+                            RadialGradient {
+                                anchors.fill: parent
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: "transparent" }
+                                    GradientStop { position: 0.25; color: "transparent" }
+                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(5).substr(1) }
+                                    GradientStop { position: 0.5; color: "transparent" }
+                                }
+                            }
                         }
                         Rectangle{
                             width: 20
                             height: 20
                             radius: 10
-                            color: '#55'+getIntColors(6).substr(1)
+                            color: 'transparent'
                             border.color: getIntLineColor(6)
                             border.width: 1
+                            RadialGradient {
+                                anchors.fill: parent
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: "transparent" }
+                                    GradientStop { position: 0.25; color: "transparent" }
+                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(6).substr(1) }
+                                    GradientStop { position: 0.5; color: "transparent" }
+                                }
+                            }
                         }
                         Rectangle{
                             width: 20
                             height: 20
                             radius: 10
-                            color: '#55'+getIntColors(7).substr(1)
+                            color: 'transparent'
                             border.color: getIntLineColor(7)
                             border.width: 1
+                            RadialGradient {
+                                anchors.fill: parent
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: "transparent" }
+                                    GradientStop { position: 0.25; color: "transparent" }
+                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(7).substr(1) }
+                                    GradientStop { position: 0.5; color: "transparent" }
+                                }
+                            }
                         }
                         Rectangle{
                             width: 20
                             height: 20
                             radius: 10
-                            color: '#55'+getIntColors(8).substr(1)
+                            color: 'transparent'
                             border.color: getIntLineColor(8)
                             border.width: 1
+                            RadialGradient {
+                                anchors.fill: parent
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: "transparent" }
+                                    GradientStop { position: 0.25; color: "transparent" }
+                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(8).substr(1) }
+                                    GradientStop { position: 0.5; color: "transparent" }
+                                }
+                            }
                         }
                         Rectangle{
                             width: 20
                             height: 20
                             radius: 10
-                            color: '#55'+getIntColors(9).substr(1)
+                            color: 'transparent'
                             border.color: getIntLineColor(9)
                             border.width: 1
+                            RadialGradient {
+                                anchors.fill: parent
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: "transparent" }
+                                    GradientStop { position: 0.25; color: "transparent" }
+                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(9).substr(1) }
+                                    GradientStop { position: 0.5; color: "transparent" }
+                                }
+                            }
                         }
                         Rectangle{
                             width: 20
                             height: 20
                             radius: 10
-                            color: '#55'+getIntColors(10).substr(1)
+                            color: 'transparent'
                             border.color: getIntLineColor(10)
                             border.width: 1
+                            RadialGradient {
+                                anchors.fill: parent
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: "transparent" }
+                                    GradientStop { position: 0.25; color: "transparent" }
+                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(10).substr(1) }
+                                    GradientStop { position: 0.5; color: "transparent" }
+                                }
+                            }
                         }
                         Rectangle{
                             width: 20
                             height: 20
                             radius: 10
-                            color: '#55'+getIntColors(11).substr(1)
+                            color: 'transparent'
                             border.color: getIntLineColor(11)
                             border.width: 1
+                            RadialGradient {
+                                anchors.fill: parent
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: "transparent" }
+                                    GradientStop { position: 0.25; color: "transparent" }
+                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(11).substr(1) }
+                                    GradientStop { position: 0.5; color: "transparent" }
+                                }
+                            }
                         }
                         Rectangle{
                             width: 20
                             height: 20
                             radius: 10
-                            color: '#55'+getIntColors(12).substr(1)
+                            color: 'transparent'
                             border.color: getIntLineColor(12)
                             border.width: 1
+                            RadialGradient {
+                                anchors.fill: parent
+                                gradient: Gradient {
+                                    GradientStop { position: 0.0; color: "transparent" }
+                                    GradientStop { position: 0.25; color: "transparent" }
+                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(12).substr(1) }
+                                    GradientStop { position: 0.5; color: "transparent" }
+                                }
+                            }
                         }
                     }
                     Text {
@@ -1150,9 +1259,7 @@ Item {
             eewCircleMapView.addMapItem(pwaveItems[item]);
         }
         for(item in swaveItems){
-            for(var sii=0;sii<swaveItemsGradientsSize;sii++){
-                eewCircleMapView.addMapItem(swaveItems[item][sii]);
-            }
+            eewCircleMapView.addMapItem(swaveItems[item]);
         }
         historyMarkMapView.clearMapItems();
         for(item of historyItems){
@@ -1177,9 +1284,6 @@ Item {
         }
     }
 
-    property var swaveItemsGradientsSize: 5
-    //property var swaveItemsGradientsPixelDistance: 150 //所有渐变的累计像素宽度
-
     function setEEWCircle(eventId,latitude,longitude,depth,elapsedMilliseconds,radiusPwave,radiusSwave,intensity,iNumber){
         var sii=0;
         //iNumber用于有多个震源时显示标号，但根据国内的地震速报情况来看，感觉暂时用不到
@@ -1191,15 +1295,15 @@ Item {
             eewCircleMapView.addMapItem(pwaveItems[eventId]);
         }
         if(swaveItems[eventId]===undefined){
-            var swaveItemGradients=[]
-            for(sii=0;sii<swaveItemsGradientsSize;sii++){
-                var item=Qt.createQmlObject('import QtLocation 5.14; MapCircle {}',eewCircleMapView);
-                item.border.width=3;//边线宽，对mapboxgl貌似不起作用
-                item.color='transparent';
-                eewCircleMapView.addMapItem(item);
-                swaveItemGradients.push(item);
-            }
-            swaveItems[eventId]=swaveItemGradients;
+            var item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;import QtGraphicalEffects 1.12; MapCircle {RadialGradient {anchors.fill: parent;gradient: Gradient {'+
+                'GradientStop { position: 0.0; color: "transparent" }'+
+                'GradientStop { position: 0.25; color: "transparent" }'+
+                'GradientStop { id: gradientColorSWave; position: 0.49609375; color: "transparent" }'+
+                'GradientStop { position: 0.5; color: "transparent" }}}function setColorGradient(c){gradientColorSWave.color=c;}}',eewCircleMapView);
+            item.border.width=3;//边线宽，对mapboxgl貌似不起作用
+            item.color='transparent';//填充色设为空，其颜色由RadialGradient控制
+            eewCircleMapView.addMapItem(item);
+            swaveItems[eventId]=item;
         }
         if(numberItems[eventId]===undefined){
             numberItems[eventId]=Qt.createQmlObject('import QtLocation 5.14;MapQuickItem{scale:getWindowZoom()}',numberBarMapView);
@@ -1220,15 +1324,8 @@ Item {
         numberItems[eventId].coordinate=QtPositioning.coordinate(latitude,longitude);
 
         swaveIntensities[eventId]=intensity;
-        //swaveItems[eventId].color=intensity===0?'transparent':'#55'+getIntColors(intensity).substr(1);//填充色
-        for(sii=0;sii<swaveItemsGradientsSize;sii++){
-            if(sii===0){
-                swaveItems[eventId][sii].border.color=getIntLineColor(intensity);//边线色，对mapboxgl貌似不起作用
-            }else{
-                swaveItems[eventId][sii].border.color='#55'+getIntColors(intensity).substr(1);//填充色
-            }
-            swaveItems[eventId][sii].opacity=(swaveItemsGradientsSize-1-sii)/(swaveItemsGradientsSize-1);
-        }
+        swaveItems[eventId].setColorGradient("#55"+getIntColors(intensity).substr(1));
+        swaveItems[eventId].border.color=getIntLineColor(intensity);//边线色，对mapboxgl貌似不起作用
         if(radiusSwave<0){
             if(barItems[eventId]===undefined){
                 var item=Qt.createQmlObject('import QtLocation 5.14; MapQuickItem {scale:getWindowZoom()}',numberBarMapView);
@@ -1274,22 +1371,8 @@ Item {
 
         pwaveItems[eventId].center=QtPositioning.coordinate(latitude,longitude);
         pwaveItems[eventId].radius=Math.max(0,radiusPwave*1000);//单位米，涉及参数较多，在C++中运算
-        for(sii=0;sii<swaveItemsGradientsSize;sii++){
-            swaveItems[eventId][sii].center=pwaveItems[eventId].center;
-            if(sii===0){
-                swaveItems[eventId][sii].radius=Math.max(0,radiusSwave*1000);//单位米，涉及参数较多，在C++中运算
-            }else{
-                var centerCoord=QtPositioning.coordinate(latitude,longitude);
-                var distantCoord=centerCoord.atDistanceAndAzimuth(swaveItems[eventId][0].radius,90);
-                var centerPos=geoToPos(latitude,longitude);
-                var distantPos=geoToPos(distantCoord.latitude,distantCoord.longitude);
-                //S波半径在震中点的X轴上的像素长度是abs(centerPos.x-distantPos.x)
-                var surfaceAllGradientPixelDistance=Math.abs(centerPos.x-distantPos.x);
-                var surfaceEachGradientDistance=surfaceAllGradientPixelDistance/swaveItemsGradientsSize;
-                swaveItems[eventId][sii].border.width=surfaceAllGradientPixelDistance/(swaveItemsGradientsSize-1);
-                swaveItems[eventId][sii].radius=swaveItems[eventId][0].radius*(1-(sii-0.5)/(swaveItemsGradientsSize-1));
-            }
-        }
+        swaveItems[eventId].center=pwaveItems[eventId].center;
+        swaveItems[eventId].radius=Math.max(0,radiusSwave*1000);//单位米，涉及参数较多，在C++中运算
         if(!eewMarksTimer.running){
             for(var key in eewItems)
                 eewItems[key].visible=false;
@@ -1304,9 +1387,7 @@ Item {
         eewCircleMapView.removeMapItem(pwaveItems[eventId]);
         numberBarMapView.removeMapItem(numberItems[eventId]);
         delete pwaveItems[eventId];
-        for(var sii=0;sii<swaveItemsGradientsSize;sii++){
-            eewCircleMapView.removeMapItem(swaveItems[eventId][sii]);
-        }
+        eewCircleMapView.removeMapItem(swaveItems[eventId]);
         delete swaveItems[eventId];
         delete swaveIntensities[eventId];
         delete numberItems[eventId];
@@ -1366,7 +1447,7 @@ Item {
             topP=-90;
             bottomP=90;
             for(var key in swaveItems){
-                var item=swaveItems[key][0];
+                var item=swaveItems[key];
                 leftP=Math.min(leftP,_PC(item.center.atDistanceAndAzimuth(item.radius,270).longitude));
                 topP=Math.max(topP,item.center.atDistanceAndAzimuth(item.radius,0).latitude);
                 rightP=Math.max(rightP,_PC(item.center.atDistanceAndAzimuth(item.radius,90).longitude));
