@@ -2,6 +2,7 @@ import QtQuick 2.14
 import QtLocation 5.15
 import QtPositioning 5.15
 import QtGraphicalEffects 1.12
+import QtQuick.Controls 2.15
 
 Item {
     visible: true
@@ -1068,6 +1069,88 @@ Item {
         }
     }
 
+    Row{
+        visible: !rectWarnInfo.visible
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.rightMargin: 8
+        anchors.topMargin: 8
+        transformOrigin: Item.TopRight
+        scale: getWindowZoom()
+        CheckBox{
+            id: checkLockView
+            checked: false
+            text: qsTr("Lock View")
+            height: 20
+            indicator.implicitWidth: 20
+            indicator.implicitHeight: 20
+            hoverEnabled: true
+            //onClicked: saveLocalSettings()
+            contentItem:Text{
+                id: textCheckLockView
+                text: checkLockView.text
+                color: "white"
+                style: Text.Outline
+                font.pixelSize: 14
+                font.bold: true
+                verticalAlignment: Text.AlignVCenter
+                leftPadding: checkLockView.indicator.width + checkLockView.spacing
+            }
+            ToolTip.delay: 1000
+            ToolTip.timeout: 10000
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Prevent the program from getting stuck.")
+        }
+        CheckBox{
+            id: checkNoAnimation
+            checked: false
+            text: qsTr("No Animation")
+            height: 20
+            indicator.implicitWidth: 20
+            indicator.implicitHeight: 20
+            hoverEnabled: true
+            //onClicked: saveLocalSettings()
+            contentItem:Text{
+                id: textCheckNoAnimation
+                text: checkNoAnimation.text
+                color: "white"
+                style: Text.Outline
+                font.pixelSize: 14
+                font.bold: true
+                verticalAlignment: Text.AlignVCenter
+                leftPadding: checkNoAnimation.indicator.width + checkNoAnimation.spacing
+            }
+            ToolTip.delay: 1000
+            ToolTip.timeout: 10000
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("May relieve the program getting stuck.")
+        }
+    }
+
+    function loadLocalSettings(){
+        var db=LocalStorage.openDatabaseSync("eewcndb","1.0","EEW CN MapView Database",10000);
+        db.transaction(function(tx) {
+            tx.executeSql('CREATE TABLE IF NOT EXISTS mapviewtbl(sKey TEXT UNIQUE, sValue TEXT)');
+            var rs=tx.executeSql('SELECT sValue FROM mapviewtbl WHERE sKey=?',["lockview"]);
+            if(rs.rows.length>0){
+                checkLockView.checked=(rs.rows.item(0).sValue==="true");
+            }
+            rs=tx.executeSql('SELECT sValue FROM mapviewtbl WHERE sKey=?',["noanimation"]);
+            if(rs.rows.length>0){
+                checkNoAnimation.checked=(rs.rows.item(0).sValue==="true");
+            }
+        });
+    }
+
+    function saveLocalSettings(){
+        var db=LocalStorage.openDatabaseSync("eewcndb","1.0","EEW CN MapView Database",10000);
+        db.transaction(function(tx) {
+            tx.executeSql('CREATE TABLE IF NOT EXISTS mapviewtbl(sKey TEXT UNIQUE, sValue TEXT)');
+            tx.executeSql('INSERT OR REPLACE INTO mapviewtbl VALUES(?,?)',["lockview",checkLockView.checked.toString()]);
+            tx.executeSql('INSERT OR REPLACE INTO mapviewtbl VALUES(?,?)',["noanimation",checkNoAnimation.checked.toString()]);
+        });
+    }
+
     function setShowWarnInfo(bShow,title,msg){
         rectWarnInfo.visible=bShow;
         textWarnInfoTitle.text=title;
@@ -1244,12 +1327,22 @@ Item {
     }
 
     function focusLocation(latitude,longitude,zoom){
-        animMapLatitude.to=latitude;
-        animMapLongitude.to=longitude;
-        animMapZoomLevel.to=zoom;
-        animMapLatitude.start();
-        animMapLongitude.start();
-        animMapZoomLevel.start();
+        if(checkLockView.checked){
+            return;
+        }
+        mapView.tilt=0;
+        mapView.bearing=0;
+        if(checkNoAnimation.checked){
+            mapView.zoomLevel=zoom;
+            mapView.center=QtPositioning.coordinate(latitude,longitude);
+        }else{
+            animMapLatitude.to=latitude;
+            animMapLongitude.to=longitude;
+            animMapZoomLevel.to=zoom;
+            animMapLatitude.start();
+            animMapLongitude.start();
+            animMapZoomLevel.start();
+        }
     }
 
     function refreshMarks(){
@@ -1485,6 +1578,8 @@ Item {
         textLegendSWave.font.family=fontName[language];
         textWarnInfoTitle.font.family=fontName[language];
         textWarnInfoContent.font.family=fontName[language];
+        textCheckLockView.font.family=fontName[language];
+        textCheckNoAnimation.font.family=fontName[language];
         for(var i=0;i<12;i++){
             columnLegendIntensities.children[i].children[1].font.family=fontName[language];
         }
