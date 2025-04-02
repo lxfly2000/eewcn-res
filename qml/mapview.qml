@@ -1032,45 +1032,7 @@ Item {
         font.pixelSize: 18
     }
 
-    Rectangle{
-        id:rectWarnInfo
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.rightMargin: 8
-        anchors.topMargin: 8
-        width: columnWarnInfo.width
-        height: columnWarnInfo.height
-        gradient: Gradient {
-                 GradientStop { position: 0.0; color: "#FF1240AB" }
-                 GradientStop { position: 1.0; color: "#6D6C8CD5" }
-             }
-        Column{
-            id:columnWarnInfo
-            leftPadding: 20
-            rightPadding: 20
-            topPadding: 8
-            bottomPadding: 8
-            Text {
-                id: textWarnInfoTitle
-                text: "WarnInfo"
-                font.pixelSize: 48
-                font.bold: true
-                color: "yellow"
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-            Text {
-                id: textWarnInfoContent
-                text: "Details"
-                font.pixelSize: 24
-                font.bold: true
-                color: "yellow"
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-        }
-    }
-
     Row{
-        visible: !rectWarnInfo.visible
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.rightMargin: 8
@@ -1124,6 +1086,38 @@ Item {
             ToolTip.timeout: 10000
             ToolTip.visible: hovered
             ToolTip.text: qsTr("May relieve the program getting stuck.")
+        }
+        Rectangle{
+            id:rectWarnInfo
+            width: columnWarnInfo.width
+            height: columnWarnInfo.height
+            gradient: Gradient {
+                    GradientStop { position: 0.0; color: "#FF1240AB" }
+                    GradientStop { position: 1.0; color: "#6D6C8CD5" }
+                }
+            Column{
+                id:columnWarnInfo
+                leftPadding: 20
+                rightPadding: 20
+                topPadding: 8
+                bottomPadding: 8
+                Text {
+                    id: textWarnInfoTitle
+                    text: "WarnInfo"
+                    font.pixelSize: 48
+                    font.bold: true
+                    color: "yellow"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+                Text {
+                    id: textWarnInfoContent
+                    text: "Details"
+                    font.pixelSize: 24
+                    font.bold: true
+                    color: "yellow"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
         }
     }
 
