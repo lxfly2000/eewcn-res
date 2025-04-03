@@ -4,57 +4,65 @@
 <context>
     <name>mapview</name>
     <message>
-        <location filename="mapview.qml" line="460"/>
+        <location filename="mapview.qml" line="461"/>
         <source>S Wave arriving in…</source>
         <translation type="unfinished">距橫波到達…</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="499"/>
+        <location filename="mapview.qml" line="500"/>
         <source>Intensity</source>
         <translation type="unfinished">烈度</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="729"/>
+        <location filename="mapview.qml" line="730"/>
         <source>Home</source>
         <translation type="unfinished">所在地</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="750"/>
+        <location filename="mapview.qml" line="751"/>
         <source>Earthquake Record</source>
         <translation type="unfinished">地震記錄</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="771"/>
+        <location filename="mapview.qml" line="772"/>
         <source>EEW Record</source>
         <translation type="unfinished">預警記錄</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="795"/>
+        <location filename="mapview.qml" line="796"/>
         <source>P Wave</source>
         <translation type="unfinished">緃波</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="1014"/>
+        <location filename="mapview.qml" line="1015"/>
         <source>S Wave</source>
         <translation type="unfinished">橫波</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="1081"/>
-        <source>Lock View</source>
-        <translation type="unfinished">鎖定視點</translation>
+        <location filename="mapview.qml" line="1065"/>
+        <source>&amp;Lock View</source>
+        <translation type="unfinished">鎖定視點(&amp;L)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="1099"/>
+        <location filename="mapview.qml" line="1075"/>
+        <source>&amp;No Animation</source>
+        <translation type="unfinished">禁用動畫(&amp;N)</translation>
+    </message>
+    <message>
+        <source>Lock View</source>
+        <translation type="obsolete">鎖定視點</translation>
+    </message>
+    <message>
+        <location filename="mapview.qml" line="1069"/>
         <source>Prevent the program from getting stuck.</source>
         <translation type="unfinished">防止程式卡死。</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="1104"/>
         <source>No Animation</source>
-        <translation type="unfinished">禁用動畫</translation>
+        <translation type="obsolete">禁用動畫</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="1122"/>
+        <location filename="mapview.qml" line="1079"/>
         <source>May relieve the program getting stuck.</source>
         <translation type="unfinished">可以緩解程式卡住的問題。</translation>
     </message>

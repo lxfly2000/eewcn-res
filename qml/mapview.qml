@@ -4,6 +4,7 @@ import QtPositioning 5.15
 import QtGraphicalEffects 1.12
 import QtQuick.Controls 2.15
 
+
 Item {
     visible: true
     function getWindowZoom(){
@@ -1039,53 +1040,44 @@ Item {
         anchors.topMargin: 8
         transformOrigin: Item.TopRight
         scale: getWindowZoom()
-        CheckBox{
-            id: checkLockView
-            checked: false
-            text: qsTr("Lock View")
+        Button{
+            width: 20
             height: 20
-            indicator.implicitWidth: 20
-            indicator.implicitHeight: 20
-            hoverEnabled: true
-            //onClicked: saveLocalSettings()
-            contentItem:Text{
-                id: textCheckLockView
-                text: checkLockView.text
-                color: "white"
-                style: Text.Outline
-                font.pixelSize: 14
-                font.bold: true
-                verticalAlignment: Text.AlignVCenter
-                leftPadding: checkLockView.indicator.width + checkLockView.spacing
+            background: Rectangle{
+                anchors.fill: parent
+                color: "transparent"
+                border.color: "white"
+                border.width: 2
+                radius: 2
+                Image{
+                    anchors.fill: parent
+                    source: 'data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><rect x="100" y="150" rx="25" ry="25" width="400" height="50" fill="white"/><rect x="100" y="275" rx="25" ry="25" width="400" height="50" fill="white"/><rect x="100" y="400" rx="25" ry="25" width="400" height="50" fill="white"/></svg>'
+                }
             }
-            ToolTip.delay: 1000
-            ToolTip.timeout: 10000
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Prevent the program from getting stuck.")
+            onClicked: mapviewMenu.popup()
         }
-        CheckBox{
-            id: checkNoAnimation
-            checked: false
-            text: qsTr("No Animation")
-            height: 20
-            indicator.implicitWidth: 20
-            indicator.implicitHeight: 20
-            hoverEnabled: true
-            //onClicked: saveLocalSettings()
-            contentItem:Text{
-                id: textCheckNoAnimation
-                text: checkNoAnimation.text
-                color: "white"
-                style: Text.Outline
-                font.pixelSize: 14
-                font.bold: true
-                verticalAlignment: Text.AlignVCenter
-                leftPadding: checkNoAnimation.indicator.width + checkNoAnimation.spacing
+        Menu{
+            id: mapviewMenu
+            MenuItem{
+                id: checkLockView
+                checkable: true
+                checked: false
+                text: qsTr("&Lock View")
+                ToolTip.delay: 1000
+                ToolTip.timeout: 10000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Prevent the program from getting stuck.")
             }
-            ToolTip.delay: 1000
-            ToolTip.timeout: 10000
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("May relieve the program getting stuck.")
+            MenuItem{
+                id: checkNoAnimation
+                checkable: true
+                checked: false
+                text: qsTr("&No Animation")
+                ToolTip.delay: 1000
+                ToolTip.timeout: 10000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("May relieve the program getting stuck.")
+            }
         }
         Rectangle{
             id:rectWarnInfo
