@@ -1564,8 +1564,8 @@ Item {
         textLegendSWave.font.family=fontName[language];
         textWarnInfoTitle.font.family=fontName[language];
         textWarnInfoContent.font.family=fontName[language];
-        textCheckLockView.font.family=fontName[language];
-        textCheckNoAnimation.font.family=fontName[language];
+        //textCheckLockView.font.family=fontName[language];
+        //textCheckNoAnimation.font.family=fontName[language];
         for(var i=0;i<12;i++){
             columnLegendIntensities.children[i].children[1].font.family=fontName[language];
         }
