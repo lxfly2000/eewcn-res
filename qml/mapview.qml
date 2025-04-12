@@ -1200,7 +1200,7 @@ Item {
             text:"WarnInfoCenter"
             font.pixelSize:24*getWindowZoom()
             font.bold:true
-            font.family:"Sarasa Gothic SC";color:"yellow"
+            font.family:textWarnInfoContent.font.family;color:"yellow"
             style:Text.Outline
             anchors.horizontalCenter:parent.horizontalCenter
             wrapMode:Text.Wrap
@@ -1215,7 +1215,7 @@ Item {
             text:textWarnInfoCenter.text
             font.pixelSize:24*getWindowZoom()
             font.bold:true
-            font.family:"Sarasa Gothic SC"
+            font.family:textWarnInfoCenter.font.family
             style:Text.Outline
             anchors.horizontalCenter:parent.horizontalCenter
             visible:false
