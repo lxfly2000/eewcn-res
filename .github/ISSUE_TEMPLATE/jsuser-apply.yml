@@ -4,35 +4,35 @@ labels: ["jsuser apply"]
 body:
   - type: markdown
     attributes:
-      value: "请按下列格式输入必要信息，否则不予通过申请。"
+      value: 请按下列格式输入必要信息，否则不予通过申请。
   - type: input
     attributes:
-      label: 账号名称
+      label: 账号名称 (Account Name)
       description: 输入你常用的账号名称。
     validations:
       required: true
   - type: input
     attributes:
-      label: 机器ID
+      label: 机器ID (Machine ID)
       description: 将EEWCN中关于框下方的ID粘贴到此处。
     validations:
       required: true
   - type: input
     attributes:
-      label: 你从哪里获取的JS脚本文件？
+      label: 你从哪里获取的JS脚本文件？(Where did you get the JS file?)
     validations:
       required: true
   - type: input
     attributes:
-      label: B站账号链接
+      label: B站/YouTube账号链接 (Your Bilibili / YouTube Account Link)
       description: 在此处输入链接。
   - type: textarea
     attributes:
-      label: 其他视频网站链接
+      label: 其他视频网站链接 (Your Other Video Site Links)
       description: 如有抖音、快手等其他视频网站账号请一并给出。
   - type: textarea
     attributes:
-      label: 你为什么要申请JS用户？
+      label: 你为什么要申请JS用户？(Why do you want to apply for a JS user?)
       description: 详细说明申请的理由，以及其他补充信息。
     validations:
       required: true
@@ -40,9 +40,9 @@ body:
     attributes:
       label: 确认事项
       options:
-        - label: 你使用的数据真实有效而非杜撰或哗众取宠
+        - label: 你使用的数据真实有效而非杜撰或哗众取宠 (Your data source is true and valid)
           required: true
-        - label: 你确定如违反真实有效原则会被撤销ID
+        - label: 你确定如违反真实有效原则会被撤销ID (Your ID will be revoked if your data source violates authenticity and validity)
           required: true
     validations:
       required: true
