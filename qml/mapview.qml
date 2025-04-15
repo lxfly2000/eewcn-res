@@ -1072,7 +1072,7 @@ Item {
             MenuItem{
                 id: checkNoAnimation
                 checkable: true
-                checked: false
+                checked: true
                 text: qsTr("&No Animation")
                 ToolTip.delay: 1000
                 ToolTip.timeout: 10000
