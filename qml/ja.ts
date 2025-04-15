@@ -39,21 +39,26 @@
         <translation type="unfinished">S波</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="1065"/>
+        <location filename="mapview.qml" line="1066"/>
         <source>&amp;Lock View</source>
         <translation type="unfinished">ビューをロック(&amp;L)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="1075"/>
+        <location filename="mapview.qml" line="1076"/>
         <source>&amp;No Animation</source>
         <translation type="unfinished">アニメーションを無効(&amp;N)</translation>
+    </message>
+    <message>
+        <location filename="mapview.qml" line="1083"/>
+        <source>&amp;Help</source>
+        <translation type="unfinished">ヘルプ(&amp;H)</translation>
     </message>
     <message>
         <source>Lock View</source>
         <translation type="obsolete">ビューをロック</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="1069"/>
+        <location filename="mapview.qml" line="1070"/>
         <source>Prevent the program from getting stuck.</source>
         <translation type="unfinished">プログラムがフリーズするのを防ぐ。</translation>
     </message>
@@ -62,7 +67,7 @@
         <translation type="obsolete">アニメーションを無効</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="1079"/>
+        <location filename="mapview.qml" line="1080"/>
         <source>May relieve the program getting stuck.</source>
         <translation type="unfinished">プログラムがフリーズするのを緩和するかもしれない。</translation>
     </message>

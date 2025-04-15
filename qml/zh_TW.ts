@@ -39,21 +39,26 @@
         <translation type="unfinished">橫波</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="1065"/>
+        <location filename="mapview.qml" line="1066"/>
         <source>&amp;Lock View</source>
         <translation type="unfinished">鎖定視點(&amp;L)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="1075"/>
+        <location filename="mapview.qml" line="1076"/>
         <source>&amp;No Animation</source>
         <translation type="unfinished">禁用動畫(&amp;N)</translation>
+    </message>
+    <message>
+        <location filename="mapview.qml" line="1083"/>
+        <source>&amp;Help</source>
+        <translation type="unfinished">幫助(&amp;H)</translation>
     </message>
     <message>
         <source>Lock View</source>
         <translation type="obsolete">鎖定視點</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="1069"/>
+        <location filename="mapview.qml" line="1070"/>
         <source>Prevent the program from getting stuck.</source>
         <translation type="unfinished">防止程式卡死。</translation>
     </message>
@@ -62,7 +67,7 @@
         <translation type="obsolete">禁用動畫</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="1079"/>
+        <location filename="mapview.qml" line="1080"/>
         <source>May relieve the program getting stuck.</source>
         <translation type="unfinished">可以緩解程式卡住的問題。</translation>
     </message>

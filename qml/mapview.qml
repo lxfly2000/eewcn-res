@@ -1079,6 +1079,10 @@ Item {
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("May relieve the program getting stuck.")
             }
+            MenuItem{
+                text: qsTr("&Help")
+                onClicked: Qt.openUrlExternally("https://lxfly2000.github.io/eewcn-res/link.htm?key=EEWCNHelp")
+            }
         }
         Rectangle{
             id:rectWarnInfo
