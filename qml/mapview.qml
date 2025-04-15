@@ -1058,6 +1058,7 @@ Item {
         }
         Menu{
             id: mapviewMenu
+            width: 300
             MenuItem{
                 id: checkLockView
                 checkable: true
@@ -1109,6 +1110,10 @@ Item {
                     color: "yellow"
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: Qt.openUrlExternally("https://lxfly2000.github.io/eewcn-res/link.htm?key=WarningHelp")
             }
         }
     }
@@ -1219,6 +1224,10 @@ Item {
             style:Text.Outline
             anchors.horizontalCenter:parent.horizontalCenter
             visible:false
+        }
+        MouseArea{
+            anchors.fill: parent
+            onClicked: Qt.openUrlExternally("https://lxfly2000.github.io/eewcn-res/link.htm?key=WarningHelp")
         }
     }
 
