@@ -26,14 +26,16 @@ body:
     attributes:
       label: B站账号链接
       description: 在此处输入链接。
-    validations:
-      required: false
   - type: textarea
     attributes:
       label: 其他视频网站链接
       description: 如有抖音、快手等其他视频网站账号请一并给出。
+  - type: textarea
+    attributes:
+      label: 你为什么要申请JS用户？
+      description: 详细说明申请的理由，以及其他补充信息。
     validations:
-      required: false
+      required: true
   - type: checkboxes
     attributes:
       label: 确认事项
