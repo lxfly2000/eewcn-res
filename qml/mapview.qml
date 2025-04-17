@@ -1377,7 +1377,7 @@ Item {
     }
 
     function setEEWCircle(eventId,latitude,longitude,depth,elapsedMilliseconds,radiusPwave,radiusSwave,intensity,iNumber){
-        var sii=0;
+        //var sii=0;
         //iNumber用于有多个震源时显示标号，但根据国内的地震速报情况来看，感觉暂时用不到
         if(pwaveItems[eventId]===undefined){
             pwaveItems[eventId]=Qt.createQmlObject('import QtLocation 5.14; MapCircle {}',eewCircleMapView);
@@ -1410,9 +1410,26 @@ Item {
             numberBarMapView.addMapItem(numberItems[eventId]);
         }
         var numTextItem=numberItems[eventId].sourceItem;
-        numTextItem.text=String.fromCharCode(9312+eventIdList.indexOf(eventId));
-        numberItems[eventId].anchorPoint.x=numTextItem.width/2;
-        numberItems[eventId].anchorPoint.y=numTextItem.height/2+50*getWindowZoom();
+        var eventIdIndex=eventIdList.indexOf(eventId);
+        numTextItem.text=String.fromCharCode(9312+eventIdIndex);
+        switch(eventIdIndex%4){
+            case 0:default:
+                numberItems[eventId].anchorPoint.x=numTextItem.width/2;
+                numberItems[eventId].anchorPoint.y=numTextItem.height/2+50*getWindowZoom();
+                break;
+            case 1:
+                numberItems[eventId].anchorPoint.x=numTextItem.width/2;
+                numberItems[eventId].anchorPoint.y=numTextItem.height/2-50*getWindowZoom();
+                break;
+            case 2:
+                numberItems[eventId].anchorPoint.x=numTextItem.width/2-50*getWindowZoom();
+                numberItems[eventId].anchorPoint.y=numTextItem.height/2;
+                break;
+            case 3:
+                numberItems[eventId].anchorPoint.x=numTextItem.width/2+50*getWindowZoom();
+                numberItems[eventId].anchorPoint.y=numTextItem.height/2;
+                break;
+        }
         numberItems[eventId].coordinate=QtPositioning.coordinate(latitude,longitude);
 
         swaveIntensities[eventId]=intensity;
