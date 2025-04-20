@@ -27,6 +27,7 @@ function eew_postdata(){return "";}
 function eew_onsuccess(str_response){
     var original=JSON.parse(str_response);
     for(var i=0;i<original.data.length;i++){
+        original.data[i].eventId=original.data[i].eventId&2147483647;//不能超过INT32范围
         original.data[i].magnitude=parseFloat(original.data[i].magnitude.toFixed(1));
     }
     return original;
