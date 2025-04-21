@@ -17,7 +17,7 @@ function history_header(){return {/*"Accept":"application/json"*/};}
 function history_postdata(){return "";}
 
 //格式如下：
-//  {shuju:[{id:"字符串型事件ID（在程序中会被转换为32位int型）",
+//  {shuju:[{id:"字符串型事件ID",
 //          O_TIME:"YYYY-MM-DD HH:MM:SS格式发震时间",
 //          EPI_LAT:"字符串型震中纬度",
 //          EPI_LON:"字符串型震中经度",
@@ -34,7 +34,7 @@ function history_onsuccess(str_response){
     for(var i=0;i<original.length;i++){
         var item=original[i];
         shuju_array.push({
-            id:item.id.toString(),
+            id:item.eventId,
             O_TIME:item.shockTime,
             EPI_LAT:item.latitude.toString(),
             EPI_LON:item.longitude.toString(),

@@ -14,7 +14,7 @@ function eew_postdata(){return "query_cwaeew";}
 
 //成功返回数据时请将响应内容转换为指定的JSON形式
 //格式如下：
-//  {data:[{eventId:数值型事件ID,
+//  {data:[{eventId:字符串型事件ID,
 //          updates:数值型第几报,
 //          latitude:数值型震中纬度,
 //          longitude:数值型震中经度,
@@ -29,7 +29,7 @@ function eew_onsuccess(str_response){
     var original=JSON.parse(str_response);
     if(original.type==="cwa_eew"){
         var converted={
-            eventId:original.ID,
+            eventId:original.ID.toString(),
             updates:original.ReportNum,
             latitude:original.Latitude,
             longitude:original.Longitude,

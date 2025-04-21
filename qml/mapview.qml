@@ -3,6 +3,7 @@ import QtLocation 5.15
 import QtPositioning 5.15
 import QtGraphicalEffects 1.12
 import QtQuick.Controls 2.15
+import Qt.labs.settings 1.1
 
 
 Item {
@@ -1068,16 +1069,22 @@ Item {
                 ToolTip.timeout: 10000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Prevent the program from getting stuck.")
+                Settings{
+                    property alias lockView: checkLockView.checked
+                }
             }
             MenuItem{
                 id: checkNoAnimation
                 checkable: true
-                checked: true
+                checked: false
                 text: qsTr("&No Animation")
                 ToolTip.delay: 1000
                 ToolTip.timeout: 10000
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("May relieve the program getting stuck.")
+                Settings{
+                    property alias noAnimation: checkNoAnimation.checked
+                }
             }
             MenuItem{
                 text: qsTr("&Help")

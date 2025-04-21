@@ -14,7 +14,7 @@ function eew_postdata(){return "query_sceew";}
 
 //成功返回数据时请将响应内容转换为指定的JSON形式
 //格式如下：
-//  {data:[{eventId:数值型事件ID,
+//  {data:[{eventId:字符串型事件ID,
 //          updates:数值型第几报,
 //          latitude:数值型震中纬度,
 //          longitude:数值型震中经度,
@@ -27,9 +27,10 @@ function eew_postdata(){return "query_sceew";}
 var last_eew=null;
 function eew_onsuccess(str_response){
     var original=JSON.parse(str_response);
+    var converted;
     if(original.type==="sc_eew"){
-        var converted={
-            eventId:original.ID,
+        converted={
+            eventId:original.EventID,
             updates:original.ReportNum,
             latitude:original.Latitude,
             longitude:original.Longitude,
@@ -40,13 +41,8 @@ function eew_onsuccess(str_response){
         };
         last_eew={data:[converted]};
     }else if(original.type==="jma_eew"){
-        var converted={
-            eventId:fmt_to_msts(original.EventID.substr(0,4)+"-"+
-                                original.EventID.substr(4,2)+"-"+
-                                original.EventID.substr(6,2)+" "+
-                                original.EventID.substr(8,2)+":"+
-                                original.EventID.substr(10,2)+":"+
-                                original.EventID.substr(12,2)+" UTC+9")/1000,
+        converted={
+            eventId:original.EventID,
             updates:original.Serial,
             latitude:original.Latitude,
             longitude:original.Longitude,
@@ -57,13 +53,8 @@ function eew_onsuccess(str_response){
         };
         last_eew={data:[converted]};
     }else if(original.type==="fj_eew"){
-        var converted={
-            eventId:fmt_to_msts(original.EventID.substr(0,4)+"-"+
-                                original.EventID.substr(4,2)+"-"+
-                                original.EventID.substr(6,2)+" "+
-                                original.EventID.substr(8,2)+":"+
-                                original.EventID.substr(10,2)+":"+
-                                original.EventID.substr(12,2)+" UTC+8")/1000,
+        converted={
+            eventId:original.EventID,
             updates:original.ReportNum,
             latitude:original.Latitude,
             longitude:original.Longitude,
@@ -74,8 +65,8 @@ function eew_onsuccess(str_response){
         };
         last_eew={data:[converted]};
     }else if(original.type==="cwa_eew"){
-        var converted={
-            eventId:original.ID,
+        converted={
+            eventId:original.ID.toString(),
             updates:original.ReportNum,
             latitude:original.Latitude,
             longitude:original.Longitude,
@@ -116,10 +107,11 @@ function parse_auto_flag(str){
 }
 function history_onsuccess(str_response){
     var original=JSON.parse(str_response);
+    var item;
     if(original.type==="cenc_eqlist"){
-        var item=original["No1"];
+        item=original["No1"];
         last_history={shuju:[{
-            id:(fmt_to_msts(item.time+" UTC+8")/1000).toString(),
+            id:item.EventID,
             O_TIME:item.time,
             EPI_LAT:item.latitude,
             EPI_LON:item.longitude,
@@ -130,9 +122,9 @@ function history_onsuccess(str_response){
             LOCATION_C:item.location
         }]};
     }else if(original.type==="jma_eqlist"){
-        var item=original["No1"];
+        item=original["No1"];
         last_history={shuju:[{
-            id:(fmt_to_msts(item.time_full+" UTC+9")/1000).toString(),
+            id:item.EventID,
             O_TIME:item.time_full,
             EPI_LAT:item.latitude,
             EPI_LON:item.longitude,

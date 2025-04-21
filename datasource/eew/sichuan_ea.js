@@ -14,7 +14,7 @@ function eew_postdata(){return "";}
 
 //成功返回数据时请将响应内容转换为指定的JSON形式
 //格式如下：
-//  {data:[{eventId:数值型事件ID,
+//  {data:[{eventId:字符串型事件ID,
 //          updates:数值型第几报,
 //          latitude:数值型震中纬度,
 //          longitude:数值型震中经度,
@@ -29,12 +29,7 @@ function eew_onsuccess(str_response){
     var arr=[];
     for(var i=0;i<original.length;i++){
         var converted={
-            eventId:fmt_to_msts(original[i].eventId.substr(0,4)+"-"+
-                                original[i].eventId.substr(4,2)+"-"+
-                                original[i].eventId.substr(6,2)+" "+
-                                original[i].eventId.substr(8,2)+":"+
-                                original[i].eventId.substr(10,2)+":"+
-                                original[i].eventId.substr(12,2)+" UTC+8"),
+            eventId:original[i].eventId,
             updates:original[i].list.length,
             latitude:original[i].latitude,
             longitude:original[i].longitude,
