@@ -1,32 +1,32 @@
 {
     "eew":[
-        {"name":{"en":"Sichuan E.A.","zh_CN":"四川省地震局","zh_TW":"四川省地震局","ja":"四川省地震局"},"url":"http://localhost:8000/datasource/eew/sichuan_ea.js"},
-        {"name":{"en":"CENC WeChat App (Configuration Required)","zh_CN":"中国地震台网微信小程序（需要配置）","zh_TW":"中國地震台網微信小程式（需要配置）","ja":"CENC WeChatアプリ（設定必要）"},"url":"http://localhost:8000/datasource/cenc_wechat.js"},
-        {"name":{"en":"Wolfx Sichuan E.A.","zh_CN":"Wolfx 四川地震局","zh_TW":"Wolfx 四川地震局","ja":"Wolfx 四川省地震局"},"url":"http://localhost:8000/datasource/eew/wolfx_sc_eew.js"},
-        {"name":{"en":"Wolfx Sichuan E.A. (WebSocket)","zh_CN":"Wolfx 四川地震局 (WebSocket)","zh_TW":"Wolfx 四川地震局 (WebSocket)","ja":"Wolfx 四川省地震局 (WebSocket)"},"url":"http://localhost:8000/datasource/eew/wolfx_ws_sc_eew.js"},
-        {"name":{"en":"Wolfx Fujian E.A.","zh_CN":"Wolfx 福建地震局","zh_TW":"Wolfx 福建地震局","ja":"Wolfx 福建省地震局"},"url":"http://localhost:8000/datasource/eew/wolfx_fj_eew.js"},
-        {"name":{"en":"Wolfx Fujian E.A. (WebSocket)","zh_CN":"Wolfx 福建地震局 (WebSocket)","zh_TW":"Wolfx 福建地震局 (WebSocket)","ja":"Wolfx 福建省地震局 (WebSocket)"},"url":"http://localhost:8000/datasource/eew/wolfx_ws_fj_eew.js"},
-        {"name":{"en":"Wolfx CWA","zh_CN":"Wolfx 台湾中央气象署","zh_TW":"Wolfx 臺灣中央氣象署","ja":"Wolfx 台湾中央気象署"},"url":"http://localhost:8000/datasource/eew/wolfx_cwa_eew.js"},
-        {"name":{"en":"Wolfx CWA (WebSocket)","zh_CN":"Wolfx 台湾中央气象署 (WebSocket)","zh_TW":"Wolfx 臺灣中央氣象署 (WebSocket)","ja":"Wolfx 台湾中央気象署 (WebSocket)"},"url":"http://localhost:8000/datasource/eew/wolfx_ws_cwa_eew.js"},
-        {"name":{"en":"Wolfx JMA","zh_CN":"Wolfx 日本气象厅","zh_TW":"Wolfx 日本氣象廳","ja":"Wolfx 気象庁"},"url":"http://localhost:8000/datasource/eew/wolfx_jma.js"},
-        {"name":{"en":"Wolfx JMA (WebSocket)","zh_CN":"Wolfx 日本气象厅 (WebSocket)","zh_TW":"Wolfx 日本氣象廳 (WebSocket)","ja":"Wolfx 気象庁 (WebSocket)"},"url":"http://localhost:8000/datasource/eew/wolfx_ws_jma.js"},
-        {"name":{"en":"Wolfx NIED","zh_CN":"Wolfx 日本防灾科研","zh_TW":"Wolfx 日本防災科研","ja":"Wolfx 防災科研"},"url":"http://localhost:8000/datasource/eew/wolfx_nied.js"},
-        {"name":{"en":"Wolfx Receive from all APIs (WebSocket)","zh_CN":"Wolfx 接收所有 API (WebSocket)","zh_TW":"Wolfx 接收所有 API (WebSocket)","ja":"Wolfx すべてのAPI受信 (WebSocket)"},"url":"http://localhost:8000/datasource/wolfx_all_eew.js"},
-        {"name":{"en":"Wolfx CENC","zh_CN":"Wolfx 中国地震台网","zh_TW":"Wolfx 中國地震台網","ja":"Wolfx CENC"},"url":"http://localhost:8000/datasource/eew/wolfx_cenc_eew.js"},
-        {"name":{"en":"ICL","zh_CN":"成都高新减灾研究所(ICL)","zh_TW":"ICL","ja":"ICL"},"url":"http://localhost:8000/datasource/eew/icl.js"}
+        {"name":{"en":"Sichuan E.A.","zh_CN":"四川省地震局","zh_TW":"四川省地震局","ja":"四川省地震局"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/sichuan_ea.js"},
+        {"name":{"en":"CENC WeChat App (Configuration Required)","zh_CN":"中国地震台网微信小程序（需要配置）","zh_TW":"中國地震台網微信小程式（需要配置）","ja":"CENC WeChatアプリ（設定必要）"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/cenc_wechat.js"},
+        {"name":{"en":"Wolfx Sichuan E.A.","zh_CN":"Wolfx 四川地震局","zh_TW":"Wolfx 四川地震局","ja":"Wolfx 四川省地震局"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_sc_eew.js"},
+        {"name":{"en":"Wolfx Sichuan E.A. (WebSocket)","zh_CN":"Wolfx 四川地震局 (WebSocket)","zh_TW":"Wolfx 四川地震局 (WebSocket)","ja":"Wolfx 四川省地震局 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_ws_sc_eew.js"},
+        {"name":{"en":"Wolfx Fujian E.A.","zh_CN":"Wolfx 福建地震局","zh_TW":"Wolfx 福建地震局","ja":"Wolfx 福建省地震局"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_fj_eew.js"},
+        {"name":{"en":"Wolfx Fujian E.A. (WebSocket)","zh_CN":"Wolfx 福建地震局 (WebSocket)","zh_TW":"Wolfx 福建地震局 (WebSocket)","ja":"Wolfx 福建省地震局 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_ws_fj_eew.js"},
+        {"name":{"en":"Wolfx CWA","zh_CN":"Wolfx 台湾中央气象署","zh_TW":"Wolfx 臺灣中央氣象署","ja":"Wolfx 台湾中央気象署"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_cwa_eew.js"},
+        {"name":{"en":"Wolfx CWA (WebSocket)","zh_CN":"Wolfx 台湾中央气象署 (WebSocket)","zh_TW":"Wolfx 臺灣中央氣象署 (WebSocket)","ja":"Wolfx 台湾中央気象署 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_ws_cwa_eew.js"},
+        {"name":{"en":"Wolfx JMA","zh_CN":"Wolfx 日本气象厅","zh_TW":"Wolfx 日本氣象廳","ja":"Wolfx 気象庁"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_jma.js"},
+        {"name":{"en":"Wolfx JMA (WebSocket)","zh_CN":"Wolfx 日本气象厅 (WebSocket)","zh_TW":"Wolfx 日本氣象廳 (WebSocket)","ja":"Wolfx 気象庁 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_ws_jma.js"},
+        {"name":{"en":"Wolfx NIED","zh_CN":"Wolfx 日本防灾科研","zh_TW":"Wolfx 日本防災科研","ja":"Wolfx 防災科研"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_nied.js"},
+        {"name":{"en":"Wolfx Receive from all APIs (WebSocket)","zh_CN":"Wolfx 接收所有 API (WebSocket)","zh_TW":"Wolfx 接收所有 API (WebSocket)","ja":"Wolfx すべてのAPI受信 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/wolfx_all_eew.js"},
+        {"name":{"en":"Wolfx CENC","zh_CN":"Wolfx 中国地震台网","zh_TW":"Wolfx 中國地震台網","ja":"Wolfx CENC"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_cenc_eew.js"},
+        {"name":{"en":"ICL","zh_CN":"成都高新减灾研究所(ICL)","zh_TW":"ICL","ja":"ICL"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/icl.js"}
     ],
     "history":[
-        {"name":{"en":"CENC Website","zh_CN":"中国地震台网","zh_TW":"中國地震台網","ja":"CENCウェブサイト"},"url":"http://localhost:8000/datasource/history/cenc_web.js"},
-        {"name":{"en":"CENC Mobile App","zh_CN":"地震速报手机客户端","zh_TW":"地震速報手機APP","ja":"CENC地震速報アプリ"},"url":"http://localhost:8000/datasource/history/cenc_app.js"},
-        {"name":{"en":"Fujian E.A.","zh_CN":"福建省地震局","zh_TW":"福建省地震局","ja":"福建省地震局"},"url":"http://localhost:8000/datasource/history/fujian_ea.js"},
-        {"name":{"en":"CENC WeChat App (Configuration Required)","zh_CN":"中国地震台网微信小程序（需要配置）","zh_TW":"中國地震台網微信小程式（需要配置）","ja":"CENC WeChatアプリ（設定必要）"},"url":"http://localhost:8000/datasource/cenc_wechat.js"},
-        {"name":{"en":"Wolfx CENC Earthquakes Info","zh_CN":"Wolfx 中国地震台网","zh_TW":"Wolfx 中國地震台網","ja":"Wolfx CENC"},"url":"http://localhost:8000/datasource/history/wolfx_cenc_eqlist.js"},
-        {"name":{"en":"Wolfx CENC Earthquakes Info (WebSocket)","zh_CN":"Wolfx 中国地震台网 (WebSocket)","zh_TW":"Wolfx 中國地震台網 (WebSocket)","ja":"Wolfx CENC 地震情報 (WebSocket)"},"url":"http://localhost:8000/datasource/history/wolfx_ws_cenc_eqlist.js"},
-        {"name":{"en":"Wolfx JMA","zh_CN":"Wolfx 日本气象厅","zh_TW":"Wolfx 日本氣象廳","ja":"Wolfx 気象庁"},"url":"http://localhost:8000/datasource/history/wolfx_jma_eqlist.js"},
-        {"name":{"en":"Wolfx JMA (WebSocket)","zh_CN":"Wolfx 日本气象厅 (WebSocket)","zh_TW":"Wolfx 日本氣象廳 (WebSocket)","ja":"Wolfx 気象庁 (WebSocket)"},"url":"http://localhost:8000/datasource/history/wolfx_ws_jma_eqlist.js"},
-        {"name":{"en":"Wolfx Receive from all APIs (WebSocket)","zh_CN":"Wolfx 接收所有 API (WebSocket)","zh_TW":"Wolfx 接收所有 API (WebSocket)","ja":"Wolfx すべてのAPI受信 (WebSocket)"},"url":"http://localhost:8000/datasource/wolfx_all_eew.js"}
+        {"name":{"en":"CENC Website","zh_CN":"中国地震台网","zh_TW":"中國地震台網","ja":"CENCウェブサイト"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/history/cenc_web.js"},
+        {"name":{"en":"CENC Mobile App","zh_CN":"地震速报手机客户端","zh_TW":"地震速報手機APP","ja":"CENC地震速報アプリ"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/history/cenc_app.js"},
+        {"name":{"en":"Fujian E.A.","zh_CN":"福建省地震局","zh_TW":"福建省地震局","ja":"福建省地震局"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/history/fujian_ea.js"},
+        {"name":{"en":"CENC WeChat App (Configuration Required)","zh_CN":"中国地震台网微信小程序（需要配置）","zh_TW":"中國地震台網微信小程式（需要配置）","ja":"CENC WeChatアプリ（設定必要）"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/cenc_wechat.js"},
+        {"name":{"en":"Wolfx CENC Earthquakes Info","zh_CN":"Wolfx 中国地震台网","zh_TW":"Wolfx 中國地震台網","ja":"Wolfx CENC"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/history/wolfx_cenc_eqlist.js"},
+        {"name":{"en":"Wolfx CENC Earthquakes Info (WebSocket)","zh_CN":"Wolfx 中国地震台网 (WebSocket)","zh_TW":"Wolfx 中國地震台網 (WebSocket)","ja":"Wolfx CENC 地震情報 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/history/wolfx_ws_cenc_eqlist.js"},
+        {"name":{"en":"Wolfx JMA","zh_CN":"Wolfx 日本气象厅","zh_TW":"Wolfx 日本氣象廳","ja":"Wolfx 気象庁"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/history/wolfx_jma_eqlist.js"},
+        {"name":{"en":"Wolfx JMA (WebSocket)","zh_CN":"Wolfx 日本气象厅 (WebSocket)","zh_TW":"Wolfx 日本氣象廳 (WebSocket)","ja":"Wolfx 気象庁 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/history/wolfx_ws_jma_eqlist.js"},
+        {"name":{"en":"Wolfx Receive from all APIs (WebSocket)","zh_CN":"Wolfx 接收所有 API (WebSocket)","zh_TW":"Wolfx 接收所有 API (WebSocket)","ja":"Wolfx すべてのAPI受信 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/wolfx_all_eew.js"}
     ],
     "station":[
-        {"name":{"en":"Wolfx SeisJS","zh_CN":"Wolfx SeisJS","zh_TW":"Wolfx SeisJS","ja":"Wolfx SeisJS"},"url":"http://localhost:8000/datasource/station/wolfx_seis.js"}
+        {"name":{"en":"Wolfx SeisJS","zh_CN":"Wolfx SeisJS","zh_TW":"Wolfx SeisJS","ja":"Wolfx SeisJS"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/station/wolfx_seis.js"}
     ]
 }
