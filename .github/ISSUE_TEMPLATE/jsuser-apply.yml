@@ -1,6 +1,6 @@
 name: JS User Apply
 description: JS用户申请
-title: JS用户申请：【账号名称】
+title: JS用户申请 (JS User Application): 【账号名称 (Account Name)】
 labels: ["jsuser apply"]
 body:
   - type: markdown
@@ -9,7 +9,7 @@ body:
   - type: input
     attributes:
       label: 账号名称 (Account Name)
-      description: 输入你常用的账号名称。（请同时将标题中的“【账号名称】”改为此处的名称）
+      description: 输入你常用的账号名称。（请同时将标题中的“【账号名称 (Account Name)】”改为此处的名称）
     validations:
       required: true
   - type: input
