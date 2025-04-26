@@ -1,6 +1,6 @@
 name: JS User Apply
 description: JS用户申请
-title: JS用户申请 (JS User Application): 【账号名称 (Account Name)】
+title: 'JS用户申请 (JS User Application): 【账号名称 (Account Name)】'
 labels: ["jsuser apply"]
 body:
   - type: markdown
