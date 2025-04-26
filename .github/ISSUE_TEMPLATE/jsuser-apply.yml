@@ -1,5 +1,6 @@
 name: JS User Apply
-description: 申请JS用户
+description: JS用户申请
+title: JS用户申请
 labels: ["jsuser apply"]
 body:
   - type: markdown
