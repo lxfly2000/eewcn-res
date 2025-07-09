@@ -62,7 +62,10 @@ function eew_onsuccess(str_response){
             startAt:fmt_to_msts(original_sichuan.Data.shockTime+" UTC+8"),//注意时区问题
             magnitude:parseFloat(original_sichuan.Data.magnitude)
         };
-        last_eew={data:[converted_icl, converted_cea, converted_sichuan]};
+        var arr_not_sorted=[converted_icl, converted_cea, converted_sichuan];
+        last_eew={data:arr_not_sorted.sort(function(a, b) {
+            return b.startAt - a.startAt;
+        })};
     }
     return last_eew;
 }
