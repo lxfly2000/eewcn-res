@@ -60,7 +60,7 @@ function eew_onsuccess(str_response){
             depth:0,
             epicenter:original_sichuan.Data.placeName,
             startAt:fmt_to_msts(original_sichuan.Data.shockTime+" UTC+8"),//注意时区问题
-            magnitude:original_sichuan.Data.magnitude
+            magnitude:parseFloat(original_sichuan.Data.magnitude)
         };
         last_eew={data:[converted_icl, converted_cea, converted_sichuan]};
     }
