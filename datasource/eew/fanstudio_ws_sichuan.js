@@ -31,7 +31,7 @@ function eew_onsuccess(str_response){
         var parts=original.Data.eventId.split("_");
         var converted={
             eventId:parts[0], // 事件ID的第一部分作为事件ID
-            updates:parts[1], // 事件ID的第二部分作为更新次数
+            updates:parseInt(parts[1]), // 事件ID的第二部分作为更新次数
             latitude:original.Data.latitude,
             longitude:original.Data.longitude,
             depth:0,

@@ -37,30 +37,30 @@ function eew_onsuccess(str_response){
             depth:original_icl.Data.depth,
             epicenter:original_icl.Data.placeName,
             startAt:fmt_to_msts(original_icl.Data.shockTime+" UTC+8"),//注意时区问题
-            magnitude:original_icl.Data.magnitude
+            magnitude:parseFloat(original_icl.Data.magnitude)
         };
         var original_cea=original.cea;
         var converted_cea={
-            eventId:original.Data.eventId,
-            updates:original.Data.updates,
-            latitude:parseFloat(original.Data.latitude),
-            longitude:parseFloat(original.Data.longitude),
-            depth:original.Data.depth,
-            epicenter:original.Data.placeName,
-            startAt:fmt_to_msts(original.Data.shockTime+" UTC+8"),//注意时区问题
-            magnitude:parseFloat(original.Data.magnitude)
+            eventId:original_cea.Data.eventId,
+            updates:original_cea.Data.updates,
+            latitude:parseFloat(original_cea.Data.latitude),
+            longitude:parseFloat(original_cea.Data.longitude),
+            depth:original_cea.Data.depth,
+            epicenter:original_cea.Data.placeName,
+            startAt:fmt_to_msts(original_cea.Data.shockTime+" UTC+8"),//注意时区问题
+            magnitude:parseFloat(original_cea.Data.magnitude)
         };
         var original_sichuan=original.sichuan;
         var parts=original_sichuan.Data.eventId.split("_");
         var converted_sichuan={
             eventId:parts[0], // 事件ID的第一部分作为事件ID
-            updates:parts[1], // 事件ID的第二部分作为更新次数
-            latitude:original.Data.latitude,
-            longitude:original.Data.longitude,
+            updates:parseInt(parts[1]), // 事件ID的第二部分作为更新次数
+            latitude:original_sichuan.Data.latitude,
+            longitude:original_sichuan.Data.longitude,
             depth:0,
-            epicenter:original.Data.placeName,
-            startAt:fmt_to_msts(original.Data.shockTime+" UTC+8"),//注意时区问题
-            magnitude:original.Data.magnitude
+            epicenter:original_sichuan.Data.placeName,
+            startAt:fmt_to_msts(original_sichuan.Data.shockTime+" UTC+8"),//注意时区问题
+            magnitude:original_sichuan.Data.magnitude
         };
         last_eew={data:[converted_icl, converted_cea, converted_sichuan]};
     }

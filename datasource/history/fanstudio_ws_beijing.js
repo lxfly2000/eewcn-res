@@ -37,12 +37,12 @@ function history_onsuccess(str_response){
         shuju_array.push({
             id:item.eventId,
             O_TIME:item.shockTime,
-            EPI_LAT:item.latitude,
-            EPI_LON:item.longitude,
+            EPI_LAT:item.latitude.toString(),
+            EPI_LON:item.longitude.toString(),
             EPI_DEPTH:item.depth,
             AUTO_FLAG:"M",
             EQ_TYPE:"M",
-            M:item.magnitude,
+            M:item.magnitude.toString(),
             LOCATION_C:item.placeName
         });
         last_history={shuju:shuju_array};

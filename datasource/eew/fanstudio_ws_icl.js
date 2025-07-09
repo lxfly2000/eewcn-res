@@ -36,7 +36,7 @@ function eew_onsuccess(str_response){
             depth:original.Data.depth,
             epicenter:original.Data.placeName,
             startAt:fmt_to_msts(original.Data.shockTime+" UTC+8"),//注意时区问题
-            magnitude:original.Data.magnitude
+            magnitude:parseFloat(original.Data.magnitude)
         };
         last_eew={data:[converted]};
     }
