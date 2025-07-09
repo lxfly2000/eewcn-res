@@ -27,7 +27,7 @@ function eew_postdata(){return "";}
 function eew_onsuccess(str_response){
     var original=JSON.parse(str_response);
     var converted={
-        eventId:original.EventID,
+        eventId:original.EventID.split("_")[0], // 事件ID的第一部分作为事件ID
         updates:original.ReportNum,
         latitude:original.Latitude,
         longitude:original.Longitude,

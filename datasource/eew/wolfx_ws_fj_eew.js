@@ -29,7 +29,7 @@ function eew_onsuccess(str_response){
     var original=JSON.parse(str_response);
     if(original.type==="fj_eew"){
         var converted={
-            eventId:original.EventID,
+            eventId:original.EventID.split("_")[0],//事件ID
             updates:original.ReportNum,
             latitude:original.Latitude,
             longitude:original.Longitude,

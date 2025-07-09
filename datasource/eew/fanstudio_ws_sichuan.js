@@ -1,16 +1,16 @@
 //===========预警获取函数==============
 
 //指定一个URL，若不想使用脚本的预警或地震历史功能请将相应的URL指定为空字符串，即""
-function eew_url(){return "http://118.113.105.29:8002/api/earlywarning/jsonPageList?orderType=1&pageNo=1&pageSize={eewQueryCount}&userLat=0.0&userLng=0.0";}
+function eew_url(){return "wss://ws.fanstudio.tech/sichuan";}
 
 //指定请求方式，"get"或"post"等，还可指定为"websocket"使用WebSocket连接（此时URL应为ws或wss协议）
-function eew_method(){return "get";}
+function eew_method(){return "websocket";}
 
 //指定HTTP请求头，以JSON形式返回，使用WebSocket时此函数不会被调用
 function eew_header(){return {/*"Accept":"application/json"*/};}
 
 //请求方式为POST时提交的数据，或WebSocket连接成功后要发送的数据，字符串形式，空字符串表示不发送
-function eew_postdata(){return "";}
+function eew_postdata(){return "query";}
 
 //成功返回数据时请将响应内容转换为指定的JSON形式
 //格式如下：
@@ -24,30 +24,31 @@ function eew_postdata(){return "";}
 //          magnitude:数值型震级},
 //         {...},{...},{...},...
 //        ]}
+var last_eew=null;
 function eew_onsuccess(str_response){
-    var original=JSON.parse(str_response).data;
-    var arr=[];
-    for(var i=0;i<original.length;i++){
+    var original=JSON.parse(str_response);
+    if(original.type==="initial"||original.type==="update"||original.type==="query_response"){
+        var parts=original.Data.eventId.split("_");
         var converted={
-            eventId:original[i].eventId.split("_")[0], // 事件ID的第一部分作为事件ID
-            updates:original[i].list.length,
-            latitude:original[i].latitude,
-            longitude:original[i].longitude,
+            eventId:parts[0], // 事件ID的第一部分作为事件ID
+            updates:parts[1], // 事件ID的第二部分作为更新次数
+            latitude:original.Data.latitude,
+            longitude:original.Data.longitude,
             depth:0,
-            epicenter:original[i].placeName,
-            startAt:original[i].shockTime,
-            magnitude:original[i].magnitude
+            epicenter:original.Data.placeName,
+            startAt:fmt_to_msts(original.Data.shockTime+" UTC+8"),//注意时区问题
+            magnitude:original.Data.magnitude
         };
-        arr.push(converted);
+        last_eew={data:[converted]};
     }
-    return {data:arr};
+    return last_eew;
 }
 
 //失败时的调用，参数为一个数值型的错误码
 function eew_onfail(num_errorcode){logger.error("eew_onfail: "+num_errorcode);}
 
-//根据URL判断该URL返回的是否为EEW数据，使用WebSocket时此函数不会被调用
-function is_eew_data(url){return url.split("?")[0]==="http://118.113.105.29:8002/api/earlywarning/jsonPageList";}
+//根据URL判断该URL返回的是否为EEW数据
+function is_eew_data(url){return url==="wss://ws.fanstudio.tech/sichuan";}
 
 
 //=========地震历史数据获取函数=============
@@ -55,7 +56,7 @@ function is_eew_data(url){return url.split("?")[0]==="http://118.113.105.29:8002
 function history_url(){return "";}
 function history_method(){return "get";}
 function history_header(){return {/*"Accept":"application/json"*/};}
-function history_postdata(){return "";}
+function history_postdata(){return "query_sceew";}
 function history_onsuccess(str_response){return {};}
 function history_onfail(num_errorcode){logger.error("history_onfail: "+num_errorcode);}
 function is_history_data(url){return url==="";}

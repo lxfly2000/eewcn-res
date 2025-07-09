@@ -13,6 +13,11 @@
         {"name":{"en":"Wolfx NIED","zh_CN":"Wolfx 日本防灾科研","zh_TW":"Wolfx 日本防災科研","ja":"Wolfx 防災科研"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_nied.js"},
         {"name":{"en":"Wolfx Receive from all APIs (WebSocket)","zh_CN":"Wolfx 接收所有 API (WebSocket)","zh_TW":"Wolfx 接收所有 API (WebSocket)","ja":"Wolfx すべてのAPI受信 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/wolfx_all_eew.js"},
         {"name":{"en":"Wolfx CENC","zh_CN":"Wolfx 中国地震台网","zh_TW":"Wolfx 中國地震台網","ja":"Wolfx CENC"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_cenc_eew.js"},
+        {"name":{"en":"FAN Studio CEA (WebSocket)","zh_CN":"FAN Studio 中国地震预警网地震预警 (WebSocket)","zh_TW":"FAN Studio 中國地震預警網地震預警 (WebSocket)","ja":"FAN Studio CEA (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/fanstudio_ws_cea.js"},
+        {"name":{"en":"FAN Studio Sichuan (WebSocket)","zh_CN":"FAN Studio 四川省地震局地震预警 (WebSocket)","zh_TW":"FAN Studio 四川省地震局地震預警 (WebSocket)","ja":"FAN Studio 四川省地震局地震速報 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/fanstudio_ws_sichuan.js"},
+        {"name":{"en":"FAN Studio Fujian (WebSocket)","zh_CN":"FAN Studio 福建省地震局地震预警 (WebSocket)","zh_TW":"FAN Studio 福建省地震局地震預警 (WebSocket)","ja":"FAN Studio 福建省地震局地震速報 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/fanstudio_ws_fujian.js"},
+        {"name":{"en":"FAN Studio ICL (WebSocket)","zh_CN":"FAN Studio 成都高新防灾减灾研究所地震预警 (WebSocket)","zh_TW":"FAN Studio ICL (WebSocket)","ja":"FAN Studio ICL (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/fanstudio_ws_icl.js"},
+        {"name":{"en":"FAN Studio Receive all EEW (WebSocket)","zh_CN":"FAN Studio 接收所有预警 (WebSocket)","zh_TW":"FAN Studio 接收所有預警 (WebSocket)","ja":"FAN Studio すべてのEEW受信 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/fanstudio_ws_all_eew.js"},
         {"name":{"en":"ICL","zh_CN":"成都高新减灾研究所(ICL)","zh_TW":"ICL","ja":"ICL"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/icl.js"}
     ],
     "history":[
@@ -24,7 +29,10 @@
         {"name":{"en":"Wolfx CENC Earthquakes Info (WebSocket)","zh_CN":"Wolfx 中国地震台网 (WebSocket)","zh_TW":"Wolfx 中國地震台網 (WebSocket)","ja":"Wolfx CENC 地震情報 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/history/wolfx_ws_cenc_eqlist.js"},
         {"name":{"en":"Wolfx JMA","zh_CN":"Wolfx 日本气象厅","zh_TW":"Wolfx 日本氣象廳","ja":"Wolfx 気象庁"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/history/wolfx_jma_eqlist.js"},
         {"name":{"en":"Wolfx JMA (WebSocket)","zh_CN":"Wolfx 日本气象厅 (WebSocket)","zh_TW":"Wolfx 日本氣象廳 (WebSocket)","ja":"Wolfx 気象庁 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/history/wolfx_ws_jma_eqlist.js"},
-        {"name":{"en":"Wolfx Receive from all APIs (WebSocket)","zh_CN":"Wolfx 接收所有 API (WebSocket)","zh_TW":"Wolfx 接收所有 API (WebSocket)","ja":"Wolfx すべてのAPI受信 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/wolfx_all_eew.js"}
+        {"name":{"en":"Wolfx Receive from all APIs (WebSocket)","zh_CN":"Wolfx 接收所有 API (WebSocket)","zh_TW":"Wolfx 接收所有 API (WebSocket)","ja":"Wolfx すべてのAPI受信 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/wolfx_all_eew.js"},
+        {"name":{"en":"FAN Studio CENC (WebSocket)","zh_CN":"FAN Studio 中国地震台网地震信息 (WebSocket)","zh_TW":"FAN Studio 中國地震台網地震資訊 (WebSocket)","ja":"FAN Studio CENC (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/history/fanstudio_ws_cenc.js"},
+        {"name":{"en":"FAN Studio Ningxia (WebSocket)","zh_CN":"FAN Studio 宁夏回族自治区地震局地震信息 (WebSocket)","zh_TW":"FAN Studio 寧夏回族自治區地震局地震資訊 (WebSocket)","ja":"FAN Studio 寧夏回族自治区地震局地震情報 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/history/fanstudio_ws_ningxia.js"},
+        {"name":{"en":"FAN Studio Beijing (WebSocket)","zh_CN":"FAN Studio 北京市地震局地震信息 (WebSocket)","zh_TW":"FAN Studio 北京市地震局地震資訊 (WebSocket)","ja":"FAN Studio 北京市地震局地震情報 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/history/fanstudio_ws_beijing.js"}
     ],
     "station":[
         {"name":{"en":"Wolfx SeisJS","zh_CN":"Wolfx SeisJS","zh_TW":"Wolfx SeisJS","ja":"Wolfx SeisJS"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/station/wolfx_seis.js"}

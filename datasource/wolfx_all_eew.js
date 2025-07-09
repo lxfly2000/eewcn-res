@@ -30,7 +30,7 @@ function eew_onsuccess(str_response){
     var converted;
     if(original.type==="sc_eew"){
         converted={
-            eventId:original.EventID,
+            eventId:original.EventID.split("_")[0],
             updates:original.ReportNum,
             latitude:original.Latitude,
             longitude:original.Longitude,
@@ -54,7 +54,7 @@ function eew_onsuccess(str_response){
         last_eew={data:[converted]};
     }else if(original.type==="fj_eew"){
         converted={
-            eventId:original.EventID,
+            eventId:original.EventID.split("_")[0],
             updates:original.ReportNum,
             latitude:original.Latitude,
             longitude:original.Longitude,
