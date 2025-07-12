@@ -10,7 +10,7 @@ function eew_method(){return "websocket";}
 function eew_header(){return {/*"Accept":"application/json"*/};}
 
 //请求方式为POST时提交的数据，或WebSocket连接成功后要发送的数据，字符串形式，空字符串表示不发送
-function eew_postdata(){return "query";}
+function eew_postdata(){return "{\"type\":\"query\"}";}
 
 //成功返回数据时请将响应内容转换为指定的JSON形式
 //格式如下：
@@ -27,18 +27,7 @@ function eew_postdata(){return "query";}
 var last_eew=null;
 function eew_onsuccess(str_response){
     var original=JSON.parse(str_response);
-    if(original.type==="initial"||original.type==="update"||original.type==="query_response"){
-        var original_icl=original.icl;
-        var converted_icl={
-            eventId:original_icl.Data.eventId.toString(),
-            updates:original_icl.Data.updates,
-            latitude:original_icl.Data.latitude,
-            longitude:original_icl.Data.longitude,
-            depth:original_icl.Data.depth,
-            epicenter:original_icl.Data.placeName,
-            startAt:fmt_to_msts(original_icl.Data.shockTime+" UTC+8"),//注意时区问题
-            magnitude:parseFloat(original_icl.Data.magnitude)
-        };
+    if(original.type==="initial_all"||original.type==="update"||original.type==="query_response"){
         var original_cea=original.cea;
         var converted_cea={
             eventId:original_cea.Data.eventId,
@@ -62,7 +51,7 @@ function eew_onsuccess(str_response){
             startAt:fmt_to_msts(original_sichuan.Data.shockTime+" UTC+8"),//注意时区问题
             magnitude:parseFloat(original_sichuan.Data.magnitude)
         };
-        var arr_not_sorted=[converted_icl, converted_cea, converted_sichuan];
+        var arr_not_sorted=[converted_cea, converted_sichuan];
         last_eew={data:arr_not_sorted.sort(function(a, b) {
             return b.startAt - a.startAt;
         })};
