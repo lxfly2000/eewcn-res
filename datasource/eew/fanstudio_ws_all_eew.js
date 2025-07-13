@@ -10,7 +10,7 @@ function eew_method(){return "websocket";}
 function eew_header(){return {/*"Accept":"application/json"*/};}
 
 //请求方式为POST时提交的数据，或WebSocket连接成功后要发送的数据，字符串形式，空字符串表示不发送
-function eew_postdata(){return "{\"type\":\"query\"}";}
+function eew_postdata(){return "";}
 
 //成功返回数据时请将响应内容转换为指定的JSON形式
 //格式如下：

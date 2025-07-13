@@ -14,7 +14,7 @@ function is_eew_data(url){return url==="";}
 function history_url(){return "wss://ws.fanstudio.tech/beijing";}
 function history_method(){return "websocket";}
 function history_header(){return {/*"Accept":"application/json"*/};}
-function history_postdata(){return "query";}
+function history_postdata(){return "{\"type\":\"query\"}";}
 
 //格式如下：
 //  {shuju:[{id:"字符串型事件ID",
