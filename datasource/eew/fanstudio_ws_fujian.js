@@ -28,16 +28,16 @@ var last_eew=null;
 function eew_onsuccess(str_response){
     var original=JSON.parse(str_response);
     if(original.type==="initial"||original.type==="update"||original.type==="query_response"){
-        var parts=original.data.eventId.split("_");
+        var parts=original.Data.eventId.split("_");
         var converted={
             eventId:parts[0],
             updates:parts[1],
-            latitude:original.data.latitude,
-            longitude:original.data.longitude,
+            latitude:original.Data.latitude,
+            longitude:original.Data.longitude,
             depth:0,
-            epicenter:original.data.placeName,
-            startAt:fmt_to_msts(original.data.shockTime+" UTC+8"),//注意时区问题
-            magnitude:original.data.magnitude
+            epicenter:original.Data.placeName,
+            startAt:fmt_to_msts(original.Data.shockTime+" UTC+8"),//注意时区问题
+            magnitude:original.Data.magnitude
         };
         last_eew={data:[converted]};
     }
