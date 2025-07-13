@@ -29,14 +29,14 @@ function eew_onsuccess(str_response){
     var original=JSON.parse(str_response);
     if(original.type==="initial"||original.type==="update"||original.type==="query_response"){
         var converted={
-            eventId:original.Data.eventId.toString(),
-            updates:original.Data.updates,
-            latitude:original.Data.latitude,
-            longitude:original.Data.longitude,
-            depth:original.Data.depth,
-            epicenter:original.Data.placeName,
-            startAt:fmt_to_msts(original.Data.shockTime+" UTC+8"),//注意时区问题
-            magnitude:parseFloat(original.Data.magnitude)
+            eventId:original.data.eventId.toString(),
+            updates:original.data.updates,
+            latitude:original.data.latitude,
+            longitude:original.data.longitude,
+            depth:original.data.depth,
+            epicenter:original.data.placeName,
+            startAt:fmt_to_msts(original.data.shockTime+" UTC+8"),//注意时区问题
+            magnitude:parseFloat(original.data.magnitude)
         };
         last_eew={data:[converted]};
     }

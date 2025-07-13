@@ -33,7 +33,7 @@ function history_onsuccess(str_response){
     var original=JSON.parse(str_response);
     if(original.type==="initial"||original.type==="update"||original.type==="query_response"){
         var shuju_array=[];
-        var item=original.Data;
+        var item=original.data;
         shuju_array.push({
             id:item.eventId,
             O_TIME:item.shockTime,

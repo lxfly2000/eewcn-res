@@ -30,26 +30,26 @@ function eew_onsuccess(str_response){
     if(original.type==="initial_all"||original.type==="update"||original.type==="query_response"){
         var original_cea=original.cea;
         var converted_cea={
-            eventId:original_cea.Data.eventId,
-            updates:original_cea.Data.updates,
-            latitude:parseFloat(original_cea.Data.latitude),
-            longitude:parseFloat(original_cea.Data.longitude),
-            depth:original_cea.Data.depth,
-            epicenter:original_cea.Data.placeName,
-            startAt:fmt_to_msts(original_cea.Data.shockTime+" UTC+8"),//注意时区问题
-            magnitude:parseFloat(original_cea.Data.magnitude)
+            eventId:original_cea.data.eventId,
+            updates:original_cea.data.updates,
+            latitude:parseFloat(original_cea.data.latitude),
+            longitude:parseFloat(original_cea.data.longitude),
+            depth:original_cea.data.depth,
+            epicenter:original_cea.data.placeName,
+            startAt:fmt_to_msts(original_cea.data.shockTime+" UTC+8"),//注意时区问题
+            magnitude:parseFloat(original_cea.data.magnitude)
         };
         var original_sichuan=original.sichuan;
-        var parts=original_sichuan.Data.eventId.split("_");
+        var parts=original_sichuan.data.eventId.split("_");
         var converted_sichuan={
             eventId:parts[0], // 事件ID的第一部分作为事件ID
             updates:parseInt(parts[1]), // 事件ID的第二部分作为更新次数
-            latitude:original_sichuan.Data.latitude,
-            longitude:original_sichuan.Data.longitude,
+            latitude:original_sichuan.data.latitude,
+            longitude:original_sichuan.data.longitude,
             depth:0,
-            epicenter:original_sichuan.Data.placeName,
-            startAt:fmt_to_msts(original_sichuan.Data.shockTime+" UTC+8"),//注意时区问题
-            magnitude:parseFloat(original_sichuan.Data.magnitude)
+            epicenter:original_sichuan.data.placeName,
+            startAt:fmt_to_msts(original_sichuan.data.shockTime+" UTC+8"),//注意时区问题
+            magnitude:parseFloat(original_sichuan.data.magnitude)
         };
         var arr_not_sorted=[converted_cea, converted_sichuan];
         last_eew={data:arr_not_sorted.sort(function(a, b) {
