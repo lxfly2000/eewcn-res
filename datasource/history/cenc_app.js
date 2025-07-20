@@ -70,8 +70,15 @@ function is_station_data(url){return url==="";}
 
 //将毫秒数时间戳转为YYYY-MM-DD HH:MM:SS
 function msts_to_fmt(msts){
-    var isodt=new Date(msts).toISOString();
-    return isodt.substr(0,10)+" "+isodt.substr(11,8);
+	var date=new Date(msts);
+	let year = date.getFullYear();
+	let month = ('0' + (date.getMonth() + 1)).slice(-2);
+	let day = ('0' + date.getDate()).slice(-2);
+	let hours = ('0' + date.getHours()).slice(-2);
+	let minutes = ('0' + date.getMinutes()).slice(-2);
+	let seconds = ('0' + date.getSeconds()).slice(-2);
+	let formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+	return formattedDate;
 }
 
 //将YYYY-MM-DD HH:MM:SS转为毫秒数时间戳
