@@ -46,7 +46,9 @@ function history_onsuccess(str_response){
             LOCATION_C:item.placeName
         });
         last_history={shuju:shuju_array};
-    }
+    }else if(original.type==="notice"||original.type==="error"){
+		logger.info(str_response);
+	}
     return last_history;
 }
 

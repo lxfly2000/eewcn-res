@@ -40,7 +40,9 @@ function eew_onsuccess(str_response){
             magnitude:original.Data.magnitude
         };
         last_eew={data:[converted]};
-    }
+    }else if(original.type==="notice"||original.type==="error"){
+		logger.info(str_response);
+	}
     return last_eew;
 }
 

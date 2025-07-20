@@ -55,7 +55,9 @@ function eew_onsuccess(str_response){
         last_eew={data:arr_not_sorted.sort(function(a, b) {
             return b.startAt - a.startAt;
         })};
-    }
+    }else if(original.type==="notice"||original.type==="error"){
+		logger.info(str_response);
+	}
     return last_eew;
 }
 
