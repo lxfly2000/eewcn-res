@@ -66,7 +66,7 @@ function eew_onsuccess(str_response){
                 longitude:spot[i].longitude,
                 depth:spot[i].depth,
                 epicenter:spot[i].location,
-                startAt:spot[i].event_time*1000,
+                startAt:spot[i].created_at*1000,
                 magnitude:parseFloat(spot[i].level)
             });
         }
@@ -135,7 +135,7 @@ function history_onsuccess(str_response){
         for(var i=0;i<spot.length;i++){
             converted.push({
                 id:spot[i].third_id,
-                O_TIME:msts_to_fmt(spot[i].event_time*1000),
+                O_TIME:msts_to_fmt(spot[i].created_at*1000),
                 EPI_LAT:spot[i].latitude.toString(),
                 EPI_LON:spot[i].longitude.toString(),
                 EPI_DEPTH:spot[i].depth,
@@ -203,8 +203,15 @@ function setUserData(data){
 
 //将毫秒数时间戳转为YYYY-MM-DD HH:MM:SS
 function msts_to_fmt(msts){
-    var isodt=new Date(msts).toISOString();
-    return isodt.substr(0,10)+" "+isodt.substr(11,8);
+	var date=new Date(msts);
+	let year = date.getFullYear();
+	let month = ('0' + (date.getMonth() + 1)).slice(-2);
+	let day = ('0' + date.getDate()).slice(-2);
+	let hours = ('0' + date.getHours()).slice(-2);
+	let minutes = ('0' + date.getMinutes()).slice(-2);
+	let seconds = ('0' + date.getSeconds()).slice(-2);
+	let formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+	return formattedDate;
 }
 
 //将YYYY-MM-DD HH:MM:SS转为毫秒数时间戳
