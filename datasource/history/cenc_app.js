@@ -39,7 +39,7 @@ function history_onsuccess(str_response){
             EPI_LAT:item.latitude.toString(),
             EPI_LON:item.longitude.toString(),
             EPI_DEPTH:item.depth/1000,
-            AUTO_FLAG:"M",
+            AUTO_FLAG:(item.eq_type==="A")?"(自动测定)":"M",
             EQ_TYPE:"M",
             M:item.mag.toString(),
             LOCATION_C:item.loc_name
