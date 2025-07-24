@@ -431,59 +431,6 @@ Item {
         fieldOfView: mapView.fieldOfView
     }
 
-    Column{
-        id: columnHeads
-        //visible: false
-        x: 2
-        y: 2
-        spacing: 1
-        transformOrigin: Item.TopLeft
-        scale: getWindowZoom()
-        /*RectangeHead*/
-    }
-
-    Column{
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.rightMargin: 5
-        anchors.bottomMargin: 2
-        spacing: 1
-        transformOrigin: Item.BottomRight
-        scale: getWindowZoom()
-
-        Column {
-            id: columnCounter
-            visible: false
-            anchors.right: parent.right
-
-            Text {
-                id: textSwaveArrivingIn
-                color: "#ffffff"
-                text: qsTr("S Wave arriving in…")
-                font.bold: true
-                style: Text.Outline
-                anchors.right: parent.right
-                font.pixelSize: 14
-            }
-
-            Column{
-                id: columnListCounters
-                spacing: 1
-                /*ColumnListCounters*/
-            }
-        }
-
-        Text {
-            id: textEEWTime
-            color: "red"
-            text: "0000-00-00 00:00:00"
-            font.pixelSize: 14
-            font.bold: true
-            anchors.right: parent.right
-            style: Text.Outline
-        }
-    }
-
     Column {
         //id给js用，objectName给C++用，而且必须带引号
         id: columnLegends
@@ -507,208 +454,24 @@ Item {
 
         Column{
             id: columnLegendIntensities
-            Row{
-                spacing: 2
-                Rectangle{
-                    width: 20
-                    height: 20
-                    color: getIntColors(12)
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Text {
-                    text: "12"
-                    color: "white"
-                    style: Text.Outline
-                    font.pixelSize: 14
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-            Row{
-                spacing: 2
-                Rectangle{
-                    width: 20
-                    height: 20
-                    color: getIntColors(11)
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Text {
-                    text: "11"
-                    color: "white"
-                    style: Text.Outline
-                    font.pixelSize: 14
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-            Row{
-                spacing: 2
-                Rectangle{
-                    width: 20
-                    height: 20
-                    color: getIntColors(10)
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Text {
-                    text: "10"
-                    color: "white"
-                    style: Text.Outline
-                    font.pixelSize: 14
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-            Row{
-                spacing: 2
-                Rectangle{
-                    width: 20
-                    height: 20
-                    color: getIntColors(9)
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Text {
-                    text: "9"
-                    color: "white"
-                    style: Text.Outline
-                    font.pixelSize: 14
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-            Row{
-                spacing: 2
-                Rectangle{
-                    width: 20
-                    height: 20
-                    color: getIntColors(8)
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Text {
-                    text: "8"
-                    color: "white"
-                    style: Text.Outline
-                    font.pixelSize: 14
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-            Row{
-                spacing: 2
-                Rectangle{
-                    width: 20
-                    height: 20
-                    color: getIntColors(7)
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Text {
-                    text: "7"
-                    color: "white"
-                    style: Text.Outline
-                    font.pixelSize: 14
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-            Row{
-                spacing: 2
-                Rectangle{
-                    width: 20
-                    height: 20
-                    color: getIntColors(6)
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Text {
-                    text: "6"
-                    color: "white"
-                    style: Text.Outline
-                    font.pixelSize: 14
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-            Row{
-                spacing: 2
-                Rectangle{
-                    width: 20
-                    height: 20
-                    color: getIntColors(5)
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Text {
-                    text: "5"
-                    color: "white"
-                    style: Text.Outline
-                    font.pixelSize: 14
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-            Row{
-                spacing: 2
-                Rectangle{
-                    width: 20
-                    height: 20
-                    color: getIntColors(4)
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Text {
-                    text: "4"
-                    color: "white"
-                    style: Text.Outline
-                    font.pixelSize: 14
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-            Row{
-                spacing: 2
-                Rectangle{
-                    width: 20
-                    height: 20
-                    color: getIntColors(3)
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Text {
-                    text: "3"
-                    color: "white"
-                    style: Text.Outline
-                    font.pixelSize: 14
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-            Row{
-                spacing: 2
-                Rectangle{
-                    width: 20
-                    height: 20
-                    color: getIntColors(2)
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Text {
-                    text: "2"
-                    color: "white"
-                    style: Text.Outline
-                    font.pixelSize: 14
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-            Row{
-                spacing: 2
-                Rectangle{
-                    width: 20
-                    height: 20
-                    color: getIntColors(1)
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Text {
-                    text: "1"
-                    color: "white"
-                    style: Text.Outline
-                    font.pixelSize: 14
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
+            Repeater {
+                model: 12
+                Row{
+                    spacing: 2
+                    Rectangle{
+                        width: 20
+                        height: 20
+                        color: getIntColors(12-index)
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text {
+                        text: (12-index).toString()
+                        color: "white"
+                        style: Text.Outline
+                        font.pixelSize: 14
+                        font.bold: true
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
                 }
             }
         }
@@ -806,207 +569,23 @@ Item {
                     spacing: 2
                     Row{
                         id: columnSWaveLegends
-                        Rectangle{
-                            width: 20
-                            height: 20
-                            radius: 10
-                            color: 'transparent'
-                            border.color: getIntLineColor(1)
-                            border.width: 1
-                            RadialGradient {
-                                anchors.fill: parent
-                                gradient: Gradient {
-                                    GradientStop { position: 0.0; color: "transparent" }
-                                    GradientStop { position: 0.25; color: "transparent" }
-                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(1).substr(1) }
-                                    GradientStop { position: 0.5; color: "transparent" }
-                                }
-                            }
-                        }
-                        Rectangle{
-                            width: 20
-                            height: 20
-                            radius: 10
-                            color: 'transparent'
-                            border.color: getIntLineColor(2)
-                            border.width: 1
-                            RadialGradient {
-                                anchors.fill: parent
-                                gradient: Gradient {
-                                    GradientStop { position: 0.0; color: "transparent" }
-                                    GradientStop { position: 0.25; color: "transparent" }
-                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(2).substr(1) }
-                                    GradientStop { position: 0.5; color: "transparent" }
-                                }
-                            }
-                        }
-                        Rectangle{
-                            width: 20
-                            height: 20
-                            radius: 10
-                            color: 'transparent'
-                            border.color: getIntLineColor(3)
-                            border.width: 1
-                            RadialGradient {
-                                anchors.fill: parent
-                                gradient: Gradient {
-                                    GradientStop { position: 0.0; color: "transparent" }
-                                    GradientStop { position: 0.25; color: "transparent" }
-                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(3).substr(1) }
-                                    GradientStop { position: 0.5; color: "transparent" }
-                                }
-                            }
-                        }
-                        Rectangle{
-                            width: 20
-                            height: 20
-                            radius: 10
-                            color: 'transparent'
-                            border.color: getIntLineColor(4)
-                            border.width: 1
-                            RadialGradient {
-                                anchors.fill: parent
-                                gradient: Gradient {
-                                    GradientStop { position: 0.0; color: "transparent" }
-                                    GradientStop { position: 0.25; color: "transparent" }
-                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(4).substr(1) }
-                                    GradientStop { position: 0.5; color: "transparent" }
-                                }
-                            }
-                        }
-                        Rectangle{
-                            width: 20
-                            height: 20
-                            radius: 10
-                            color: 'transparent'
-                            border.color: getIntLineColor(5)
-                            border.width: 1
-                            RadialGradient {
-                                anchors.fill: parent
-                                gradient: Gradient {
-                                    GradientStop { position: 0.0; color: "transparent" }
-                                    GradientStop { position: 0.25; color: "transparent" }
-                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(5).substr(1) }
-                                    GradientStop { position: 0.5; color: "transparent" }
-                                }
-                            }
-                        }
-                        Rectangle{
-                            width: 20
-                            height: 20
-                            radius: 10
-                            color: 'transparent'
-                            border.color: getIntLineColor(6)
-                            border.width: 1
-                            RadialGradient {
-                                anchors.fill: parent
-                                gradient: Gradient {
-                                    GradientStop { position: 0.0; color: "transparent" }
-                                    GradientStop { position: 0.25; color: "transparent" }
-                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(6).substr(1) }
-                                    GradientStop { position: 0.5; color: "transparent" }
-                                }
-                            }
-                        }
-                        Rectangle{
-                            width: 20
-                            height: 20
-                            radius: 10
-                            color: 'transparent'
-                            border.color: getIntLineColor(7)
-                            border.width: 1
-                            RadialGradient {
-                                anchors.fill: parent
-                                gradient: Gradient {
-                                    GradientStop { position: 0.0; color: "transparent" }
-                                    GradientStop { position: 0.25; color: "transparent" }
-                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(7).substr(1) }
-                                    GradientStop { position: 0.5; color: "transparent" }
-                                }
-                            }
-                        }
-                        Rectangle{
-                            width: 20
-                            height: 20
-                            radius: 10
-                            color: 'transparent'
-                            border.color: getIntLineColor(8)
-                            border.width: 1
-                            RadialGradient {
-                                anchors.fill: parent
-                                gradient: Gradient {
-                                    GradientStop { position: 0.0; color: "transparent" }
-                                    GradientStop { position: 0.25; color: "transparent" }
-                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(8).substr(1) }
-                                    GradientStop { position: 0.5; color: "transparent" }
-                                }
-                            }
-                        }
-                        Rectangle{
-                            width: 20
-                            height: 20
-                            radius: 10
-                            color: 'transparent'
-                            border.color: getIntLineColor(9)
-                            border.width: 1
-                            RadialGradient {
-                                anchors.fill: parent
-                                gradient: Gradient {
-                                    GradientStop { position: 0.0; color: "transparent" }
-                                    GradientStop { position: 0.25; color: "transparent" }
-                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(9).substr(1) }
-                                    GradientStop { position: 0.5; color: "transparent" }
-                                }
-                            }
-                        }
-                        Rectangle{
-                            width: 20
-                            height: 20
-                            radius: 10
-                            color: 'transparent'
-                            border.color: getIntLineColor(10)
-                            border.width: 1
-                            RadialGradient {
-                                anchors.fill: parent
-                                gradient: Gradient {
-                                    GradientStop { position: 0.0; color: "transparent" }
-                                    GradientStop { position: 0.25; color: "transparent" }
-                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(10).substr(1) }
-                                    GradientStop { position: 0.5; color: "transparent" }
-                                }
-                            }
-                        }
-                        Rectangle{
-                            width: 20
-                            height: 20
-                            radius: 10
-                            color: 'transparent'
-                            border.color: getIntLineColor(11)
-                            border.width: 1
-                            RadialGradient {
-                                anchors.fill: parent
-                                gradient: Gradient {
-                                    GradientStop { position: 0.0; color: "transparent" }
-                                    GradientStop { position: 0.25; color: "transparent" }
-                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(11).substr(1) }
-                                    GradientStop { position: 0.5; color: "transparent" }
-                                }
-                            }
-                        }
-                        Rectangle{
-                            width: 20
-                            height: 20
-                            radius: 10
-                            color: 'transparent'
-                            border.color: getIntLineColor(12)
-                            border.width: 1
-                            RadialGradient {
-                                anchors.fill: parent
-                                gradient: Gradient {
-                                    GradientStop { position: 0.0; color: "transparent" }
-                                    GradientStop { position: 0.25; color: "transparent" }
-                                    GradientStop { position: 0.49609375; color: '#55'+getIntColors(12).substr(1) }
-                                    GradientStop { position: 0.5; color: "transparent" }
+                        Repeater {
+                            model: 12
+                            Rectangle{
+                                width: 20
+                                height: 20
+                                radius: 10
+                                color: 'transparent'
+                                border.color: getIntLineColor(index+1)
+                                border.width: 1
+                                RadialGradient {
+                                    anchors.fill: parent
+                                    gradient: Gradient {
+                                        GradientStop { position: 0.0; color: "transparent" }
+                                        GradientStop { position: 0.25; color: "transparent" }
+                                        GradientStop { position: 0.49609375; color: '#55'+getIntColors(index+1).substr(1) }
+                                        GradientStop { position: 0.5; color: "transparent" }
+                                    }
                                 }
                             }
                         }
@@ -1022,6 +601,59 @@ Item {
                     }
                 }
             }
+        }
+    }
+
+    Column{
+        id: columnHeads
+        //visible: false
+        x: 2
+        y: 2
+        spacing: 1
+        transformOrigin: Item.TopLeft
+        scale: getWindowZoom()
+        /*RectangeHead*/
+    }
+
+    Column{
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: 5
+        anchors.bottomMargin: 2
+        spacing: 1
+        transformOrigin: Item.BottomRight
+        scale: getWindowZoom()
+
+        Column {
+            id: columnCounter
+            visible: false
+            anchors.right: parent.right
+
+            Text {
+                id: textSwaveArrivingIn
+                color: "#ffffff"
+                text: qsTr("S Wave arriving in…")
+                font.bold: true
+                style: Text.Outline
+                anchors.right: parent.right
+                font.pixelSize: 14
+            }
+
+            Column{
+                id: columnListCounters
+                spacing: 1
+                /*ColumnListCounters*/
+            }
+        }
+
+        Text {
+            id: textEEWTime
+            color: "red"
+            text: "0000-00-00 00:00:00"
+            font.pixelSize: 14
+            font.bold: true
+            anchors.right: parent.right
+            style: Text.Outline
         }
     }
 
