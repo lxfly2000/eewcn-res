@@ -2,6 +2,7 @@ import QtQuick 2.14
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 2.15 as QControl2
+import QtQuick.Layouts 1.15
 import Qt.labs.settings 1.1
 
 TabView {
@@ -193,136 +194,197 @@ TabView {
         id: tabHistory
         title: qsTr("Records")
 
-        SplitView {
+        Rectangle {
             anchors.fill: parent
-            orientation: Qt.Vertical
-            ScrollView{
-                implicitHeight: parent.height*3/4
+            color: "transparent"
+            Settings {
+                property alias statShowMt: checkShowMt.checked
+            }
 
-                ListView{
-                    width: parent.width
-                    model: historyListModel
-                    delegate: cmpDelegate
-                    highlight: Rectangle{color: Qt.lighter("lightskyblue",1.25)}
-                    property bool isStation: false
+            SplitView {
+                anchors.fill: parent
+                orientation: Qt.Vertical
+                ScrollView{
+                    Layout.fillHeight: true
+
+                    ListView{
+                        width: parent.width
+                        model: historyListModel
+                        delegate: cmpDelegate
+                        highlight: Rectangle{color: Qt.lighter("lightskyblue",1.25)}
+                        property bool isStation: false
+                    }
+                }
+
+                Rectangle {
+                    id: rectangleStat
+                    visible: checkShowMt.checked
+                    implicitHeight: parent.height/4
+                    color: "white"
+                    property int nowTimeSecond: now_ts()
+                    property int recordDays: 7
+                    property int recordSeconds: recordDays*24*60*60
+                    property real barMinWidth: 3
+                    Settings {
+                        property alias statRecordDays: rectangleStat.recordDays
+                        property alias statBarMinWidth: rectangleStat.barMinWidth
+                    }
+
+                    Timer{
+                        interval: 60000
+                        running: true
+                        repeat: true
+                        onTriggered: parent.nowTimeSecond=now_ts()
+                    }
+
+                    Repeater {
+                        model: historyListModel
+                        delegate: Component {
+                            Rectangle {
+                                width: Math.max(parent.barMinWidth, parent.width*60/parent.recordSeconds)
+                                height: parent.height*eqMagnitude/10
+                                x: parent.width*(fmt_to_ts(eqTime)-parent.nowTimeSecond+parent.recordSeconds)/parent.recordSeconds-width/2
+                                y: parent.height-height
+                                color: eqBkColor
+                            }
+                        }
+                    }
+                    Canvas {
+                        anchors.fill: parent
+                        onPaint: {
+                            var ctx = getContext("2d");
+                            ctx.strokeStyle = "silver";
+                            ctx.font="12px monospace";
+                            ctx.beginPath();
+                            for (var i=2;i<10;i=i+2){
+                                ctx.moveTo(20,parent.height*(10-i)/10);
+                                ctx.lineTo(parent.width,parent.height*(10-i)/10);
+                                ctx.fillText("M"+i,0,parent.height*(10-i)/10);
+                            }
+                            ctx.stroke();
+                            ctx.closePath();
+                        }
+                    }
+                    property bool mouseEntered: false
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        acceptedButtons: Qt.AllButtons
+                        onClicked: {
+                            if(mouse.button===Qt.RightButton){
+                                contextMenu.popup();
+                            }
+                        }
+                        onPressAndHold: {
+                            if(isTouchEnvironment){
+                                contextMenu.popup();
+                            }
+                        }
+                        onEntered: {
+                            parent.mouseEntered=true;
+                        }
+                        onExited: {
+                            parent.mouseEntered=false;
+                        }
+                        Menu{
+                            id: contextMenu
+                            MenuItem{
+                                text: qsTr("&Settings…")
+                                onTriggered: columnSettingDataRange.visible=true
+                            }
+                        }
+                    }
+                    QControl2.ToolTip.delay: 1000
+                    QControl2.ToolTip.timeout: 10000
+                    QControl2.ToolTip.visible: mouseEntered
+                    QControl2.ToolTip.text: qsTr("Magnitude-Time Statistics")
+                    Rectangle {
+                        id: columnSettingDataRange
+                        anchors.fill: parent
+                        visible: false
+                        ScrollView {
+                            anchors.fill: parent
+                            Column {
+                                Label {
+                                    text: qsTr("Days of data to display:")
+                                }
+                                SpinBox {
+                                    id: spinRecordDays
+                                    minimumValue: 1
+                                    maximumValue: 65535
+                                    value: rectangleStat.recordDays
+                                }
+                                Label {
+                                    text: qsTr("Minimum bar width (px):")
+                                }
+                                SpinBox {
+                                    id: spinMinBarWidth
+                                    minimumValue: 1
+                                    maximumValue: 65535
+                                    value: rectangleStat.barMinWidth
+                                }
+
+                                Button {
+                                    text: qsTr("&OK")
+                                    onClicked: {
+                                        rectangleStat.recordDays=spinRecordDays.value;
+                                        rectangleStat.barMinWidth=spinMinBarWidth.value;
+                                        columnSettingDataRange.visible=false;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
             Rectangle {
-                id: rectangleStat
-                implicitHeight: parent.height/4
-                color: "white"
-                property int nowTimeSecond: now_ts()
-                property int recordDays: 7
-                property int recordSeconds: recordDays*24*60*60
-                property real barMinWidth: 3
-                Settings {
-                    property alias statRecordDays: rectangleStat.recordDays
-                    property alias statBarMinWidth: rectangleStat.barMinWidth
-                }
-
-                Timer{
-                    interval: 60000
-                    running: true
-                    repeat: true
-                    onTriggered: parent.nowTimeSecond=now_ts()
-                }
-
-                Repeater {
-                    model: historyListModel
-                    delegate: Component {
-                        Rectangle {
-                            width: Math.max(parent.barMinWidth, parent.width*60/parent.recordSeconds)
-                            height: parent.height*eqMagnitude/10
-                            x: parent.width*(fmt_to_ts(eqTime)-parent.nowTimeSecond+parent.recordSeconds)/parent.recordSeconds-width/2
-                            y: parent.height-height
-                            color: eqBkColor
-                        }
-                    }
-                }
-                Canvas {
-                    anchors.fill: parent
-                    onPaint: {
-                        var ctx = getContext("2d");
-                        ctx.strokeStyle = "silver";
-                        ctx.font="12px monospace";
-                        ctx.beginPath();
-                        for (var i=2;i<10;i=i+2){
-                            ctx.moveTo(20,parent.height*(10-i)/10);
-                            ctx.lineTo(parent.width,parent.height*(10-i)/10);
-                            ctx.fillText("M"+i,0,parent.height*(10-i)/10);
-                        }
-                        ctx.stroke();
-                        ctx.closePath();
-                    }
-                }
-                property bool mouseEntered: false
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                color: checkShowMt.visible ? "white" : "transparent"
+                width: checkShowMt.width
+                height: checkShowMt.height
+                visible: !columnSettingDataRange.visible
                 MouseArea {
                     anchors.fill: parent
                     hoverEnabled: true
-                    acceptedButtons: Qt.AllButtons
+                    propagateComposedEvents: true
+                    onEntered: {
+                        checkShowMt.visible=true;
+                        //onEntered没有mouse参数
+                        //mouse.accepted=false;
+                    }
+                    onPositionChanged: {
+                        checkShowMt.visible=true;
+                        mouse.accepted=false;//No effect
+                    }
                     onClicked: {
-                        if(mouse.button===Qt.RightButton){
-                            contextMenu.popup();
-                        }
+                        checkShowMt.visible=true;
+                        mouse.accepted=false;
                     }
                     onPressAndHold: {
                         if(isTouchEnvironment){
-                            contextMenu.popup();
-                        }
-                    }
-                    onEntered: {
-                        parent.mouseEntered=true;
-                    }
-                    onExited: {
-                        parent.mouseEntered=false;
-                    }
-                    Menu{
-                        id: contextMenu
-                        MenuItem{
-                            text: qsTr("&Settings…")
-                            onTriggered: columnSettingDataRange.visible=true
+                            checkShowMt.visible=true;
+                            mouse.accepted=false;
                         }
                     }
                 }
-                QControl2.ToolTip.delay: 1000
-                QControl2.ToolTip.timeout: 10000
-                QControl2.ToolTip.visible: mouseEntered
-                QControl2.ToolTip.text: qsTr("Magnitude-Time Statistics")
-                Rectangle {
-                    id: columnSettingDataRange
-                    anchors.fill: parent
-                    visible: false
-                    Column {
-                        anchors.fill: parent
-                        Label {
-                            text: qsTr("Days of data to display:")
-                        }
-                        SpinBox {
-                            id: spinRecordDays
-                            minimumValue: 1
-                            maximumValue: 65535
-                            value: rectangleStat.recordDays
-                        }
-                        Label {
-                            text: qsTr("Minimum bar width (px):")
-                        }
-                        SpinBox {
-                            id: spinMinBarWidth
-                            minimumValue: 1
-                            maximumValue: 65535
-                            value: rectangleStat.barMinWidth
-                        }
-
-                        Button {
-                            text: qsTr("&OK")
-                            onClicked: {
-                                rectangleStat.recordDays=spinRecordDays.value;
-                                rectangleStat.barMinWidth=spinMinBarWidth.value;
-                                columnSettingDataRange.visible=false;
-                            }
+                CheckBox {
+                    id: checkShowMt
+                    checked: true
+                    visible: true
+                    text: qsTr("Magnitude-Time Statistics")
+                    onVisibleChanged: {
+                        if(visible){
+                            timerCheckShowMtDismiss.start();
                         }
                     }
+                }
+                Timer {
+                    id: timerCheckShowMtDismiss
+                    interval: 5000
+                    running: true
+                    onTriggered: checkShowMt.visible=false
                 }
             }
         }
