@@ -11,6 +11,8 @@ Item {
     function getWindowZoom(){
         return height/480;//假定初始QML窗口大小为640*480
     }
+    //Windows, MacOS, Linux, Android, iOS
+    property string runningOS: "Unknown"
     property string emptyGeoJson: '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[]}}]}'
 
     Map {
@@ -483,7 +485,7 @@ Item {
                     Image {
                         width: 20
                         height: 20
-                        source: "file:Media/green.svg"
+                        source: runningOS==="Android" ? "assets:Media/green.svg" : "file:Media/green.svg"
                         fillMode: Image.PreserveAspectFit
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -504,7 +506,7 @@ Item {
                     Image {
                         width: 20
                         height: 20
-                        source: "file:Media/red.svg"
+                        source: runningOS==="Android" ? "assets:Media/red.svg" : "file:Media/red.svg"
                         fillMode: Image.PreserveAspectFit
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -525,7 +527,7 @@ Item {
                     Image {
                         width: 20
                         height: 20
-                        source: "file:Media/cross.svg"
+                        source: runningOS==="Android" ? "assets:Media/cross.svg" : "file:Media/cross.svg"
                         fillMode: Image.PreserveAspectFit
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -922,9 +924,15 @@ Item {
 
     function setHome(latitude,longitude){
         if(homeItem===null){
-            homeItem=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
-                                        'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
-                                        'sourceItem:Image{id:img;width:50;height:50;source:"file:Media/green.svg"}}',homeMarkMapView);
+            if(runningOS==="Android"){
+                homeItem=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
+                                            'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
+                                            'sourceItem:Image{id:img;width:50;height:50;source:"assets:Media/green.svg"}}',homeMarkMapView);
+            }else{
+                homeItem=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
+                                            'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
+                                            'sourceItem:Image{id:img;width:50;height:50;source:"file:Media/green.svg"}}',homeMarkMapView);
+            }
             homeMarkMapView.addMapItem(homeItem);
         }
         homeItem.coordinate=QtPositioning.coordinate(latitude,longitude);
@@ -933,9 +941,16 @@ Item {
     function putEEWMark(eventId,latitude,longitude,intensity){
         var sl=(3+1.5*Math.exp(0.25*intensity))*5;
         //注意此处应合并为一个脚本创建，否则会有释放不掉的问题
-        var item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
-                                    'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
-                                    'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"file:Media/cross.svg"}}',eewMarkMapView);
+        var item;
+        if(runningOS==="Android"){
+            item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
+                                        'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
+                                        'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"assets:Media/cross.svg"}}',eewMarkMapView);
+        }else{
+            item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
+                                        'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
+                                        'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"file:Media/cross.svg"}}',eewMarkMapView);
+        }
         item.coordinate=QtPositioning.coordinate(latitude,longitude);
         item.visible=!eewMarksTimer.running;
         eewItems[eventId]=item;
@@ -945,9 +960,16 @@ Item {
     function putHistoryMark(latitude,longitude,intensity){
         var sl=(3+1.5*Math.exp(0.25*intensity))*5;
         //注意此处应合并为一个脚本创建，否则会有释放不掉的问题
-        var item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
-                                    'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
-                                    'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"file:Media/red.svg"}}',historyMarkMapView);
+        var item;
+        if(runningOS==="Android"){
+            item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
+                                        'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
+                                        'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"assets:Media/red.svg"}}',historyMarkMapView);
+        }else{
+            item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
+                                        'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
+                                        'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"file:Media/red.svg"}}',historyMarkMapView);
+        }
         item.coordinate=QtPositioning.coordinate(latitude,longitude);
         item.visible=!eewMarksTimer.running;
         historyItems.push(item);
@@ -1076,7 +1098,7 @@ Item {
         swaveItems[eventId].border.color=getIntLineColor(intensity);//边线色，对mapboxgl貌似不起作用
         if(radiusSwave<0){
             if(barItems[eventId]===undefined){
-                var item=Qt.createQmlObject('import QtLocation 5.14; MapQuickItem {scale:getWindowZoom()}',numberBarMapView);
+                /*var*/ item=Qt.createQmlObject('import QtLocation 5.14; MapQuickItem {scale:getWindowZoom()}',numberBarMapView);
                 var rb=Qt.createQmlObject('import QtQuick 2.14;Rectangle{}',numberBarMapView);
                 var rpw=Qt.createQmlObject('import QtQuick 2.14;Rectangle{}',numberBarMapView);
                 var rsw=Qt.createQmlObject('import QtQuick 2.14;Rectangle{}',numberBarMapView);
@@ -1434,7 +1456,7 @@ Item {
         var epiItem=Qt.createQmlObject('import QtLocation 5.14; MapQuickItem {}',supplementMapView);
         var img=Qt.createQmlObject('import QtQuick 2.14; Image{}',supplementMapView);
         img.width=img.height=(3+1.5*Math.exp(0.25*epiInt))*5;
-        img.source='file:Media/red.svg';
+        img.source=(runningOS==="Android"?'assets:Media/red.svg':'file:Media/red.svg');
         epiItem.anchorPoint.x=img.width/2;
         epiItem.anchorPoint.y=img.height/2;
         epiItem.sourceItem=img;
