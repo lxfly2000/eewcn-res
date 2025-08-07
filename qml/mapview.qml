@@ -488,6 +488,7 @@ Item {
                         source: runningOS==="Android" ? "assets:Media/green.svg" : "file:Media/green.svg"
                         fillMode: Image.PreserveAspectFit
                         anchors.verticalCenter: parent.verticalCenter
+                        mipmap: true
                     }
 
                     Text {
@@ -509,6 +510,7 @@ Item {
                         source: runningOS==="Android" ? "assets:Media/red.svg" : "file:Media/red.svg"
                         fillMode: Image.PreserveAspectFit
                         anchors.verticalCenter: parent.verticalCenter
+                        mipmap: true
                     }
 
                     Text {
@@ -530,6 +532,7 @@ Item {
                         source: runningOS==="Android" ? "assets:Media/cross.svg" : "file:Media/cross.svg"
                         fillMode: Image.PreserveAspectFit
                         anchors.verticalCenter: parent.verticalCenter
+                        mipmap: true
                     }
 
                     Text {
@@ -687,6 +690,7 @@ Item {
                 Image{
                     anchors.fill: parent
                     source: 'data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><rect x="100" y="150" rx="25" ry="25" width="400" height="50" fill="white"/><rect x="100" y="275" rx="25" ry="25" width="400" height="50" fill="white"/><rect x="100" y="400" rx="25" ry="25" width="400" height="50" fill="white"/></svg>'
+                    mipmap: true
                 }
             }
             onClicked: mapviewMenu.popup()
@@ -927,11 +931,11 @@ Item {
             if(runningOS==="Android"){
                 homeItem=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
                                             'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
-                                            'sourceItem:Image{id:img;width:50;height:50;source:"assets:Media/green.svg"}}',homeMarkMapView);
+                                            'sourceItem:Image{id:img;width:50;height:50;source:"assets:Media/green.svg";mipmap: true}}',homeMarkMapView);
             }else{
                 homeItem=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
                                             'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
-                                            'sourceItem:Image{id:img;width:50;height:50;source:"file:Media/green.svg"}}',homeMarkMapView);
+                                            'sourceItem:Image{id:img;width:50;height:50;source:"file:Media/green.svg";mipmap: true}}',homeMarkMapView);
             }
             homeMarkMapView.addMapItem(homeItem);
         }
@@ -945,11 +949,11 @@ Item {
         if(runningOS==="Android"){
             item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
                                         'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
-                                        'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"assets:Media/cross.svg"}}',eewMarkMapView);
+                                        'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"assets:Media/cross.svg";mipmap: true}}',eewMarkMapView);
         }else{
             item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
                                         'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
-                                        'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"file:Media/cross.svg"}}',eewMarkMapView);
+                                        'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"file:Media/cross.svg";mipmap: true}}',eewMarkMapView);
         }
         item.coordinate=QtPositioning.coordinate(latitude,longitude);
         item.visible=!eewMarksTimer.running;
@@ -964,11 +968,11 @@ Item {
         if(runningOS==="Android"){
             item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
                                         'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
-                                        'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"assets:Media/red.svg"}}',historyMarkMapView);
+                                        'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"assets:Media/red.svg";mipmap: true}}',historyMarkMapView);
         }else{
             item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
                                         'MapQuickItem {anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
-                                        'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"file:Media/red.svg"}}',historyMarkMapView);
+                                        'sourceItem:Image{id:img;width:'+sl+';height:'+sl+';source:"file:Media/red.svg";mipmap: true}}',historyMarkMapView);
         }
         item.coordinate=QtPositioning.coordinate(latitude,longitude);
         item.visible=!eewMarksTimer.running;
