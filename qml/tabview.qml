@@ -9,7 +9,7 @@ TabView {
     property bool isTouchEnvironment: false
     tabPosition: Qt.BottomEdge
     signal tabViewSetMapCenter(double lat,double lng)
-    signal tabViewShowIntensity(double lat,double lng,double mag,double depth)
+    signal tabViewShowIntensity(double lat,double lng,double mag,double depth,double epiIntensity)
     style: TabViewStyle {
         frameOverlap: 1
         tab: Rectangle {
@@ -159,7 +159,7 @@ TabView {
                     id: contextMenu
                     MenuItem{
                         text: qsTr("View &Intensity on Map")
-                        onTriggered: tabViewShowIntensity(eqLatitude,eqLongitude,eqMagnitude,eqDepth)
+                        onTriggered: tabViewShowIntensity(eqLatitude,eqLongitude,eqMagnitude,eqDepth,eqIntensity)
                     }
                 }
             }
