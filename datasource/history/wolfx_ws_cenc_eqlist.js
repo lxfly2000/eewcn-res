@@ -59,10 +59,11 @@ function is_history_data(url){return url==="wss://ws-api.wolfx.jp/cenc_eqlist";}
 
 function history_onreport(str_data){
     var data=JSON.parse(str_data);
+    var date=data.O_TIME.substr(8,2);
     var hour=data.O_TIME.substr(11,2);
     var minute=data.O_TIME.substr(14,2);
     tts.play("zh_CN","中国地震台网"+(data.type==="automatic"?"自动测定":"正式测定")+"："+
-    hour+"时"+minute+"分，"+data.LOCATION_C+"发生"+data.M+"级地震，震源深度"+data.EPI_DEPTH+"公里。");
+    date+"日"+hour+"点"+minute+"分，"+data.LOCATION_C+"发生"+data.M+"级地震，震源深度"+data.EPI_DEPTH+"公里。");
 }
 
 
