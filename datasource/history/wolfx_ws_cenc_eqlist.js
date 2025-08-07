@@ -57,6 +57,15 @@ function history_onfail(num_errorcode){logger.error("history_onfail: "+num_error
 //根据URL判断该URL返回的是否为地震历史数据
 function is_history_data(url){return url==="wss://ws-api.wolfx.jp/cenc_eqlist";}
 
+function history_onreport(str_data){
+    var data=JSON.parse(str_data);
+    var hour=data.O_TIME.substr(11,2);
+    var minute=data.O_TIME.substr(14,2);
+    tts.play("zh_CN","中国地震台网"+(data.type==="automatic"?"自动测定":"正式测定")+"："+
+    hour+"时"+minute+"分，"+data.LOCATION_C+"发生"+data.M+"级地震，震源深度"+data.EPI_DEPTH+"公里。");
+}
+
+
 
 //=========测站数据获取函数=============
 
@@ -68,6 +77,17 @@ function station_postdata(){return ["",""];}
 function station_onsuccess(num_index,str_response){return {};}
 function station_onfail(num_errorcode){logger.error("station_onfail: "+num_errorcode);}
 function is_station_data(url){return url==="";}
+
+
+//=========其他功能函数=============
+
+function setLangTag(langTag){
+    if(langTag==="zh_CN"){
+        sound.play("http://lxfly2000.github.io/eewcn-res/st1.wav",1);
+    }else if(langTag==="ja"){
+        sound.play("http://lxfly2000.github.io/eewcn-res/st2.wav",1);
+    }
+}
 
 
 //=========辅助函数=============

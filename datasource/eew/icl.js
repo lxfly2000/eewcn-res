@@ -39,6 +39,11 @@ function eew_onfail(num_errorcode){logger.error("eew_onfail: "+num_errorcode);}
 //根据URL判断该URL返回的是否为EEW数据，使用WebSocket时此函数不会被调用
 function is_eew_data(url){return url.substr(0,48)==="https://mobile-new.chinaeew.cn/v1/earlywarnings?";}
 
+function eew_onreport(str_data){
+    var data=JSON.parse(str_data);
+    tts.play("zh_CN",data.epicenter+"发生"+data.magnitude+"级地震，深度"+data.depth+"公里。");
+}
+
 
 //=========地震历史数据获取函数=============
 
@@ -49,6 +54,7 @@ function history_postdata(){return "";}
 function history_onsuccess(str_response){return {};}
 function history_onfail(num_errorcode){logger.error("history_onfail: "+num_errorcode);}
 function is_history_data(url){return url==="";}
+function history_onreport(str_data){}
 
 
 //=========测站数据获取函数=============
@@ -61,6 +67,20 @@ function station_postdata(){return ["",""];}
 function station_onsuccess(num_index,str_response){return {};}
 function station_onfail(num_errorcode){logger.error("station_onfail: "+num_errorcode);}
 function is_station_data(url){return url==="";}
+function station_onreport(str_data){}
+
+
+//=========其他功能函数=============
+
+function setLangTag(langTag){
+    switch(langTag){
+        case "en":tts.play(langTag,"The program language is set to English.");break;
+        case "zh_CN":tts.play(langTag,"程序语言已设置为简体中文。");break;
+        case "zh_TW":tts.play(langTag,"程式語言已設定為繁體中文。");break;
+        case "ja":tts.play(langTag,"アプリの言語は日本語に設定しました。");break;
+        default:tts.play("en","The program language is set to an unknown language.");break;
+    }
+}
 
 
 //=========辅助函数=============
