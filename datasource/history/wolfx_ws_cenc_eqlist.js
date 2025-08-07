@@ -83,9 +83,9 @@ function is_station_data(url){return url==="";}
 
 function setLangTag(langTag){
     if(langTag==="zh_CN"){
-        sound.play("http://lxfly2000.github.io/eewcn-res/st1.wav",1);
+        sound.play("https://lxfly2000.github.io/eewcn-res/st1.wav",1);
     }else if(langTag==="ja"){
-        sound.play("http://lxfly2000.github.io/eewcn-res/st2.wav",1);
+        sound.play("https://lxfly2000.github.io/eewcn-res/st2.wav",1);
     }
 }
 
