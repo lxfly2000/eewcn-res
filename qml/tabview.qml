@@ -11,7 +11,7 @@ TabView {
     tabPosition: Qt.BottomEdge
     signal tabViewSetMapCenter(double lat,double lng)
     signal tabViewShowIntensity(double lat,double lng,double mag,double depth)
-    signal tabViewShowIntensity(double lat,double lng,double mag,double depth,double epiIntensity)
+    signal tabViewShowIntensityWithEpiIntensity(double lat,double lng,double mag,double depth,double epiIntensity)
     style: TabViewStyle {
         frameOverlap: 1
         tab: Rectangle {
@@ -163,10 +163,11 @@ TabView {
                         text: qsTr("View &Intensity on Map")
                         onTriggered: {
                             if(versionInt>=0x02010000){
-                                tabViewShowIntensity(eqLatitude,eqLongitude,eqMagnitude,eqDepth,eqIntensity);
+                                tabViewShowIntensityWithEpiIntensity(eqLatitude,eqLongitude,eqMagnitude,eqDepth,eqIntensity);
                             }else{
                                 tabViewShowIntensity(eqLatitude,eqLongitude,eqMagnitude,eqDepth);
                             }
+                        }
                     }
                 }
             }
