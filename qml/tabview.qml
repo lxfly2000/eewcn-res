@@ -6,9 +6,11 @@ import QtQuick.Layouts 1.15
 import Qt.labs.settings 1.1
 
 TabView {
+    property int versionInt: 0x00000000
     property bool isTouchEnvironment: false
     tabPosition: Qt.BottomEdge
     signal tabViewSetMapCenter(double lat,double lng)
+    signal tabViewShowIntensity(double lat,double lng,double mag,double depth)
     signal tabViewShowIntensity(double lat,double lng,double mag,double depth,double epiIntensity)
     style: TabViewStyle {
         frameOverlap: 1
@@ -159,7 +161,12 @@ TabView {
                     id: contextMenu
                     MenuItem{
                         text: qsTr("View &Intensity on Map")
-                        onTriggered: tabViewShowIntensity(eqLatitude,eqLongitude,eqMagnitude,eqDepth,eqIntensity)
+                        onTriggered: {
+                            if(versionInt>=0x02010000){
+                                tabViewShowIntensity(eqLatitude,eqLongitude,eqMagnitude,eqDepth,eqIntensity);
+                            }else{
+                                tabViewShowIntensity(eqLatitude,eqLongitude,eqMagnitude,eqDepth);
+                            }
                     }
                 }
             }
