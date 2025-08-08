@@ -74,11 +74,23 @@ function station_onreport(str_data){}
 
 function setLangTag(langTag){
     switch(langTag){
-        case "en":tts.play(langTag,"The program language is set to English.");break;
-        case "zh_CN":tts.play(langTag,"程序语言已设置为简体中文。");break;
-        case "zh_TW":tts.play(langTag,"程式語言已設定為繁體中文。");break;
-        case "ja":tts.play(langTag,"アプリの言語は日本語に設定されています。");break;
-        default:tts.play("en","The program language is set to an unknown language.");break;
+        case "en":
+            tts.play(langTag,"The program language is set to English.");
+            break;
+        case "zh_CN":
+            tts.play(langTag,"程序语言已设置为简体中文。");
+            sound.play("https://lxfly2000.github.io/eewcn-res/st1.wav",1);
+            break;
+        case "zh_TW":
+            tts.play(langTag,"程式語言已設定為繁體中文。");
+            break;
+        case "ja":
+            tts.play(langTag,"アプリの言語は日本語に設定されています。");
+            sound.play("https://lxfly2000.github.io/eewcn-res/st2.wav",1);
+            break;
+        default:
+            tts.play("en","The program language is set to an unknown language.");
+            break;
     }
 }
 
