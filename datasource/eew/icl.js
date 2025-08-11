@@ -77,7 +77,7 @@ function setLangTag(langTag){
         case "en":
             tts.play(langTag,"The program language is set to English.");
             break;
-        case "zh":
+        case "zh_CN":
             tts.play(langTag,"程序语言已设置为简体中文。");
             sound.play("https://lxfly2000.github.io/eewcn-res/st1.wav",1);
             break;
