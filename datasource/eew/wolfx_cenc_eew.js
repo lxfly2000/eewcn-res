@@ -45,6 +45,11 @@ function eew_onfail(num_errorcode){logger.error("eew_onfail: "+num_errorcode);}
 //根据URL判断该URL返回的是否为EEW数据，使用WebSocket时此函数不会被调用
 function is_eew_data(url){return url==="https://api.wolfx.jp/cenc_eew.json";}
 
+function eew_onreport(str_data){
+    var data=JSON.parse(str_data);
+    tts.play("zh_CN",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
+}
+
 
 //=========地震历史数据获取函数=============
 
@@ -80,4 +85,18 @@ function msts_to_fmt(msts){
 //将YYYY-MM-DD HH:MM:SS转为毫秒数时间戳
 function fmt_to_msts(fmt){
     return new Date(fmt).getTime();
+}
+
+function voice_cn_ordinal(num){
+    if(num==2){
+        return "二";
+    }
+    return num;
+}
+
+function voice_cn_quantity(num){
+    if(num==2){
+        return "两";
+    }
+    return num;
 }

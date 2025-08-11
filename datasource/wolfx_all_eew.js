@@ -47,7 +47,7 @@ function eew_onsuccess(str_response){
             latitude:original.Latitude,
             longitude:original.Longitude,
             depth:original.Depth,
-            epicenter:original.Hypocenter+(original.Title==="緊急地震速報（警報）"?"(警報)":""),
+            epicenter:"<b>["+shindo_str(original.MaxIntensity)+"]</b> "+original.Hypocenter+(original.Title==="緊急地震速報（警報）"?"(警報)":""),
             startAt:fmt_to_msts(original.OriginTime+" UTC+9"),//注意时区问题
             magnitude:original.Magunitude
         };
@@ -85,6 +85,15 @@ function eew_onfail(num_errorcode){logger.error("eew_onfail: "+num_errorcode);}
 
 //根据URL判断该URL返回的是否为EEW数据，使用WebSocket时此函数不会被调用
 function is_eew_data(url){return url==="wss://ws-api.wolfx.jp/all_eew";}
+
+function eew_onreport(str_data){
+    var data=JSON.parse(str_data);
+    if(data.epicenter.startsWith("<b>[")){
+	    tts.play("ja",data.epicenter.substr(data.epicenter.indexOf("]</b> ")+6).replace("(警報)","")+"で地震、推定最大震度"+data.epicenter.substr(4,data.epicenter.indexOf("]")-4)+"。");
+    }else{
+	    tts.play("zh_CN",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
+    }
+}
 
 
 //=========地震历史数据获取函数=============
@@ -132,13 +141,39 @@ function history_onsuccess(str_response){
             AUTO_FLAG:parse_auto_flag(item.Title),
             EQ_TYPE:"M",
             M:item.magnitude,
-            LOCATION_C:item.location
+            LOCATION_C:"<b>["+shindo_str(item.shindo)+"]</b> "+item.location
         }]};
     }
     return last_history;
 }
 function history_onfail(num_errorcode){logger.error("history_onfail: "+num_errorcode);}
 function is_history_data(url){return url==="wss://ws-api.wolfx.jp/all_eew";}
+
+function history_onreport(str_data){
+    var data=JSON.parse(str_data);
+    if(data.LOCATION_C.startsWith("<b>[")){
+    	var shindo=data.LOCATION_C.substr(4,data.LOCATION_C.indexOf("]")-4);
+	    shindo=shindo.replace("+","強");
+	    shindo=shindo.replace("-","弱");
+	    var auto_flag=data.AUTO_FLAG;
+	    if(auto_flag==="(震度速報)"){
+	        tts.play("ja",auto_flag+"最大震度"+shindo+"の地震がありました。");
+	        return;
+	    }else if(auto_flag==="(震源情報)"){
+	        tts.play("ja",auto_flag+"震源は"+data.LOCATION_C.substr(data.LOCATION_C.indexOf("]</b> ")+6)+"です。マグニチュード"+data.M+"、深さは"+data.EPI_DEPTH+"キロメートルです。");
+	        return;
+	    }else if(auto_flag==="M"){
+	        auto_flag="(地震情報)";
+	    }else if(auto_flag==="(遠地)"){
+	        auto_flag="(遠地地震情報)";
+	    }
+	    var loc=data.LOCATION_C.substr(data.LOCATION_C.indexOf("]</b> ")+6);
+	    tts.play("ja",auto_flag+data.O_TIME+"，"+loc+"で、"+(auto_flag==="(地震情報)"?"最大震度"+shindo+"の":"")+"地震がありました。マグニチュード"+data.M+"、深さは"+data.EPI_DEPTH+"キロメートルです。");
+    }else{
+	    tts.play("zh_CN","中国地震台网地震信息："+
+	    data.O_TIME+"，"+data.LOCATION_C+"发生"+voice_cn_ordinal(data.M)+"级地震，震源深度"+voice_cn_quantity(data.EPI_DEPTH)+"公里。");
+    }
+}
 
 
 //=========测站数据获取函数=============
@@ -164,4 +199,25 @@ function msts_to_fmt(msts){
 //将YYYY-MM-DD HH:MM:SS转为毫秒数时间戳
 function fmt_to_msts(fmt){
     return new Date(fmt).getTime();
+}
+
+function shindo_str(num){
+    if("012347".indexOf(num)===-1){
+        return num;
+    }
+    return String.fromCharCode(0xFF10+parseInt(num));
+}
+
+function voice_cn_ordinal(num){
+    if(num==2){
+        return "二";
+    }
+    return num;
+}
+
+function voice_cn_quantity(num){
+    if(num==2){
+        return "两";
+    }
+    return num;
 }

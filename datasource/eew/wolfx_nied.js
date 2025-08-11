@@ -32,7 +32,7 @@ function eew_onsuccess(str_response){
         latitude:parseFloat(original.latitude),
         longitude:parseFloat(original.longitude),
         depth:parseFloat(original.depth),
-        epicenter:original.region_name,
+        epicenter:"<b>["+original.calcintensity+"]</b> "+original.region_name,
         startAt:fmt_to_msts(original.origin_time.substr(0,4)+"-"+
         original.origin_time.substr(4,2)+"-"+
         original.origin_time.substr(6,2)+" "+
@@ -49,6 +49,11 @@ function eew_onfail(num_errorcode){logger.error("eew_onfail: "+num_errorcode);}
 
 //根据URL判断该URL返回的是否为EEW数据，使用WebSocket时此函数不会被调用
 function is_eew_data(url){return url==="https://api.wolfx.jp/nied_eew.json";}
+
+function eew_onreport(str_data){
+    var data=JSON.parse(str_data);
+    tts.play("ja",data.epicenter.substr(data.epicenter.indexOf("]</b> ")+6)+"で地震、推定最大震度"+data.epicenter.substr(4,data.epicenter.indexOf("]")-4)+"。");
+}
 
 
 //=========地震历史数据获取函数=============

@@ -40,10 +40,10 @@ function history_onsuccess(str_response){
             EPI_LAT:item.latitude,
             EPI_LON:item.longitude,
             EPI_DEPTH:item.depth,
-            AUTO_FLAG:"M",
+            AUTO_FLAG:item.verify==="N"?"(待核实)":"M",
             EQ_TYPE:"M",
             M:item.magnitude,
-            LOCATION_C:item.placeName
+            LOCATION_C:item.region
         });
         last_history={shuju:shuju_array};
     }else if(original.type==="notice"||original.type==="error"){
@@ -56,6 +56,12 @@ function history_onfail(num_errorcode){logger.error("history_onfail: "+num_error
 
 //根据URL判断该URL返回的是否为地震历史数据
 function is_history_data(url){return url==="wss://ws.fanstudio.tech/hko";}
+
+function history_onreport(str_data){
+    var data=JSON.parse(str_data);
+    tts.play("zh_CN","香港天文台"+(data.AUTO_FLAG==="(待核实)"?"自动测定":"正式测定")+"："+
+    data.O_TIME+"，"+data.LOCATION_C+"发生"+voice_cn_ordinal(data.M)+"级地震，震源深度"+voice_cn_quantity(data.EPI_DEPTH)+"公里。");
+}
 
 
 //=========测站数据获取函数=============
@@ -81,4 +87,18 @@ function msts_to_fmt(msts){
 //将YYYY-MM-DD HH:MM:SS转为毫秒数时间戳
 function fmt_to_msts(fmt){
     return new Date(fmt).getTime();
+}
+
+function voice_cn_ordinal(num){
+    if(num==2){
+        return "二";
+    }
+    return num;
+}
+
+function voice_cn_quantity(num){
+    if(num==2){
+        return "两";
+    }
+    return num;
 }

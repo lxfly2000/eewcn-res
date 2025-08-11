@@ -84,6 +84,11 @@ function eew_onfail(num_errorcode){logger.error("eew_onfail: "+num_errorcode);}
 //根据URL判断该URL返回的是否为EEW数据，使用WebSocket时此函数不会被调用
 function is_eew_data(url){return url.startsWith("https://yjfw.cenc.ac.cn/api/earthquake/")&&url.endsWith("#eew");}
 
+function eew_onreport(str_data){
+    var data=JSON.parse(str_data);
+    tts.play("zh_CN",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
+}
+
 
 //=========地震历史数据获取函数=============
 
@@ -158,6 +163,12 @@ function history_onfail(num_errorcode){logger.error("history_onfail: "+num_error
 //根据URL判断该URL返回的是否为地震历史数据
 function is_history_data(url){return url.startsWith("https://yjfw.cenc.ac.cn/api/earthquake/")&&url.endsWith("#history");}
 
+function history_onreport(str_data){
+    var data=JSON.parse(str_data);
+    tts.play("zh_CN","中国地震台网地震信息："+
+    data.O_TIME+"，"+data.LOCATION_C+"发生"+voice_cn_ordinal(data.M)+"级地震，震源深度"+voice_cn_quantity(data.EPI_DEPTH)+"公里。");
+}
+
 
 //=========测站数据获取函数=============
 
@@ -221,4 +232,18 @@ function fmt_to_msts(fmt){
 
 function now_time_msts(){
     return new Date().getTime();
+}
+
+function voice_cn_ordinal(num){
+    if(num==2){
+        return "二";
+    }
+    return num;
+}
+
+function voice_cn_quantity(num){
+    if(num==2){
+        return "两";
+    }
+    return num;
 }

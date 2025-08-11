@@ -55,7 +55,7 @@ function history_onsuccess(str_response){
                 AUTO_FLAG:parse_auto_flag(item.Title),
                 EQ_TYPE:"M",
                 M:item.magnitude,
-                LOCATION_C:item.location
+                LOCATION_C:"<b>["+shindo_str(item.shindo)+"]</b> "+item.location
             });
         }
         last_history={shuju:shuju_array};
@@ -67,6 +67,27 @@ function history_onfail(num_errorcode){logger.error("history_onfail: "+num_error
 
 //根据URL判断该URL返回的是否为地震历史数据
 function is_history_data(url){return url==="wss://ws-api.wolfx.jp/jma_eqlist";}
+
+function history_onreport(str_data){
+    var data=JSON.parse(str_data);
+    var shindo=data.LOCATION_C.substr(4,data.LOCATION_C.indexOf("]")-4);
+    shindo=shindo.replace("+","強");
+    shindo=shindo.replace("-","弱");
+    var auto_flag=data.AUTO_FLAG;
+    if(auto_flag==="(震度速報)"){
+        tts.play("ja",auto_flag+"最大震度"+shindo+"の地震がありました。");
+        return;
+    }else if(auto_flag==="(震源情報)"){
+        tts.play("ja",auto_flag+"震源は"+data.LOCATION_C.substr(data.LOCATION_C.indexOf("]</b> ")+6)+"です。マグニチュード"+data.M+"、深さは"+data.EPI_DEPTH+"キロメートルです。");
+        return;
+    }else if(auto_flag==="M"){
+        auto_flag="(地震情報)";
+    }else if(auto_flag==="(遠地)"){
+        auto_flag="(遠地地震情報)";
+    }
+    var loc=data.LOCATION_C.substr(data.LOCATION_C.indexOf("]</b> ")+6);
+    tts.play("ja",auto_flag+data.O_TIME+"，"+loc+"で、"+(auto_flag==="(地震情報)"?"最大震度"+shindo+"の":"")+"地震がありました。マグニチュード"+data.M+"、深さは"+data.EPI_DEPTH+"キロメートルです。");
+}
 
 
 //=========测站数据获取函数=============
@@ -92,4 +113,11 @@ function msts_to_fmt(msts){
 //将YYYY-MM-DD HH:MM:SS转为毫秒数时间戳
 function fmt_to_msts(fmt){
     return new Date(fmt).getTime();
+}
+
+function shindo_str(num){
+    if("012347".indexOf(num)===-1){
+        return num;
+    }
+    return String.fromCharCode(0xFF10+parseInt(num));
 }
