@@ -86,7 +86,7 @@ function is_eew_data(url){return url.startsWith("https://yjfw.cenc.ac.cn/api/ear
 
 function eew_onreport(str_data){
     var data=JSON.parse(str_data);
-    tts.play("zh_CN",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
+    tts.play("zh",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
 }
 
 
@@ -165,7 +165,7 @@ function is_history_data(url){return url.startsWith("https://yjfw.cenc.ac.cn/api
 
 function history_onreport(str_data){
     var data=JSON.parse(str_data);
-    tts.play("zh_CN","中国地震台网地震信息："+
+    tts.play("zh","中国地震台网地震信息："+
     data.O_TIME+"，"+data.LOCATION_C+"发生"+voice_cn_ordinal(data.M)+"级地震，震源深度"+voice_cn_quantity(data.EPI_DEPTH)+"公里。");
 }
 

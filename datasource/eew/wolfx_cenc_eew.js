@@ -34,7 +34,7 @@ function eew_onsuccess(str_response){
         depth:original.Depth,
         epicenter:original.HypoCenter,
         startAt:fmt_to_msts(original.OriginTime+" UTC+8"),//注意时区问题
-        magnitude:original.Magunitude
+        magnitude:original.Magnitude
     };
     return {data:[converted]};
 }
@@ -47,7 +47,7 @@ function is_eew_data(url){return url==="https://api.wolfx.jp/cenc_eew.json";}
 
 function eew_onreport(str_data){
     var data=JSON.parse(str_data);
-    tts.play("zh_CN",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
+    tts.play("zh",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
 }
 
 

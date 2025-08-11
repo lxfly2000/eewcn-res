@@ -31,12 +31,12 @@ function eew_onsuccess(str_response){
         var parts=original.Data.eventId.split("_");
         var converted={
             eventId:parts[0],
-            updates:parts[1],
+            updates:parseInt(parts[1]),
             latitude:original.Data.latitude,
             longitude:original.Data.longitude,
             depth:0,
             epicenter:original.Data.placeName,
-            startAt:fmt_to_msts(original.Data.shockTime+" UTC+8"),//注意时区问题
+            startAt:fmt_to_msts(original.Data.shockTime.replace(".0","")+" UTC+8"),//注意时区问题
             magnitude:original.Data.magnitude
         };
         last_eew={data:[converted]};
@@ -54,7 +54,7 @@ function is_eew_data(url){return url==="wss://ws.fanstudio.tech/fujian";}
 
 function eew_onreport(str_data){
     var data=JSON.parse(str_data);
-    tts.play("zh_CN",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
+    tts.play("zh",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
 }
 
 

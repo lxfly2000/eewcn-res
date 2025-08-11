@@ -91,7 +91,7 @@ function eew_onreport(str_data){
     if(data.epicenter.startsWith("<b>[")){
 	    tts.play("ja",data.epicenter.substr(data.epicenter.indexOf("]</b> ")+6).replace("(警報)","")+"で地震、推定最大震度"+data.epicenter.substr(4,data.epicenter.indexOf("]")-4)+"。");
     }else{
-	    tts.play("zh_CN",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
+	    tts.play("zh",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
     }
 }
 
@@ -170,7 +170,7 @@ function history_onreport(str_data){
 	    var loc=data.LOCATION_C.substr(data.LOCATION_C.indexOf("]</b> ")+6);
 	    tts.play("ja",auto_flag+data.O_TIME+"，"+loc+"で、"+(auto_flag==="(地震情報)"?"最大震度"+shindo+"の":"")+"地震がありました。マグニチュード"+data.M+"、深さは"+data.EPI_DEPTH+"キロメートルです。");
     }else{
-	    tts.play("zh_CN","中国地震台网地震信息："+
+	    tts.play("zh","中国地震台网地震信息："+
 	    data.O_TIME+"，"+data.LOCATION_C+"发生"+voice_cn_ordinal(data.M)+"级地震，震源深度"+voice_cn_quantity(data.EPI_DEPTH)+"公里。");
     }
 }

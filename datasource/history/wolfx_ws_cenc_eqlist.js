@@ -59,7 +59,7 @@ function is_history_data(url){return url==="wss://ws-api.wolfx.jp/cenc_eqlist";}
 
 function history_onreport(str_data){
     var data=JSON.parse(str_data);
-    tts.play("zh_CN","中国地震台网"+(data.AUTO_FLAG==="(自动测定)"?"自动测定":"正式测定")+"："+
+    tts.play("zh","中国地震台网"+(data.AUTO_FLAG==="(自动测定)"?"自动测定":"正式测定")+"："+
     data.O_TIME+"，"+data.LOCATION_C+"发生"+voice_cn_ordinal(data.M)+"级地震，震源深度"+voice_cn_quantity(data.EPI_DEPTH)+"公里。");
 }
 
@@ -79,7 +79,7 @@ function is_station_data(url){return url==="";}
 //=========其他功能函数=============
 
 /*function setLangTag(langTag){
-    if(langTag==="zh_CN"){
+    if(langTag==="zh"){
         sound.play("https://lxfly2000.github.io/eewcn-res/st1.wav",1);
     }else if(langTag==="ja"){
         sound.play("https://lxfly2000.github.io/eewcn-res/st2.wav",1);

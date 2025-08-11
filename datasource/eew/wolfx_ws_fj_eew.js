@@ -51,7 +51,7 @@ function is_eew_data(url){return url==="wss://ws-api.wolfx.jp/fj_eew";}
 
 function eew_onreport(str_data){
     var data=JSON.parse(str_data);
-    tts.play("zh_CN",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
+    tts.play("zh",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
 }
 
 

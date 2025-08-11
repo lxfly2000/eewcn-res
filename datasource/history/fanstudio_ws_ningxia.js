@@ -59,7 +59,7 @@ function is_history_data(url){return url==="wss://ws.fanstudio.tech/ningxia";}
 
 function history_onreport(str_data){
     var data=JSON.parse(str_data);
-    tts.play("zh_CN","宁夏地震局地震信息："+
+    tts.play("zh","宁夏地震局地震信息："+
     data.O_TIME+"，"+data.LOCATION_C+"发生"+voice_cn_ordinal(data.M)+"级地震，震源深度"+voice_cn_quantity(data.EPI_DEPTH)+"公里。");
 }
 

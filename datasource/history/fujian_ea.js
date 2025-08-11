@@ -55,7 +55,7 @@ function is_history_data(url){return url.split("?")[0]==="http://218.5.2.111:908
 
 function history_onreport(str_data){
     var data=JSON.parse(str_data);
-    tts.play("zh_CN","福建省地震局"+(data.AUTO_FLAG==="M"?"正式测定":"自动测定")+"："+
+    tts.play("zh","福建省地震局"+(data.AUTO_FLAG==="M"?"正式测定":"自动测定")+"："+
     data.O_TIME+"，"+data.LOCATION_C+"发生"+voice_cn_ordinal(data.M)+"级地震，震源深度"+voice_cn_quantity(data.EPI_DEPTH)+"公里。");
 }
 

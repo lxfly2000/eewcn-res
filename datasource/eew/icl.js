@@ -41,7 +41,7 @@ function is_eew_data(url){return url.substr(0,48)==="https://mobile-new.chinaeew
 
 function eew_onreport(str_data){
     var data=JSON.parse(str_data);
-    tts.play("zh_CN",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
+    tts.play("zh",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
 }
 
 
@@ -77,7 +77,7 @@ function setLangTag(langTag){
         case "en":
             tts.play(langTag,"The program language is set to English.");
             break;
-        case "zh_CN":
+        case "zh":
             tts.play(langTag,"程序语言已设置为简体中文。");
             sound.play("https://lxfly2000.github.io/eewcn-res/st1.wav",1);
             break;
