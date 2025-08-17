@@ -76,6 +76,18 @@ function eew_onsuccess(str_response){
             magnitude:original.Magunitude
         };
         last_eew={data:[converted]};
+    }else if(original.type==="cenc_eew"){
+        converted={
+            eventId:original.EventID,
+            updates:original.ReportNum,
+            latitude:original.Latitude,
+            longitude:original.Longitude,
+            depth:original.Depth,
+            epicenter:original.HypoCenter,
+            startAt:fmt_to_msts(original.OriginTime+" UTC+8"),//注意时区问题
+            magnitude:original.Magnitude
+        };
+        last_eew={data:[converted]};
     }
     return last_eew;
 }
