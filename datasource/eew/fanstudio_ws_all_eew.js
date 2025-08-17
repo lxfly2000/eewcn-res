@@ -51,7 +51,18 @@ function eew_onsuccess(str_response){
             startAt:fmt_to_msts(original_sichuan.Data.shockTime+" UTC+8"),//注意时区问题
             magnitude:parseFloat(original_sichuan.Data.magnitude)
         };
-        var arr_not_sorted=[converted_cea, converted_sichuan];
+        var original_icl=original.icl;
+        var converted_icl={
+            eventId:original_icl.Data.eventId.toString(),
+            updates:original_icl.Data.updates,
+            latitude:original_icl.Data.latitude,
+            longitude:original_icl.Data.longitude,
+            depth:original_icl.Data.depth,
+            epicenter:original_icl.Data.placeName,
+            startAt:fmt_to_msts(original_icl.Data.shockTime+" UTC+8"),//注意时区问题
+            magnitude:parseFloat(original_icl.Data.magnitude)
+        };
+        var arr_not_sorted=[converted_cea, converted_sichuan/*, converted_icl*/];
         last_eew={data:arr_not_sorted.sort(function(a, b) {
             return b.startAt - a.startAt;
         })};
