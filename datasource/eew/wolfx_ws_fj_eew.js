@@ -49,9 +49,18 @@ function eew_onfail(num_errorcode){logger.error("eew_onfail: "+num_errorcode);}
 //根据URL判断该URL返回的是否为EEW数据，使用WebSocket时此函数不会被调用
 function is_eew_data(url){return url==="wss://ws-api.wolfx.jp/fj_eew";}
 
+var last_report_data=null;
 function eew_onreport(str_data){
     var data=JSON.parse(str_data);
-    tts.play("zh",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
+    if(last_report_data===null||//首次报
+        last_report_data.eventId!==data.eventId||// 事件ID不同报
+        Math.abs(last_report_data.startAt-data.startAt)>10000|| // 发震时间差超过10秒报
+        last_report_data.epicenter!==data.epicenter||// 震中不同报
+        last_report_data.magnitude<data.magnitude||// 震级增大报
+        last_report_data.depth>data.depth){// 震源深度变浅报
+        tts.play("zh",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
+    }
+    last_report_data=data;
 }
 
 
