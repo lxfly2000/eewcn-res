@@ -53,7 +53,7 @@ function eew_onreport(str_data){
         last_report_data.eventId!==data.eventId||// 事件ID不同报
         Math.abs(last_report_data.startAt-data.startAt)>10000|| // 发震时间差超过10秒报
         last_report_data.epicenter!==data.epicenter||// 震中不同报
-        last_report_data.ity!==data.ity){// 震度不同报
+        last_report_data.ity!==ity){// 震度不同报
         tts.play("zh",data.epicenter.substr(data.epicenter.indexOf("]</b> ")+6)+"發生"+voice_cn_ordinal(data.magnitude)+"級地震，最大震度"+ity+"，深度"+voice_cn_quantity(data.depth)+"公里。");
     }
     last_report_data=data;
