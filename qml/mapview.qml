@@ -918,11 +918,17 @@ Item {
 
     function clearEEWMarks(){
         eewMarkMapView.clearMapItems();
+        for(var i=0;i<eewItems.length;i++){
+            eewItems[i].destroy();
+        }
         eewItems={};
     }
 
     function clearHistoryMarks(){
         historyMarkMapView.clearMapItems();
+        for(var i=0;i<historyItems.length;i++){
+            historyItems[i].destroy();
+        }
         historyItems=[];
     }
 
