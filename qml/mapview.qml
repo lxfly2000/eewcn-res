@@ -918,8 +918,8 @@ Item {
 
     function clearEEWMarks(){
         eewMarkMapView.clearMapItems();
-        for(var i=0;i<eewItems.length;i++){
-            eewItems[i].destroy();
+        for(var key in eewItems){
+            eewItems[key].destroy();
         }
         eewItems={};
     }
@@ -1146,6 +1146,7 @@ Item {
             sBar.y=rectBorder.border.width+fillh-sBar.height;
         }else if(barItems[eventId]!==undefined){
             numberBarMapView.removeMapItem(barItems[eventId]);
+            barItems[eventId].destroy();
             delete barItems[eventId];
         }
 
@@ -1166,10 +1167,13 @@ Item {
     function removeEEWCircle(eventId){
         eewCircleMapView.removeMapItem(pwaveItems[eventId]);
         numberBarMapView.removeMapItem(numberItems[eventId]);
+        pwaveItems[eventId].destroy();
         delete pwaveItems[eventId];
         eewCircleMapView.removeMapItem(swaveItems[eventId]);
+        swaveItems[eventId].destroy();
         delete swaveItems[eventId];
         delete swaveIntensities[eventId];
+        numberItems[eventId].destroy();
         delete numberItems[eventId];
         if(Object.keys(pwaveItems).length===0){
             legendPSWave.visible=false;
