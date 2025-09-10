@@ -25,7 +25,7 @@ function eew_postdata(){return "";}
 //         {...},{...},{...},...
 //        ]}
 var last_eew=null;
-function eew_onsuccess(str_response){
+/*function eew_onsuccess(str_response){
     var original=JSON.parse(str_response);
     if(original.type==="initial_all"||original.type==="update"||original.type==="query_response"){
         var original_cea=original.cea;
@@ -62,13 +62,62 @@ function eew_onsuccess(str_response){
             startAt:fmt_to_msts(original_icl.Data.shockTime+" UTC+8"),//注意时区问题
             magnitude:parseFloat(original_icl.Data.magnitude)
         };
-        var arr_not_sorted=[converted_cea, converted_sichuan/*, converted_icl*/];
+        var arr_not_sorted=[converted_cea, converted_sichuan, converted_icl];
         last_eew={data:arr_not_sorted.sort(function(a, b) {
             return b.startAt - a.startAt;
         })};
     }else if(original.type==="notice"||original.type==="error"){
 		logger.info(str_response);
 	}
+    return last_eew;
+}*/
+function eew_onsuccess(str_response){
+    var matchBrackets=str_response.replace(/\r?\n/g,"").match(/\{([^{},]+,){4,}[^{}]+\}/g);
+    if(matchBrackets!==null&&matchBrackets!==undefined&&matchBrackets.length>0){
+        last_eew={data:[]};
+        for(var i=0;i<matchBrackets.length;i++){
+            var matchBracket=matchBrackets[i];
+            var foundId_match=matchBracket.match(/id\w*" *: *"?([^,{}\[\]:"]+)/i);
+            if(foundId_match)var foundId=foundId_match[1];else continue;
+            var foundUpdates_match=matchBracket.match(/upd\w*" *: *"?(\d+) *[,}]/i);
+            if(foundUpdates_match)var foundUpdates=foundUpdates_match[1];else continue;
+            var foundLat_match=matchBracket.match(/lat\w*" *: *"?(-?\d+\.?\d*) *[,}]/i);
+            if(foundLat_match)var foundLat=foundLat_match[1];else continue;
+            var foundLon_match=matchBracket.match(/(lon|lng)\w*" *: *"?(-?\d+\.?\d*) *[,}]/i);
+            if(foundLon_match)var foundLon=foundLon_match[2];else continue;
+            var foundDep_match=matchBracket.match(/dep\w*" *: *"?(-?\d+\.?\d*)/i);
+            var foundDep=foundDep_match?foundDep_match[1]:"0";
+            var foundMag_match=matchBracket.match(/mag\w*" *: *"?(-?\d+\.?\d*) *[,}]/i);
+            if(foundMag_match)var foundMag=foundMag_match[1];else continue;
+            var foundEpi_match=matchBracket.match(/(epi|hypo|place|cent|loc)\w*" *: *"([^"]+)"/i);
+            if(foundEpi_match)var foundEpi=foundEpi_match[2];else continue;
+            var foundTime_match=matchBracket.match(/\d{4}[-/]\d{2}[-/]\d{2} \d{2}:\d{2}:\d{2}/g);
+            if(!foundTime_match)continue;
+            var foundTime="1970-01-01 00:00:00";
+            for(var t of foundTime_match){
+                if(foundTime==="1970-01-01 00:00:00"||fmt_to_msts(foundTime)>fmt_to_msts(t)){
+                    foundTime=t;
+                }
+            }
+
+            var converted={
+                /*STR*/eventId:foundId,
+                /*NUM*/updates:parseInt(foundUpdates),
+                /*NUM*/latitude:parseFloat(foundLat),
+                /*NUM*/longitude:parseFloat(foundLon),
+                /*NUM*/depth:parseFloat(foundDep),
+                /*STR*/epicenter:foundEpi,
+                /*NUM*/startAt:fmt_to_msts(foundTime+" UTC+8"),//注意时区问题
+                /*NUM*/magnitude:parseFloat(foundMag)
+            }
+            last_eew.data.push(converted);
+        }
+        last_eew.data=last_eew.data.sort(function(a,b){
+            return b.startAt-a.startAt;
+        });
+    }else{
+        logger.info("无法识别的数据：\n"+str_response);
+    }
     return last_eew;
 }
 

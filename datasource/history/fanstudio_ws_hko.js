@@ -29,7 +29,7 @@ function history_postdata(){return "{\"type\":\"query\"}";}
 //         {...},{...},{...},...
 //        ]}
 var last_history=null;
-function history_onsuccess(str_response){
+/*function history_onsuccess(str_response){
     var original=JSON.parse(str_response);
     if(original.type==="initial"||original.type==="update"||original.type==="query_response"){
         var shuju_array=[];
@@ -49,6 +49,51 @@ function history_onsuccess(str_response){
     }else if(original.type==="notice"||original.type==="error"){
 		logger.info(str_response);
 	}
+    return last_history;
+}*/
+function history_onsuccess(str_response){
+    var matchBrackets=str_response.replace(/\r?\n/g,"").match(/\{([^{},]+,){4,}[^{}]+\}/g);
+    if(matchBrackets!==null&&matchBrackets!==undefined&&matchBrackets.length>0){
+        //只要第一个数据
+        var matchBracket=matchBrackets[0];
+        var foundId_match=matchBracket.match(/id\w*" *: *"?([^,{}\[\]:"]+)/i);
+        var foundId=foundId_match?foundId_match[1]:"No ID";
+        var foundLat_match=matchBracket.match(/lat\w*" *: *"?(-?\d+\.?\d*) *[,}]/i);
+        var foundLat=foundLat_match?foundLat_match[1]:"29.8";
+        var foundLon_match=matchBracket.match(/(lon|lng)\w*" *: *"?(-?\d+\.?\d*) *[,}]/i);
+        var foundLon=foundLon_match?foundLon_match[2]:"106.4";
+        var foundDep_match=matchBracket.match(/dep\w*" *: *"?(-?\d+\.?\d*)/i);
+        var foundDep=foundDep_match?foundDep_match[1]:"0";
+        var foundMag_match=matchBracket.match(/mag\w*" *: *"?(-?\d+\.?\d*) *[,}]/i);
+        var foundMag=foundMag_match?foundMag_match[1]:"0";
+        var foundEpi_match=matchBracket.match(/(epi|hypo|place|cent|loc)\w*" *: *"([^"]+)"/i);
+        var foundEpi=foundEpi_match?foundEpi_match[2]:"No Epicenter";
+        var foundTime_match=matchBracket.match(/\d{4}[-/]\d{2}[-/]\d{2} \d{2}:\d{2}:\d{2}/g);
+        var foundTime="1970-01-01 00:00:00";
+        for(var t of foundTime_match){
+            if(foundTime==="1970-01-01 00:00:00"||fmt_to_msts(foundTime)>fmt_to_msts(t)){
+                foundTime=t;
+            }
+        }
+        var foundAutoFlag_match=matchBracket.match(/verify" *: *"n/i);
+        var foundAutoFlag=foundAutoFlag_match?"(待核实)":"M";
+
+        var shuju_array=[];
+        shuju_array.push({
+            /*STR*/id:foundId,
+            /*STR*/O_TIME:foundTime,
+            /*STR*/EPI_LAT:foundLat,
+            /*STR*/EPI_LON:foundLon,
+            /*NUM*/EPI_DEPTH:parseFloat(foundDep),
+            /*STR*/AUTO_FLAG:foundAutoFlag,
+            /*STR*/EQ_TYPE:"M",
+            /*STR*/M:foundMag,
+            /*STR*/LOCATION_C:foundEpi
+        });
+        last_history={shuju:shuju_array};
+    }else{
+        logger.info("无法识别的数据：\n"+str_response);
+    }
     return last_history;
 }
 
