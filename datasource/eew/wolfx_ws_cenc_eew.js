@@ -24,19 +24,23 @@ function eew_postdata(){return "query_cenceew";}
 //          magnitude:数值型震级},
 //         {...},{...},{...},...
 //        ]}
+var last_eew=null;
 function eew_onsuccess(str_response){
     var original=JSON.parse(str_response);
-    var converted={
-        eventId:original.EventID,
-        updates:original.ReportNum,
-        latitude:original.Latitude,
-        longitude:original.Longitude,
-        depth:original.Depth,
-        epicenter:original.HypoCenter,
-        startAt:fmt_to_msts(original.OriginTime+" UTC+8"),//注意时区问题
-        magnitude:original.Magnitude
-    };
-    return {data:[converted]};
+    if(original.type==="cenc_eew"){
+        var converted={
+            eventId:original.EventID,
+            updates:original.ReportNum,
+            latitude:original.Latitude,
+            longitude:original.Longitude,
+            depth:original.Depth,
+            epicenter:original.HypoCenter,
+            startAt:fmt_to_msts(original.OriginTime+" UTC+8"),//注意时区问题
+            magnitude:original.Magnitude
+        };
+        last_eew={data:[converted]};
+    }
+    return last_eew;
 }
 
 //失败时的调用，参数为一个数值型的错误码
