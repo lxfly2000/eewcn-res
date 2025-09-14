@@ -24,7 +24,7 @@ function eew_postdata(){return "";}
 //          magnitude:数值型震级},
 //         {...},{...},{...},...
 //        ]}
-var last_eew=null;
+var last_eew={data:[]};
 /*function eew_onsuccess(str_response){
     var original=JSON.parse(str_response);
     if(original.type==="initial_all"||original.type==="update"||original.type==="query_response"){
@@ -74,7 +74,7 @@ var last_eew=null;
 function eew_onsuccess(str_response){
     var matchBrackets=str_response.replace(/\r?\n/g,"").match(/\{([^{},]+,){4,}[^{}]+\}/g);
     if(matchBrackets!==null&&matchBrackets!==undefined&&matchBrackets.length>0){
-        last_eew={data:[]};
+        var last_data_length=last_eew.data.length;
         for(var i=0;i<matchBrackets.length;i++){
             var matchBracket=matchBrackets[i];
             var foundId_match=matchBracket.match(/id\w*" *: *"?([^,{}\[\]:"]+)/i);
@@ -115,6 +115,8 @@ function eew_onsuccess(str_response){
         last_eew.data=last_eew.data.sort(function(a,b){
             return b.startAt-a.startAt;
         });
+        if(last_data_length>0)
+            last_eew.data.length=last_data_length;
     }else{
         logger.info("无法识别的数据：\n"+str_response);
     }
