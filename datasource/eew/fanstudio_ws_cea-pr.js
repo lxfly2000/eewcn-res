@@ -1,7 +1,7 @@
 //===========预警获取函数==============
 
 //指定一个URL，若不想使用脚本的预警或地震历史功能请将相应的URL指定为空字符串，即""
-function eew_url(){return "wss://ws.fanstudio.tech/fujian";}
+function eew_url(){return "wss://ws.fanstudio.tech/cea-pr";}
 
 //指定请求方式，"get"或"post"等，还可指定为"websocket"使用WebSocket连接（此时URL应为ws或wss协议）
 function eew_method(){return "websocket";}
@@ -93,7 +93,7 @@ function eew_onsuccess(str_response){
 function eew_onfail(num_errorcode){logger.error("eew_onfail: "+num_errorcode);}
 
 //根据URL判断该URL返回的是否为EEW数据
-function is_eew_data(url){return url==="wss://ws.fanstudio.tech/fujian";}
+function is_eew_data(url){return url==="wss://ws.fanstudio.tech/cea-pr";}
 
 var last_report_data=null;
 function eew_onreport(str_data){
