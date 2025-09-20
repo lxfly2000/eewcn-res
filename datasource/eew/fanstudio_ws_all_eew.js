@@ -110,7 +110,12 @@ function eew_onsuccess(str_response){
                 /*NUM*/startAt:fmt_to_msts(foundTime+" UTC+8"),//注意时区问题
                 /*NUM*/magnitude:parseFloat(foundMag)
             }
-            last_eew.data.push(converted);
+			var iExisting=last_eew.data.findIndex(o=>o.eventId===converted.eventId);
+			if(iExisting===-1){
+				last_eew.data.push(converted);
+			}else{
+				last_eew.data[iExisting]=converted;
+			}
         }
         last_eew.data=last_eew.data.sort(function(a,b){
             return b.startAt-a.startAt;
