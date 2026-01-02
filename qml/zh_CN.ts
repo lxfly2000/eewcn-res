@@ -4,52 +4,52 @@
 <context>
     <name>mapview</name>
     <message>
-        <location filename="mapview.qml" line="635"/>
+        <location filename="mapview.qml" line="640"/>
         <source>S Wave arriving in…</source>
         <translation type="unfinished">距横波到达…</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="448"/>
+        <location filename="mapview.qml" line="450"/>
         <source>Intensity</source>
         <translation type="unfinished">烈度</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="494"/>
+        <location filename="mapview.qml" line="497"/>
         <source>Home</source>
         <translation type="unfinished">所在地</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="515"/>
+        <location filename="mapview.qml" line="519"/>
         <source>Earthquake Record</source>
         <translation type="unfinished">地震记录</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="536"/>
+        <location filename="mapview.qml" line="541"/>
         <source>EEW Record</source>
         <translation type="unfinished">预警记录</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="560"/>
+        <location filename="mapview.qml" line="565"/>
         <source>P Wave</source>
         <translation type="unfinished">纵波</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="595"/>
+        <location filename="mapview.qml" line="600"/>
         <source>S Wave</source>
         <translation type="unfinished">横波</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="699"/>
+        <location filename="mapview.qml" line="705"/>
         <source>&amp;Lock View</source>
         <translation type="unfinished">锁定视图(&amp;L)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="712"/>
+        <location filename="mapview.qml" line="718"/>
         <source>&amp;No Animation</source>
         <translation type="unfinished">禁用动画(&amp;N)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="722"/>
+        <location filename="mapview.qml" line="728"/>
         <source>&amp;Help</source>
         <translation type="unfinished">帮助(&amp;H)</translation>
     </message>
@@ -58,7 +58,7 @@
         <translation type="obsolete">锁定视图</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="703"/>
+        <location filename="mapview.qml" line="709"/>
         <source>Prevent the program from getting stuck.</source>
         <translation type="unfinished">防止程序卡死。</translation>
     </message>
@@ -67,25 +67,88 @@
         <translation type="obsolete">禁用动画</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="716"/>
+        <location filename="mapview.qml" line="722"/>
         <source>May relieve the program getting stuck.</source>
         <translation type="unfinished">可能会减轻程序卡死情况。</translation>
     </message>
 </context>
 <context>
+    <name>mapview-maplibre</name>
+    <message>
+        <location filename="mapview-maplibre.qml" line="455"/>
+        <source>Intensity</source>
+        <translation type="unfinished">烈度</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="502"/>
+        <source>Home</source>
+        <translation type="unfinished">所在地</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="524"/>
+        <source>Earthquake Record</source>
+        <translation type="unfinished">地震记录</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="546"/>
+        <source>EEW Record</source>
+        <translation type="unfinished">预警记录</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="570"/>
+        <source>P Wave</source>
+        <translation type="unfinished">纵波</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="605"/>
+        <source>S Wave</source>
+        <translation type="unfinished">横波</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="645"/>
+        <source>S Wave arriving in…</source>
+        <translation type="unfinished">距横波到达…</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="710"/>
+        <source>&amp;Lock View</source>
+        <translation type="unfinished">锁定视图(&amp;L)</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="714"/>
+        <source>Prevent the program from getting stuck.</source>
+        <translation type="unfinished">防止程序卡死。</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="723"/>
+        <source>&amp;No Animation</source>
+        <translation type="unfinished">禁用动画(&amp;N)</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="727"/>
+        <source>May relieve the program getting stuck.</source>
+        <translation type="unfinished">可能会减轻程序卡死情况。</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="733"/>
+        <source>&amp;Help</source>
+        <translation type="unfinished">帮助(&amp;H)</translation>
+    </message>
+</context>
+<context>
     <name>tabview</name>
     <message>
-        <location filename="tabview.qml" line="194"/>
+        <location filename="tabview.qml" line="203"/>
         <source>Records</source>
         <translation type="unfinished">地震历史</translation>
     </message>
     <message>
-        <location filename="tabview.qml" line="160"/>
+        <location filename="tabview.qml" line="163"/>
         <source>View &amp;Intensity on Map</source>
         <translation type="unfinished">查看烈度分布(&amp;I)</translation>
     </message>
     <message>
-        <location filename="tabview.qml" line="170"/>
+        <location filename="tabview.qml" line="179"/>
         <source>Location: %1
 Latitude: %2, Longitude: %3
 Height: %4m
@@ -98,7 +161,7 @@ Intensity: %6</source>
 烈度：%6</translation>
     </message>
     <message>
-        <location filename="tabview.qml" line="173"/>
+        <location filename="tabview.qml" line="182"/>
         <source>Time: %1
 Location: %2
 Latitude: %3, Longitude: %4
@@ -117,37 +180,38 @@ Local Intensity: %9</source>
 本地烈度：%9</translation>
     </message>
     <message>
-        <location filename="tabview.qml" line="283"/>
+        <location filename="tabview.qml" line="300"/>
         <source>&amp;Settings…</source>
         <translation type="unfinished">设置(&amp;S)…</translation>
     </message>
     <message>
-        <location filename="tabview.qml" line="291"/>
+        <location filename="tabview.qml" line="308"/>
+        <location filename="tabview.qml" line="384"/>
         <source>Magnitude-Time Statistics</source>
         <translation type="unfinished">震级-时间统计</translation>
     </message>
     <message>
-        <location filename="tabview.qml" line="299"/>
+        <location filename="tabview.qml" line="317"/>
         <source>Days of data to display:</source>
         <translation type="unfinished">要显示的数据天数：</translation>
     </message>
     <message>
-        <location filename="tabview.qml" line="308"/>
+        <location filename="tabview.qml" line="326"/>
         <source>Minimum bar width (px):</source>
         <translation type="unfinished">条柱的最小宽度（像素）：</translation>
     </message>
     <message>
-        <location filename="tabview.qml" line="318"/>
+        <location filename="tabview.qml" line="336"/>
         <source>&amp;OK</source>
         <translation type="unfinished">确定(&amp;O)</translation>
     </message>
     <message>
-        <location filename="tabview.qml" line="335"/>
+        <location filename="tabview.qml" line="405"/>
         <source>EEW</source>
         <translation type="unfinished">地震预警</translation>
     </message>
     <message>
-        <location filename="tabview.qml" line="353"/>
+        <location filename="tabview.qml" line="423"/>
         <source>Station</source>
         <translation type="unfinished">测站</translation>
     </message>
