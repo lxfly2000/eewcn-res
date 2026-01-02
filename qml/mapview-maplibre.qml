@@ -895,10 +895,10 @@ Item {
             //未设置，使用自带的样式
             a="pk.eyJ1IjoibHhmbHkyMDAwIiwiYSI6ImNtNjlkdWZ2ZDA5N2cya3F1OGw2b3ZseDkifQ.LpSPrjVvQwUAOgfrzaVAqg";
             //https://docs.mapbox.com/api/maps/styles/#retrieve-a-style
-            _convertMapboxStyle("https://api.mapbox.com/styles/v1/"+s.substr(s.indexOf("/styles/")+8)+"?access_token="+a);
+            _convertMapboxStyle("https://api.mapbox.com/styles/v1/"+s.substr(s.indexOf("/styles/")+8)+"?access_token="+a,true);
         }else if(s.startsWith("mapbox:")){
             //用户设置使用自己的Mapbox样式
-            _convertMapboxStyle("https://api.mapbox.com/styles/v1/"+s.substr(s.indexOf("/styles/")+8)+"?access_token="+a);
+            _convertMapboxStyle("https://api.mapbox.com/styles/v1/"+s.substr(s.indexOf("/styles/")+8)+"?access_token="+a,false);
         }else{
             //用户设置使用自己的JSON样式
             maplibreStyle.value=s;
@@ -908,7 +908,7 @@ Item {
 
     property string mapboxStyleJson: ""//保存转换后的Mapbox Style
 
-    function _convertMapboxStyle(mapboxStyleUrl){
+    function _convertMapboxStyle(mapboxStyleUrl,isBuiltIn){
         //检查Token是否可检索Style
         var xhr=new XMLHttpRequest();
         xhr.open("GET",mapboxStyleUrl,true);
@@ -928,9 +928,15 @@ Item {
                 showWarningCenter(true,"不支持mapbox://链接。\nmapbox:// URL is not supported.\nmapbox:// URLは使用できません。");
             }else{
                 //maplibreStyle.value="https://demotiles.maplibre.org/style.json";
-                showWarningCenter(true,"无法获取地图样式。\n"+
-                    "Cannot get map style.\n"+
-                    "マップスタイルは取得できません。");
+                if(isBuiltIn){
+                    showWarningCenter(true,"程序内置的Mapbox Token暂时不可用，\n请更换Token.\n"+
+                        "The built-in Mapbox token is currently unavailable,\nplease use another token.\n"+
+                        "ご使用中の内蔵Mapbox Tokenは現在利用できません。\n別のTokenに交換してください。");
+                }else{
+                    showWarningCenter(true,"无法获取地图样式。\n"+
+                        "Cannot get map style.\n"+
+                        "マップスタイルは取得できません。");
+                }
             }
         };
         xhr.send();
