@@ -107,7 +107,7 @@ function eew_onsuccess(str_response){
                 /*NUM*/longitude:parseFloat(foundLon),
                 /*NUM*/depth:parseFloat(foundDep),
                 /*STR*/epicenter:foundEpi,
-                /*NUM*/startAt:fmt_to_msts(foundTime+" UTC+8"),//注意时区问题
+                /*NUM*/startAt:fmt_to_msts(foundTime+(matchBracket.indexOf("\"cancel\"")===-1?" UTC+8":" UTC+9")),//注意时区问题
                 /*NUM*/magnitude:parseFloat(foundMag)
             }
 			var iExisting=last_eew.data.findIndex(o=>o.eventId===converted.eventId);
