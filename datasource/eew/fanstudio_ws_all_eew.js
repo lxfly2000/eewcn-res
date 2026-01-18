@@ -123,7 +123,8 @@ function eew_onsuccess(str_response){
         if(last_data_length>0)
             last_eew.data.length=last_data_length;
     }else{
-        logger.info("无法识别的数据：\n"+str_response);
+        if(str_response.indexOf("\"heartbeat\"")===-1)
+            logger.info("无法识别的数据：\n"+str_response);
     }
     return last_eew;
 }

@@ -29,22 +29,23 @@ function history_postdata(){return "";}
 //         {...},{...},{...},...
 //        ]}
 function history_onsuccess(str_response){
-    str_response=str_response.substr(str_response.indexOf("const newdata = ")+16);
+    //2026-1-18更新：网页数据格式发生变化
+    str_response=str_response.substr(str_response.indexOf("const D=")+8);
     str_response=str_response.substr(0,str_response.indexOf(";"));
     var original=JSON.parse(str_response);
     var shuju_array=[];
     for(var i=0;i<original.length;i++){
         var item=original[i];
         shuju_array.push({
-            id:item.NEW_DID,
-            O_TIME:item.O_TIME,
-            EPI_LAT:item.EPI_LAT,
-            EPI_LON:item.EPI_LON,
-            EPI_DEPTH:item.EPI_DEPTH,
+            id:item[5],
+            O_TIME:"20"+item[1].substr(0,2)+"-"+item[1].substr(2,2)+"-"+item[1].substr(4,2)+" "+item[1].substr(7,2)+":"+item[1].substr(9,2),
+            EPI_LAT:item[2].toString(),
+            EPI_LON:item[3].toString(),
+            EPI_DEPTH:item[4],
             AUTO_FLAG:"M",
             EQ_TYPE:"M",
-            M:item.M,
-            LOCATION_C:item.LOCATION_C
+            M:item[0].toString(),
+            LOCATION_C:item[6]
         });
     }
     return {shuju:shuju_array};

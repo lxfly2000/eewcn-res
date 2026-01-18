@@ -83,7 +83,8 @@ function eew_onsuccess(str_response){
         }
         last_eew={data:[converted]};
     }else{
-        logger.info("无法识别的数据：\n"+str_response);
+        if(str_response.indexOf("\"heartbeat\"")===-1)
+            logger.info("无法识别的数据：\n"+str_response);
     }
     return last_eew;
 }
