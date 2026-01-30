@@ -108,7 +108,17 @@ function eew_onsuccess(str_response){
                 /*NUM*/depth:parseFloat(foundDep),
                 /*STR*/epicenter:foundEpi,
                 /*NUM*/startAt:fmt_to_msts(foundTime+(matchBracket.indexOf("\"cancel\"")===-1?" UTC+8":" UTC+9")),//注意时区问题
-                /*NUM*/magnitude:parseFloat(foundMag)
+                /*NUM*/magnitude:parseFloat(foundMag),
+                ttsepicenter:foundEpi
+            }
+            if(matchBracket.indexOf("\"infoTypeName\":\"警報\"")!==-1){
+                converted.epicenter="<font color=\"red\">"+converted.epicenter+"</font>";
+            }
+            if(matchBracket.indexOf("\"final\":true")!==-1){
+                converted.epicenter+="(最終報)";
+            }
+            if(matchBracket.indexOf("\"cancel\":true")!==-1){
+                converted.epicenter+="(取消)";
             }
 			var iExisting=last_eew.data.findIndex(o=>o.eventId===converted.eventId);
 			if(iExisting===-1){
@@ -144,7 +154,7 @@ function eew_onreport(str_data){
         last_report_data.epicenter!==data.epicenter||// 震中不同报
         last_report_data.magnitude<data.magnitude||// 震级增大报
         last_report_data.depth>data.depth){// 震源深度变浅报
-        tts.play("zh",data.epicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
+        tts.play("zh",data.ttsepicenter+"发生"+voice_cn_ordinal(data.magnitude)+"级地震，深度"+voice_cn_quantity(data.depth)+"公里。");
     }
     last_report_data=data;
 }

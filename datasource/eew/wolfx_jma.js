@@ -32,10 +32,21 @@ function eew_onsuccess(str_response){
         latitude:original.Latitude,
         longitude:original.Longitude,
         depth:original.Depth,
-        epicenter:"<b>["+shindo_str(original.MaxIntensity)+"]</b> "+original.Hypocenter+(original.Title==="緊急地震速報（警報）"?"(警報)":""),
+        epicenter:original.Hypocenter,
         startAt:fmt_to_msts(original.OriginTime+" UTC+9"),//注意时区问题
-        magnitude:original.Magunitude
+        magnitude:original.Magunitude,
+        ttsepicenter:original.Hypocenter
     };
+    if(original.isWarn){
+        converted.epicenter="<font color=\"red\">"+converted.epicenter+"</font>";
+    }
+    if(original.isFinal){
+        converted.epicenter+="(最終報)";
+    }
+    if(original.isCancel){
+        converted.epicenter+="(取消)";
+    }
+    converted.epicenter="<b>["+shindo_str(original.MaxIntensity)+"]</b> "+converted.epicenter;
     return {data:[converted]};
 }
 
@@ -54,7 +65,7 @@ function eew_onreport(str_data){
         Math.abs(last_report_data.startAt-data.startAt)>10000|| // 发震时间差超过10秒报
         last_report_data.epicenter!==data.epicenter||// 震中不同报
         last_report_data.ity!==ity){// 震度不同报
-        tts.play("ja",data.epicenter.substr(data.epicenter.indexOf("]</b> ")+6).replace("(警報)","")+"で地震、推定最大震度"+ity+"。");
+        tts.play("ja",data.ttsepicenter+"で地震、推定最大震度"+ity+"。");
     }
     last_report_data=data;
     last_report_data.ity=ity; // 保存震度信息以便下次比较

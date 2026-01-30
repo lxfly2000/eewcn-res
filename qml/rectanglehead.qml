@@ -12,8 +12,9 @@ Rectangle{
         spacing: 4
         Rectangle{
             id: rectangleIntensity
+            anchors.verticalCenter: parent.verticalCenter
             width: 54
-            height: parent.height
+            height: 54
             color: "#3bcdff"
             border.color: "white"
             Text {
@@ -27,7 +28,7 @@ Rectangle{
         }
 
         Column {
-            width: 200
+            width: rowDetail.width
             Text {
                 id: headLocation
                 text: "Location Location"
@@ -35,39 +36,46 @@ Rectangle{
                 color: "#ffffff"
                 wrapMode: Text.NoWrap
                 font.bold: true
-                font.pixelSize: 16
+                font.pixelSize: 28
                 transform: Scale{
                     id: scaleHeadLocation
+                    xScale: Math.min(1,headLocation.width/headLocation.contentWidth)
                 }
-            }
-
-            Text {
-                id: headTimeStr
-                color: "#ffffff"
-                text: "0000-00-00 00:00:00"
-                font.bold: true
-                font.pixelSize: 14
+                style: Text.Outline
             }
 
             Row {
-                width: parent.width
+                id: rowDetail
+                spacing: 16
                 Text {
                     id: headMagnitude
                     text: "M0.0"
                     font.bold: true
-                    font.pixelSize: 14
-                    width: parent.width/2
+                    font.pixelSize: 24
                     color: "#ffffff"
+                    style: Text.Outline
+                    anchors.bottom: parent.bottom
                 }
 
                 Text {
                     id: headDepth
                     text: "000km"
-                    horizontalAlignment: Text.AlignRight
                     font.bold: true
-                    font.pixelSize: 14
-                    width: parent.width/2
+                    font.pixelSize: 24
                     color: "#ffffff"
+                    style: Text.Outline
+                    anchors.bottom: parent.bottom
+                }
+
+                Text {
+                    id: headTimeStr
+                    color: "#ffffff"
+                    text: "0000-00-00 00:00:00"
+                    font.bold: true
+                    font.pixelSize: 16
+                    style: Text.Outline
+                    anchors.bottom: parent.bottom
+                    leftPadding: 5
                 }
             }
         }
@@ -87,11 +95,6 @@ Rectangle{
         rectangleIntensity.border.width=intensity<=0?1:0;
         //注意iNumber是从1开始的
         headLocation.text="%1%2 #%3".arg(totalNumber>1?String.fromCharCode(9311+iNumber)+" ":"").arg(location).arg(updateNumber);
-        if(headLocation.contentWidth>headLocation.width){
-            scaleHeadLocation.xScale=headLocation.width/headLocation.contentWidth;
-        }else{
-            scaleHeadLocation.xScale=1;
-        }
 
         headTimeStr.text=timeStr;
         headMagnitude.text="M%1".arg(magnitude);

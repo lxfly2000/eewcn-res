@@ -32,15 +32,26 @@ function eew_onsuccess(str_response){
         latitude:parseFloat(original.latitude),
         longitude:parseFloat(original.longitude),
         depth:parseFloat(original.depth),
-        epicenter:"<b>["+original.calcintensity+"]</b> "+original.region_name,
+        epicenter:original.region_name,
         startAt:fmt_to_msts(original.origin_time.substr(0,4)+"-"+
         original.origin_time.substr(4,2)+"-"+
         original.origin_time.substr(6,2)+" "+
         original.origin_time.substr(8,2)+":"+
         original.origin_time.substr(10,2)+":"+
         original.origin_time.substr(12,2)+" UTC+9"),//注意时区问题
-        magnitude:parseFloat(original.magunitude)
+        magnitude:parseFloat(original.magunitude),
+        ttsepicenter:original.region_name
     };
+    if(original.eew){
+        converted.epicenter="<font color=\"red\">"+converted.epicenter+"</font>";
+    }
+    if(original.is_final){
+        converted.epicenter+="(最終報)";
+    }
+    if(original.is_cancel){
+        converted.epicenter+="(取消)";
+    }
+    converted.epicenter="<b>["+original.calcintensity+"]</b> "+converted.epicenter;
     return {data:[converted]};
 }
 
@@ -59,7 +70,7 @@ function eew_onreport(str_data){
         Math.abs(last_report_data.startAt-data.startAt)>10000|| // 发震时间差超过10秒报
         last_report_data.epicenter!==data.epicenter||// 震中不同报
         last_report_data.ity!==ity){// 震度不同报
-        tts.play("ja",data.epicenter.substr(data.epicenter.indexOf("]</b> ")+6).replace("(警報)","")+"で地震、推定最大震度"+ity+"。");
+        tts.play("ja",data.ttsepicenter+"で地震、推定最大震度"+ity+"。");
     }
     last_report_data=data;
     last_report_data.ity=ity; // 保存震度信息以便下次比较

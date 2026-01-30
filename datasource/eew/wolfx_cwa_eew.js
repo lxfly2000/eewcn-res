@@ -34,8 +34,12 @@ function eew_onsuccess(str_response){
         depth:original.Depth,
         epicenter:"<b>["+shindo_str(original.MaxIntensity)+"]</b> "+original.HypoCenter,
         startAt:fmt_to_msts(original.OriginTime+" UTC+8"),//注意时区问题
-        magnitude:original.Magunitude
+        magnitude:original.Magunitude,
+        ttsepicenter:original.HypoCenter
     };
+    if(original.isCancel){
+        converted.epicenter+="(取消)";
+    }
     return {data:[converted]};
 }
 
@@ -54,7 +58,7 @@ function eew_onreport(str_data){
         Math.abs(last_report_data.startAt-data.startAt)>10000|| // 发震时间差超过10秒报
         last_report_data.epicenter!==data.epicenter||// 震中不同报
         last_report_data.ity!==ity){// 震度不同报
-        tts.play("zh",data.epicenter.substr(data.epicenter.indexOf("]</b> ")+6)+"發生"+voice_cn_ordinal(data.magnitude)+"級地震，最大震度"+ity+"，深度"+voice_cn_quantity(data.depth)+"公里。");
+        tts.play("zh",data.ttsepicenter+"發生"+voice_cn_ordinal(data.magnitude)+"級地震，最大震度"+ity+"，深度"+voice_cn_quantity(data.depth)+"公里。");
     }
     last_report_data=data;
     last_report_data.ity=ity; // 保存震度信息以便下次比较
