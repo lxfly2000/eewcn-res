@@ -46,7 +46,6 @@ Rectangle{
 
             Row {
                 id: rowDetail
-                spacing: 16
                 Text {
                     id: headMagnitude
                     width: 56
@@ -78,7 +77,7 @@ Rectangle{
                     font.pixelSize: 16
                     style: Text.Outline
                     anchors.bottom: parent.bottom
-                    leftPadding: 5
+                    leftPadding: 20
                 }
             }
         }
