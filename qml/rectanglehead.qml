@@ -49,6 +49,7 @@ Rectangle{
                 spacing: 16
                 Text {
                     id: headMagnitude
+                    width: 56
                     text: "M0.0"
                     font.bold: true
                     font.pixelSize: 24
@@ -59,7 +60,9 @@ Rectangle{
 
                 Text {
                     id: headDepth
+                    width: 68
                     text: "000km"
+                    horizontalAlignment: Text.AlignRight
                     font.bold: true
                     font.pixelSize: 24
                     color: "#ffffff"
