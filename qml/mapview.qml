@@ -725,6 +725,15 @@ Item {
                 }
             }
             MenuItem{
+                id: checkOldEewHead
+                checkable: true
+                checked: false
+                text: qsTr("&Old EEW Head")
+                Settings{
+                    property alias oldEewHead: checkOldEewHead.checked
+                }
+            }
+            MenuItem{
                 text: qsTr("&Help")
                 onClicked: Qt.openUrlExternally("https://lxfly2000.github.io/eewcn-res/link.htm?key=EEWCNHelp")
             }
@@ -1282,7 +1291,7 @@ Item {
         //columnHeads.visible=true;
         columnCounter.visible=true;
         //根据 https://doc.qt.io/qt-5/qtqml-javascript-dynamicobjectcreation.html 的文档，创建是有可能直接就完成的
-        var compHead=Qt.createComponent("https://lxfly2000.github.io/eewcn-res/qml/rectanglehead.qml",Component.Asynchronous);
+        var compHead=Qt.createComponent("https://lxfly2000.github.io/eewcn-res/qml/rectanglehead"+(checkOldEewHead.checked?"_original.qml":".qml"),Component.Asynchronous);
         if(compHead.status===Component.Ready){
             var oHead=compHead.createObject(columnHeads);
             oHead.setFontFamily(textEEWTime.font.family);
