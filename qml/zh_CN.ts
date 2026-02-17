@@ -49,7 +49,12 @@
         <translation type="unfinished">禁用动画(&amp;N)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="728"/>
+        <location filename="mapview.qml" line="731"/>
+        <source>&amp;Old EEW Head</source>
+        <translation type="unfinished">旧预警框(&amp;O)</translation>
+    </message>
+    <message>
+        <location filename="mapview.qml" line="737"/>
         <source>&amp;Help</source>
         <translation type="unfinished">帮助(&amp;H)</translation>
     </message>
@@ -130,7 +135,12 @@
         <translation type="unfinished">可能会减轻程序卡死情况。</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="733"/>
+        <location filename="mapview-maplibre.qml" line="736"/>
+        <source>&amp;Old EEW Head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="742"/>
         <source>&amp;Help</source>
         <translation type="unfinished">帮助(&amp;H)</translation>
     </message>

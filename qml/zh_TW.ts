@@ -49,7 +49,12 @@
         <translation type="unfinished">禁用動畫(&amp;N)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="728"/>
+        <location filename="mapview.qml" line="731"/>
+        <source>&amp;Old EEW Head</source>
+        <translation type="unfinished">舊預警框(&amp;O)</translation>
+    </message>
+    <message>
+        <location filename="mapview.qml" line="737"/>
         <source>&amp;Help</source>
         <translation type="unfinished">幫助(&amp;H)</translation>
     </message>
@@ -130,7 +135,12 @@
         <translation type="unfinished">可以緩解程式卡住的問題。</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="733"/>
+        <location filename="mapview-maplibre.qml" line="736"/>
+        <source>&amp;Old EEW Head</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="742"/>
         <source>&amp;Help</source>
         <translation type="unfinished">幫助(&amp;H)</translation>
     </message>
