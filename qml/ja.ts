@@ -51,7 +51,7 @@
     <message>
         <location filename="mapview.qml" line="731"/>
         <source>&amp;Old EEW Head</source>
-        <translation type="unfinished">以前のEEWバナー</translation>
+        <translation type="unfinished">以前のEEWバナー(&amp;O)</translation>
     </message>
     <message>
         <location filename="mapview.qml" line="737"/>
@@ -137,7 +137,7 @@
     <message>
         <location filename="mapview-maplibre.qml" line="736"/>
         <source>&amp;Old EEW Head</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">以前のEEWバナー(&amp;O)</translation>
     </message>
     <message>
         <location filename="mapview-maplibre.qml" line="742"/>

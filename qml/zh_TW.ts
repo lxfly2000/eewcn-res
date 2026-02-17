@@ -137,7 +137,7 @@
     <message>
         <location filename="mapview-maplibre.qml" line="736"/>
         <source>&amp;Old EEW Head</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">舊預警框(&amp;O)</translation>
     </message>
     <message>
         <location filename="mapview-maplibre.qml" line="742"/>
