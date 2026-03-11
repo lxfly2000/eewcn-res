@@ -771,7 +771,10 @@ Item {
             }
             MouseArea{
                 anchors.fill: parent
-                onClicked: Qt.openUrlExternally("https://lxfly2000.github.io/eewcn-res/link.htm?key=WarningHelp")
+                onClicked: {
+                    Qt.openUrlExternally("https://lxfly2000.github.io/eewcn-res/link.htm?key=WarningHelp");
+                    parent.visible=false;
+                }
             }
         }
     }
@@ -885,7 +888,10 @@ Item {
         }
         MouseArea{
             anchors.fill: parent
-            onClicked: Qt.openUrlExternally("https://lxfly2000.github.io/eewcn-res/link.htm?key=WarningHelp")
+            onClicked: {
+                Qt.openUrlExternally("https://lxfly2000.github.io/eewcn-res/link.htm?key=WarningHelp");
+                parent.visible=false;
+            }
         }
     }
 
