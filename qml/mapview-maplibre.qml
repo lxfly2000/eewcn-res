@@ -4,6 +4,7 @@ import QtPositioning 5.15
 import QtGraphicalEffects 1.12
 import QtQuick.Controls 2.15
 import Qt.labs.settings 1.1
+import MapLibre 3.0
 
 
 Item {
@@ -73,245 +74,151 @@ Item {
             }
         }
 
-        MapParameter {
-            id:mapIntensity1Source
-            type: "source"
-            property string name: "intensity1Source"
-            property string sourceType: "geojson"
-            property string data: emptyGeoJson
-        }
-        MapParameter {
-            type: "layer"
-            property string name: "intensity1Layer"
-            property string layerType: "fill"
-            property string source: "intensity1Source"
-            //指该层应在哪层之下
-            property string before: "admin-3-4-boundaries-bg"
-        }
-        MapParameter {
-            type: "paint"
-            property string layer: "intensity1Layer"
-            property var fillColor: getIntColors(1)
-        }
-        MapParameter {
-            id:mapIntensity2Source
-            type: "source"
-            property string name: "intensity2Source"
-            property string sourceType: "geojson"
-            property string data: emptyGeoJson
-        }
-        MapParameter {
-            type: "layer"
-            property string name: "intensity2Layer"
-            property string layerType: "fill"
-            property string source: "intensity2Source"
-            //指该层应在哪层之下
-            property string before: "admin-3-4-boundaries-bg"
-        }
-        MapParameter {
-            type: "paint"
-            property string layer: "intensity2Layer"
-            property var fillColor: getIntColors(2)
-        }
-        MapParameter {
-            id:mapIntensity3Source
-            type: "source"
-            property string name: "intensity3Source"
-            property string sourceType: "geojson"
-            property string data: emptyGeoJson
-        }
-        MapParameter {
-            type: "layer"
-            property string name: "intensity3Layer"
-            property string layerType: "fill"
-            property string source: "intensity3Source"
-            //指该层应在哪层之下
-            property string before: "admin-3-4-boundaries-bg"
-        }
-        MapParameter {
-            type: "paint"
-            property string layer: "intensity3Layer"
-            property var fillColor: getIntColors(3)
-        }
-        MapParameter {
-            id:mapIntensity4Source
-            type: "source"
-            property string name: "intensity4Source"
-            property string sourceType: "geojson"
-            property string data: emptyGeoJson
-        }
-        MapParameter {
-            type: "layer"
-            property string name: "intensity4Layer"
-            property string layerType: "fill"
-            property string source: "intensity4Source"
-            //指该层应在哪层之下
-            property string before: "admin-3-4-boundaries-bg"
-        }
-        MapParameter {
-            type: "paint"
-            property string layer: "intensity4Layer"
-            property var fillColor: getIntColors(4)
-        }
-        MapParameter {
-            id:mapIntensity5Source
-            type: "source"
-            property string name: "intensity5Source"
-            property string sourceType: "geojson"
-            property string data: emptyGeoJson
-        }
-        MapParameter {
-            type: "layer"
-            property string name: "intensity5Layer"
-            property string layerType: "fill"
-            property string source: "intensity5Source"
-            //指该层应在哪层之下
-            property string before: "admin-3-4-boundaries-bg"
-        }
-        MapParameter {
-            type: "paint"
-            property string layer: "intensity5Layer"
-            property var fillColor: getIntColors(5)
-        }
-        MapParameter {
-            id:mapIntensity6Source
-            type: "source"
-            property string name: "intensity6Source"
-            property string sourceType: "geojson"
-            property string data: emptyGeoJson
-        }
-        MapParameter {
-            type: "layer"
-            property string name: "intensity6Layer"
-            property string layerType: "fill"
-            property string source: "intensity6Source"
-            //指该层应在哪层之下
-            property string before: "admin-3-4-boundaries-bg"
-        }
-        MapParameter {
-            type: "paint"
-            property string layer: "intensity6Layer"
-            property var fillColor: getIntColors(6)
-        }
-        MapParameter {
-            id:mapIntensity7Source
-            type: "source"
-            property string name: "intensity7Source"
-            property string sourceType: "geojson"
-            property string data: emptyGeoJson
-        }
-        MapParameter {
-            type: "layer"
-            property string name: "intensity7Layer"
-            property string layerType: "fill"
-            property string source: "intensity7Source"
-            //指该层应在哪层之下
-            property string before: "admin-3-4-boundaries-bg"
-        }
-        MapParameter {
-            type: "paint"
-            property string layer: "intensity7Layer"
-            property var fillColor: getIntColors(7)
-        }
-        MapParameter {
-            id:mapIntensity8Source
-            type: "source"
-            property string name: "intensity8Source"
-            property string sourceType: "geojson"
-            property string data: emptyGeoJson
-        }
-        MapParameter {
-            type: "layer"
-            property string name: "intensity8Layer"
-            property string layerType: "fill"
-            property string source: "intensity8Source"
-            //指该层应在哪层之下
-            property string before: "admin-3-4-boundaries-bg"
-        }
-        MapParameter {
-            type: "paint"
-            property string layer: "intensity8Layer"
-            property var fillColor: getIntColors(8)
-        }
-        MapParameter {
-            id:mapIntensity9Source
-            type: "source"
-            property string name: "intensity9Source"
-            property string sourceType: "geojson"
-            property string data: emptyGeoJson
-        }
-        MapParameter {
-            type: "layer"
-            property string name: "intensity9Layer"
-            property string layerType: "fill"
-            property string source: "intensity9Source"
-            //指该层应在哪层之下
-            property string before: "admin-3-4-boundaries-bg"
-        }
-        MapParameter {
-            type: "paint"
-            property string layer: "intensity9Layer"
-            property var fillColor: getIntColors(9)
-        }
-        MapParameter {
-            id:mapIntensity10Source
-            type: "source"
-            property string name: "intensity10Source"
-            property string sourceType: "geojson"
-            property string data: emptyGeoJson
-        }
-        MapParameter {
-            type: "layer"
-            property string name: "intensity10Layer"
-            property string layerType: "fill"
-            property string source: "intensity10Source"
-            //指该层应在哪层之下
-            property string before: "admin-3-4-boundaries-bg"
-        }
-        MapParameter {
-            type: "paint"
-            property string layer: "intensity10Layer"
-            property var fillColor: getIntColors(10)
-        }
-        MapParameter {
-            id:mapIntensity11Source
-            type: "source"
-            property string name: "intensity11Source"
-            property string sourceType: "geojson"
-            property string data: emptyGeoJson
-        }
-        MapParameter {
-            type: "layer"
-            property string name: "intensity11Layer"
-            property string layerType: "fill"
-            property string source: "intensity11Source"
-            //指该层应在哪层之下
-            property string before: "admin-3-4-boundaries-bg"
-        }
-        MapParameter {
-            type: "paint"
-            property string layer: "intensity11Layer"
-            property var fillColor: getIntColors(11)
-        }
-        MapParameter {
-            id:mapIntensity12Source
-            type: "source"
-            property string name: "intensity12Source"
-            property string sourceType: "geojson"
-            property string data: emptyGeoJson
-        }
-        MapParameter {
-            type: "layer"
-            property string name: "intensity12Layer"
-            property string layerType: "fill"
-            property string source: "intensity12Source"
-            //指该层应在哪层之下
-            property string before: "admin-3-4-boundaries-bg"
-        }
-        MapParameter {
-            type: "paint"
-            property string layer: "intensity12Layer"
-            property var fillColor: getIntColors(12)
+        MapLibre.style: Style {
+            SourceParameter {
+                id: mapIntensity1Source
+                styleId: "intensity1Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                styleId: "intensity1Layer"
+                type: "fill"
+                property string source: "intensity1Source"
+                paint: {"fill-color": getIntColors(1),"fill-opacity": 0.75}
+            }
+            SourceParameter {
+                id: mapIntensity2Source
+                styleId: "intensity2Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                styleId: "intensity2Layer"
+                type: "fill"
+                property string source: "intensity2Source"
+                paint: {"fill-color": getIntColors(2),"fill-opacity": 0.75}
+            }
+            SourceParameter {
+                id: mapIntensity3Source
+                styleId: "intensity3Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                styleId: "intensity3Layer"
+                type: "fill"
+                property string source: "intensity3Source"
+                paint: {"fill-color": getIntColors(3),"fill-opacity": 0.75}
+            }
+            SourceParameter {
+                id: mapIntensity4Source
+                styleId: "intensity4Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                styleId: "intensity4Layer"
+                type: "fill"
+                property string source: "intensity4Source"
+                paint: {"fill-color": getIntColors(4),"fill-opacity": 0.75}
+            }
+            SourceParameter {
+                id: mapIntensity5Source
+                styleId: "intensity5Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                styleId: "intensity5Layer"
+                type: "fill"
+                property string source: "intensity5Source"
+                paint: {"fill-color": getIntColors(5),"fill-opacity": 0.75}
+            }
+            SourceParameter {
+                id: mapIntensity6Source
+                styleId: "intensity6Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                styleId: "intensity6Layer"
+                type: "fill"
+                property string source: "intensity6Source"
+                paint: {"fill-color": getIntColors(6),"fill-opacity": 0.75}
+            }
+            SourceParameter {
+                id: mapIntensity7Source
+                styleId: "intensity7Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                styleId: "intensity7Layer"
+                type: "fill"
+                property string source: "intensity7Source"
+                paint: {"fill-color": getIntColors(7),"fill-opacity": 0.75}
+            }
+            SourceParameter {
+                id: mapIntensity8Source
+                styleId: "intensity8Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                styleId: "intensity8Layer"
+                type: "fill"
+                property string source: "intensity8Source"
+                paint: {"fill-color": getIntColors(8),"fill-opacity": 0.75}
+            }
+            SourceParameter {
+                id: mapIntensity9Source
+                styleId: "intensity9Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                styleId: "intensity9Layer"
+                type: "fill"
+                property string source: "intensity9Source"
+                paint: {"fill-color": getIntColors(9),"fill-opacity": 0.75}
+            }
+            SourceParameter {
+                id: mapIntensity10Source
+                styleId: "intensity10Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                styleId: "intensity10Layer"
+                type: "fill"
+                property string source: "intensity10Source"
+                paint: {"fill-color": getIntColors(10),"fill-opacity": 0.75}
+            }
+            SourceParameter {
+                id: mapIntensity11Source
+                styleId: "intensity11Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                styleId: "intensity11Layer"
+                type: "fill"
+                property string source: "intensity11Source"
+                paint: {"fill-color": getIntColors(11),"fill-opacity": 0.75}
+            }
+            SourceParameter {
+                id: mapIntensity12Source
+                styleId: "intensity12Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                styleId: "intensity12Layer"
+                type: "fill"
+                property string source: "intensity12Source"
+                paint: {"fill-color": getIntColors(12),"fill-opacity": 0.75}
+            }
         }
     }
 
