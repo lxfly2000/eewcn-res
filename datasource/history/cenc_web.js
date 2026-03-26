@@ -19,10 +19,10 @@ function history_url(){
     return "https://www.cenc.ac.cn/prodlaunch-web-backend/open/data/catalogs?"
     +"orderBy=id&"
     +"isAsc=false&"
+    +"endLat=90&startLon=-180&endLon=180&startLat=-90&"
     +"startMg=0&endMg=10&"
     +"startTime="+a_week_ago_str.substr(0,10)+"+"+a_week_ago_str.substr(11,8)+"&"
-    +"endTime="+now_str.substr(0,10)+"+"+now_str.substr(11,8)+"&"
-    +"locationRange=2";}
+    +"endTime="+now_str.substr(0,10)+"+"+now_str.substr(11,8);}
 function history_method(){return "get";}
 function history_header(){return {/*"Accept":"application/json"*/};}
 function history_postdata(){return "";}
