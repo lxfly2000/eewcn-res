@@ -11,7 +11,18 @@ function is_eew_data(url){return url==="";}
 
 //=========地震历史数据获取函数=============
 
-function history_url(){return "https://news.ceic.ac.cn/speedsearch.html";}
+function history_url(){
+    var now=new Date();
+    var a_week_ago=new Date(now.getTime()-7*24*3600*1000);
+    var now_str=msts_to_fmt(now.getTime());
+    var a_week_ago_str=msts_to_fmt(a_week_ago.getTime());
+    return "https://www.cenc.ac.cn/prodlaunch-web-backend/open/data/catalogs?"
+    +"orderBy=id&"
+    +"isAsc=false&"
+    +"startMg=0&endMg=10&"
+    +"startTime="+a_week_ago_str.substr(0,10)+"+"+a_week_ago_str.substr(11,8)+"&"
+    +"endTime="+now_str.substr(0,10)+"+"+now_str.substr(11,8)+"&"
+    +"locationRange=2";}
 function history_method(){return "get";}
 function history_header(){return {/*"Accept":"application/json"*/};}
 function history_postdata(){return "";}
@@ -29,23 +40,81 @@ function history_postdata(){return "";}
 //         {...},{...},{...},...
 //        ]}
 function history_onsuccess(str_response){
-    //2026-1-18更新：网页数据格式发生变化
-    str_response=str_response.substr(str_response.indexOf("const D=")+8);
-    str_response=str_response.substr(0,str_response.indexOf(";"));
+    //2026-3-26更新：网站域名已换，格式已换
+    //格式：
+    /*{
+  "message": "",
+  "code": 0,
+  "data": [
+    {
+      "id": 20260324123750,
+      "uniEventId": "CC1774327070000",
+      "oriTime": "2026-03-24 12:37:50",
+      "oriTimeStr": null,
+      "locName": "汤加群岛",
+      "epiLon": -175.199997,
+      "epiLat": -18.700001,
+      "focDepth": 250,
+      "magType": "",
+      "magnitude": 7.6,
+      "epiIntensity": 0,
+      "costTime": 0,
+      "trigStaNum": 0,
+      "magNum": 0,
+      "isSubject": 1,
+      "eqType": "CC",
+      "gmtCreate": "2026-03-24 13:02:24",
+      "gmtUpdate": null,
+      "isDeleted": 0,
+      "locationRange": 2,
+      "event": "{\"origin\":{\"costTime\":0,\"epiIntensity\":0.0,\"epiLat\":-18.700000762939453,\"epiLon\":-175.1999969482422,\"eqType\":\"CC\",\"focDepth\":250.0,\"locName\":\"汤加群岛\",\"magNum\":0,\"magType\":\"\",\"magnitude\":7.599999904632568,\"oriTime\":1774327070000,\"trigStaNum\":0},\"reportTime\":0,\"sendTime\":0,\"serial\":0,\"uniEventId\":\"CC1774327070000\"}",
+      "earthquakeEvent": {
+        "uniEventId": "CC1774327070000",
+        "systemMode": null,
+        "strategy": null,
+        "serial": 0,
+        "sender": null,
+        "senderCode": null,
+        "sendTime": 0,
+        "reportTime": 0,
+        "status": null,
+        "msgType": null,
+        "version": null,
+        "sendType": null,
+        "origin": {
+          "oriTime": 1774327070000,
+          "locName": "汤加群岛",
+          "epiLon": -175.199996948242,
+          "epiLat": -18.7000007629395,
+          "focDepth": 250,
+          "magType": "",
+          "magnitude": 7.59999990463257,
+          "epiIntensity": 0,
+          "costTime": 0,
+          "trigStaNum": 0,
+          "magNum": 0,
+          "eqType": "CC"
+        }
+      },
+      "distance": null,
+      "subjectCodes": "base-info",
+      "nameByInfo": "汤加群岛7.6级地震"
+    },
+    ...]}*/
     var original=JSON.parse(str_response);
     var shuju_array=[];
-    for(var i=0;i<original.length;i++){
-        var item=original[i];
+    for(var i=0;i<original.data.length;i++){
+        var item=original.data[i];
         shuju_array.push({
-            id:item[5],
-            O_TIME:"20"+item[1].substr(0,2)+"-"+item[1].substr(2,2)+"-"+item[1].substr(4,2)+" "+item[1].substr(7,2)+":"+item[1].substr(9,2),
-            EPI_LAT:item[2].toString(),
-            EPI_LON:item[3].toString(),
-            EPI_DEPTH:item[4],
+            id:item.uniEventId,
+            O_TIME:item.oriTime,
+            EPI_LAT:item.epiLat.toString(),
+            EPI_LON:item.epiLon.toString(),
+            EPI_DEPTH:item.focDepth,
             AUTO_FLAG:"M",
             EQ_TYPE:"M",
-            M:item[0].toString(),
-            LOCATION_C:item[6]
+            M:item.magnitude.toString(),
+            LOCATION_C:item.locName
         });
     }
     return {shuju:shuju_array};
@@ -54,7 +123,7 @@ function history_onsuccess(str_response){
 function history_onfail(num_errorcode){logger.error("history_onfail: "+num_errorcode);}
 
 //根据URL判断该URL返回的是否为地震历史数据
-function is_history_data(url){return url==="https://news.ceic.ac.cn/speedsearch.html";}
+function is_history_data(url){return url.substr(0,64)==="https://www.cenc.ac.cn/prodlaunch-web-backend/open/data/catalogs";}
 
 function history_onreport(str_data){
     var data=JSON.parse(str_data);
