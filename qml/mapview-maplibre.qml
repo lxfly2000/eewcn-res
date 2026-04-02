@@ -836,18 +836,22 @@ Item {
         xhr.open("GET",mapboxStyleUrl,true);
         xhr.onreadystatechange=function(){
             if(xhr.readyState===4&&xhr.status===200){
-                var a=mapboxStyleUrl.substr(mapboxStyleUrl.indexOf("?access_token=")+14);
-                var styleJson=JSON.parse(xhr.responseText);
-                //https://docs.mapbox.com/api/maps/mapbox-tiling-service/#retrieve-tilejson-metadata
-                styleJson.sources.composite.url="https://api.mapbox.com/v4/"+styleJson.sources.composite.url.substr(9)+".json?access_token="+a;
-                //https://docs.mapbox.com/api/maps/styles/#retrieve-a-sprite-image-or-json
-                styleJson.sprite="https://api.mapbox.com/styles/v1/"+styleJson.sprite.substr(styleJson.sprite.indexOf("/sprites/")+9)+"/sprite@2x?access_token="+a;
-                //https://docs.mapbox.com/api/maps/fonts/#retrieve-font-glyph-ranges
-                styleJson.glyphs="https://api.mapbox.com/fonts/v1/"+styleJson.glyphs.substr(styleJson.glyphs.indexOf("/fonts/")+7)+"?access_token="+a;
-                //maplibreStyle.value="data:application/json,"+JSON.stringify(styleJson);//TODO：注意这里这样做没有效果，需要修正
-                mapboxStyleJson=JSON.stringify(styleJson);
-                maplibreStyle.value="https://demotiles.maplibre.org/style.json";
-                showWarningCenter(true,"不支持mapbox://链接。\nmapbox:// URL is not supported.\nmapbox:// URLは使用できません。");
+                if(isBuiltIn){
+                    maplibreStyle.value="https://lxfly2000.github.io/eewcn-res/qml/mapbox-style.json";
+                }else{
+                    var a=mapboxStyleUrl.substr(mapboxStyleUrl.indexOf("?access_token=")+14);
+                    var styleJson=JSON.parse(xhr.responseText);
+                    //https://docs.mapbox.com/api/maps/mapbox-tiling-service/#retrieve-tilejson-metadata
+                    styleJson.sources.composite.url="https://api.mapbox.com/v4/"+styleJson.sources.composite.url.substr(9)+".json?access_token="+a;
+                    //https://docs.mapbox.com/api/maps/styles/#retrieve-a-sprite-image-or-json
+                    styleJson.sprite="https://api.mapbox.com/styles/v1/"+styleJson.sprite.substr(styleJson.sprite.indexOf("/sprites/")+9)+"/sprite@2x?access_token="+a;
+                    //https://docs.mapbox.com/api/maps/fonts/#retrieve-font-glyph-ranges
+                    styleJson.glyphs="https://api.mapbox.com/fonts/v1/"+styleJson.glyphs.substr(styleJson.glyphs.indexOf("/fonts/")+7)+"?access_token="+a;
+                    //maplibreStyle.value="data:application/json,"+JSON.stringify(styleJson);//TODO：注意这里这样做没有效果，需要修正
+                    mapboxStyleJson=JSON.stringify(styleJson);
+                    maplibreStyle.value="https://demotiles.maplibre.org/style.json";
+                    showWarningCenter(true,"不支持mapbox://链接。\nmapbox:// URL is not supported.\nmapbox:// URLは使用できません。");
+                }
             }else{
                 //maplibreStyle.value="https://demotiles.maplibre.org/style.json";
                 if(isBuiltIn){
