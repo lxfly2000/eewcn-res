@@ -838,6 +838,7 @@ Item {
             if(xhr.readyState===4&&xhr.status===200){
                 if(isBuiltIn){
                     maplibreStyle.value="https://lxfly2000.github.io/eewcn-res/qml/mapbox-style.json";
+                    showWarningCenter(false,"");
                 }else{
                     var a=mapboxStyleUrl.substr(mapboxStyleUrl.indexOf("?access_token=")+14);
                     var styleJson=JSON.parse(xhr.responseText);
