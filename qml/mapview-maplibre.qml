@@ -813,12 +813,9 @@ Item {
     }
 
     function setMapboxParam(a,s){
-        const oldIdentifier="ckps0zs6g02ye2us4ua9hk4r8";
-        const newIdentifier="cm69dufvd097g2kqu8l6ovlx9";
-        const newAppend="LpSPrjVvQwUAOgfrzaVAqg";
-        if(JSON.parse(atob(a.split(".")[1])).a===oldIdentifier&&s.startsWith("mapbox:")){
+        if(a==="pk.eyJ1IjoibHhmbHkyMDAwIiwiYSI6ImNrcHMwenM2ZzAyeWUydXM0dWE5aGs0cjgifQ.h_6WnVVn5tltXvJRI8BK1g"&&s.startsWith("mapbox:")){
             //未设置，使用自带的样式
-            a="pk."+btoa(JSON.stringify({u:"lxfly2000",a:newIdentifier})).replaceAll("=","")+"."+newAppend;
+            a="pk.eyJ1IjoibHhmbHkyMDAwIiwiYSI6ImNtNjlkdWZ2ZDA5N2cya3F1OGw2b3ZseDkifQ.LpSPrjVvQwUAOgfrzaVAqg";
             //https://docs.mapbox.com/api/maps/styles/#retrieve-a-style
             _convertMapboxStyle("https://api.mapbox.com/styles/v1/"+s.substr(s.indexOf("/styles/")+8)+"?access_token="+a,true);
         }else if(s.startsWith("mapbox:")){

@@ -901,11 +901,8 @@ Item {
     }
 
     function setMapboxParam(a,s){
-        const oldIdentifier="ckps0zs6g02ye2us4ua9hk4r8";
-        const newIdentifier="cm69dufvd097g2kqu8l6ovlx9";
-        const newAppend="LpSPrjVvQwUAOgfrzaVAqg";
-        if(JSON.parse(atob(a.split(".")[1])).a===oldIdentifier){
-            a="pk."+btoa(JSON.stringify({u:"lxfly2000",a:newIdentifier})).replaceAll("=","")+"."+newAppend;
+        if(a==="pk.eyJ1IjoibHhmbHkyMDAwIiwiYSI6ImNrcHMwenM2ZzAyeWUydXM0dWE5aGs0cjgifQ.h_6WnVVn5tltXvJRI8BK1g"){
+            a="pk.eyJ1IjoibHhmbHkyMDAwIiwiYSI6ImNtNjlkdWZ2ZDA5N2cya3F1OGw2b3ZseDkifQ.LpSPrjVvQwUAOgfrzaVAqg";
             //检查Token是否可检索Style
             var xhr=new XMLHttpRequest();
             var stylePath=s.substr(s.indexOf("/styles/")+8);
