@@ -115,7 +115,13 @@ function eew_onsuccess(str_response){
                 converted.epicenter="[SC]"+converted.epicenter;
             }
             if(matchBracket.indexOf("\"province\":")!==-1){
-                converted.epicenter="[PR]"+converted.epicenter;
+                var foundProv_match=matchBracket.match(/province\w*" *: *"([^"]+)"/i);
+                if(foundProv_match){
+                    var foundProv=foundProv_match[1];
+                    converted.epicenter="["+foundProv+"]"+converted.epicenter;
+                }else{
+                    converted.epicenter="[PR]"+converted.epicenter;
+                }
             }
             if(matchBracket.indexOf("\"infoTypeName\":\"警報\"")!==-1){
                 converted.epicenter="<font color=\"red\">"+converted.epicenter+"</font>";
