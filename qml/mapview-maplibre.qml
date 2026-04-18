@@ -1157,15 +1157,18 @@ Item {
         return mapView.fromCoordinate(QtPositioning.coordinate(lat,lng),false);
     }
 
+    //太平洋视角中心
     function _PC(deg){
         return deg<0?deg+360:deg;
     }
 
+    //大西洋视角中心
     function _AC(deg){
         return deg>180?deg-360:deg;
     }
 
     function fitViewportCalcZoom(){
+        //使用太平洋视角缩放
         var leftP=360,topP=-90,rightP=0,bottomP=90;
         for(var key in pwaveItems){
             var item=pwaveItems[key];
@@ -1174,11 +1177,13 @@ Item {
             rightP=Math.max(rightP,_PC(item.center.atDistanceAndAzimuth(item.radius,90).longitude));
             bottomP=Math.min(bottomP,item.center.atDistanceAndAzimuth(item.radius,180).latitude);
         }
-        supplementMapView.visibleRegion=QtPositioning.rectangle(QtPositioning.coordinate(topP,leftP),QtPositioning.coordinate(bottomP,rightP));
+        //注意此处恢复为大西洋视角
+        supplementMapView.visibleRegion=QtPositioning.rectangle(QtPositioning.coordinate(topP,_AC(leftP)),QtPositioning.coordinate(bottomP,_AC(rightP)));
         return supplementMapView.zoomLevel;
     }
 
     function fitViewportToEEWCircle(){
+        //使用太平洋视角确定中心，Bug：当震源在0经度附近时，视角会被强制调整到太平洋，这个没法修复
         var leftP,topP,rightP,bottomP;
         //使用动画后不能像这样用即时属性去判断
         //while(true){

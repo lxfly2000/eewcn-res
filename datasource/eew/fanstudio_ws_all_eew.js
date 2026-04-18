@@ -72,11 +72,13 @@ var last_eew={data:[]};
     return last_eew;
 }*/
 function eew_onsuccess(str_response){
-    var matchBrackets=str_response.replace(/\r?\n/g,"").match(/\{([^{},]+,){4,}[^{}]+\}/g);
+    var matchBrackets=str_response.replace(/\r?\n/g,"").match(/"[^"]+" *: *\{[^{}]*\{([^{},]+,){4,}[^{}]+\}/g);
     if(matchBrackets!==null&&matchBrackets!==undefined&&matchBrackets.length>0){
         var last_data_length=last_eew.data.length;
         for(var i=0;i<matchBrackets.length;i++){
             var matchBracket=matchBrackets[i];
+            var agency_match=matchBracket.match(/^"([^"]+)"/i);
+            if(agency_match)var agency=agency_match[1];else continue;
             var foundId_match=matchBracket.match(/id\w*" *: *"?([^,{}\[\]:"]+)/i);
             if(foundId_match)var foundId=foundId_match[1];else continue;
             var foundUpdates_match=matchBracket.match(/upd\w*" *: *"?(\d+) *[,}]/i);
@@ -100,6 +102,7 @@ function eew_onsuccess(str_response){
                 }
             }
 
+            var utc9agency=["jma","kma-eew"];
             var converted={
                 /*STR*/eventId:foundId,
                 /*NUM*/updates:parseInt(foundUpdates),
@@ -107,7 +110,7 @@ function eew_onsuccess(str_response){
                 /*NUM*/longitude:parseFloat(foundLon),
                 /*NUM*/depth:parseFloat(foundDep),
                 /*STR*/epicenter:foundEpi,
-                /*NUM*/startAt:fmt_to_msts(foundTime+(matchBracket.indexOf("\"cancel\":")===-1?" UTC+8":" UTC+9")),//注意时区问题
+                /*NUM*/startAt:fmt_to_msts(foundTime+(utc9agency.includes(agency.toLowerCase())?" UTC+9":" UTC+8")),//注意时区问题
                 /*NUM*/magnitude:parseFloat(foundMag),
                 ttsepicenter:foundEpi
             }
