@@ -415,6 +415,24 @@ Item {
         fieldOfView: mapView.fieldOfView
     }
     Map{
+        id:yahooStationMarkMapView
+        anchors.fill: parent
+        plugin: overlayPlugin
+        gesture.enabled: false//禁用此图层的操作
+        center: mapView.center//可直接绑定基本图层的中心
+        color: "transparent"//背景透明
+        minimumFieldOfView: mapView.minimumFieldOfView
+        maximumFieldOfView: mapView.maximumFieldOfView
+        minimumTilt: mapView.minimumTilt
+        maximumTilt: mapView.maximumTilt
+        minimumZoomLevel: mapView.minimumZoomLevel
+        maximumZoomLevel: mapView.maximumZoomLevel
+        zoomLevel: mapView.zoomLevel
+        tilt: mapView.tilt;
+        bearing: mapView.bearing
+        fieldOfView: mapView.fieldOfView
+    }
+    Map{
         id:numberBarMapView
         anchors.fill: parent
         plugin: overlayPlugin
@@ -734,6 +752,22 @@ Item {
                 }
             }
             MenuItem{
+                id: checkShowNiedStations
+                checkable: true
+                checked: true
+                text: qsTr("Show &NIED Stations")
+                Settings{
+                    property alias showNiedStations: checkShowNiedStations.checked
+                }
+                onClicked: {
+                    if(checkShowNiedStations.checked){
+                        initNiedStation();
+                    }else{
+                        releaseNiedStation();
+                    }
+                }
+            }
+            MenuItem{
                 text: qsTr("&Help")
                 onClicked: Qt.openUrlExternally("https://lxfly2000.github.io/eewcn-res/link.htm?key=EEWCNHelp")
             }
@@ -924,6 +958,250 @@ Item {
             mapboxStyle.value=s;
             showWarningCenter(false,"");
         }
+        if(checkShowNiedStations.checked){
+            initNiedStation();
+        }
+    }
+
+    //{"items": [{"data_type_name": "KiK-net", "sitecode": "ABSH01", "sitename_j": "\u96c4\u6b66", "prefname": "\u5317\u6d77\u9053", "note": "", "sitename_e": "OMU", "lat_jgd": "44.5276", "lon_jgd": "142.8444", "elevation": "105", "depth": "100", "loggertype_name": "KiK-net18"},...]}
+    //经纬度单位为度，高程和深度单位为米
+    property string niedStationPubUrl: "https://lxfly2000.github.io/eewcn-res/qml/stationdata/nied.json"
+    //{"siteConfigId":"20260123000000","items":[[35.3,136.8],...],"copyright":["National Research Institute for Earth Science and Disaster Resilience","LY Corporation"],"version":"1.0"}
+    property string yahooStationListUrl: "https://weather-kyoshin.east.edge.storage-yahoo.jp/SiteList/sitelist.json"
+    //{"realTimeData":{"dataTime":"2026-04-18T21:03:34+09:00","siteConfigId":"20260123000000","intensity":"..."},"psWave":null,"hypoInfo":null,"estShindo":null,"copyright":["National Research Institute for Earth Science and Disaster Resilience","LY Corporation"],"version":"2.0"}
+    //intensity:用字母表示的震度，将每个字符转换为ASCII码并减100得到雅虎自己的震度值，值的范围为0-20，对应NIED的震度为-3-7
+    //参考：https://qiita.com/Starryacat/items/0101aa2ba4b8cb91daa1
+    property string yahooStationDataUrlTemplate: "https://weather-kyoshin.east.edge.storage-yahoo.jp/RealTimeData/{yyyy}{mm}{dd}/{yyyy}{mm}{dd}{hh}{mm}{ss}.json"
+    //{siteConfigId:"...",items:[{lat:...,lon:...,name:...,elevation:...(m),depth:...(m)},...]}
+    property var detailedYahooStationData: ({})
+    property var niedStationData: ({})
+    //二维数组，存储雅虎震度数据，用0-20表示，-1表示当前时间没有数据
+    //[[测站1数据], [测站2数据], ...]
+    property var yahooStationRealtimeData: []
+    //每个测站存储最近的30条数据，超过30条则删除最早的数据
+    property var yahooStationRealtimeDataMaxLength: 30
+    property var yahooStationRealtimeDataTimestampSec: 0
+    property var yahooStationQueryIntervalSec: 1
+    property var yahooStationQueryAccumulatedDelaySec: 0
+    property var yahooStationQMLItem: []
+
+    //num:数值
+    function _yahooRound(num) {
+        return Math.round(num * 10) / 10;
+    }
+
+    function _yahooNumIntFromChar(numChar) {
+        return numChar.charCodeAt(0) - 100;
+    }
+    
+    Timer{
+        id: yahooStationDataTimer
+        interval: yahooStationQueryIntervalSec * 1000
+        repeat: false
+        running: false
+        onTriggered: getYahooStationData()
+    }
+
+    function _loadYahooStation(){
+        var xhr=new XMLHttpRequest();
+        xhr.open("GET",yahooStationListUrl,true);
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState===4&&xhr.status===200){
+                var data=JSON.parse(xhr.responseText);
+                detailedYahooStationData={siteConfigId: data.siteConfigId, items: []};
+                var niedPos=0;//开始查找的位置
+                for(var i=0;i<data.items.length;i++){
+                    var item=data.items[i];//[lat,lon,...]
+                    //逐个匹配NIED的站点
+                    var niedSearchPos=niedPos;//当前查找的位置
+                    const maxSearchCount=10;
+                    var found=false;
+                    while(niedSearchPos<niedPos+maxSearchCount&&niedSearchPos<niedStationData.items.length){
+                        var niedItem=niedStationData.items[niedSearchPos];
+                        if(_yahooRound(parseFloat(niedItem.lat_jgd))===item[0]&&_yahooRound(parseFloat(niedItem.lon_jgd))===item[1]){
+                            //认为匹配成功，记录数据并跳出循环
+                            detailedYahooStationData.items.push({
+                                lat: niedItem.lat_jgd,
+                                lon: niedItem.lon_jgd,
+                                name: niedItem.sitename_j,
+                                elevation: parseFloat(niedItem.elevation),
+                                depth: parseFloat(niedItem.depth)
+                            });
+                            found=true;
+                            niedSearchPos++;//下一次从下一个位置开始查找
+                            break;
+                        }
+                        niedSearchPos++;
+                    }
+                    if(found){
+                        niedPos=niedSearchPos;//下一次从这里开始查找
+                    }else{
+                        //未找到匹配的NIED站点，记录部分数据
+                        detailedYahooStationData.items.push({
+                            lat: item[0],
+                            lon: item[1],
+                            name: "",
+                            elevation: 0,
+                            depth: 0
+                        });
+                    }
+                }
+                _recreateYahooStationQMLItem();
+                yahooStationDataTimer.start();
+            }
+        };
+        xhr.send();
+    }
+
+    function _recreateYahooStationQMLItem(){
+        //销毁旧的Item
+        for(var i=0;i<yahooStationQMLItem.length;i++){
+            yahooStationQMLItem[i].destroy();
+        }
+        yahooStationQMLItem=[];
+        //创建新的Item
+        for(var i=0;i<detailedYahooStationData.items.length;i++){
+            var itemData=detailedYahooStationData.items[i];
+            var item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
+                'MapQuickItem {anchorPoint.x:dot.width/2;anchorPoint.y:dot.height/2;'+
+                'sourceItem:Rectangle{id:dot;width:5;height:5;color:"white";radius:2.5}}',yahooStationMarkMapView);
+            item.coordinate=QtPositioning.coordinate(itemData.lat,itemData.lon);
+            yahooStationMarkMapView.addMapItem(item);
+            yahooStationQMLItem.push(item);
+        }
+    }
+
+    function initNiedStation(){
+        var xhr=new XMLHttpRequest();
+        xhr.open("GET",niedStationPubUrl,true);
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState===4&&xhr.status===200){
+                niedStationData=JSON.parse(xhr.responseText);
+                niedStationData.items.sort(function(a,b){
+                    if(a.data_type_name===b.data_type_name){
+                        return a.sitecode.localeCompare(b.sitecode);
+                    }else{
+                        return a.data_type_name.localeCompare(b.data_type_name);
+                    }
+                });
+                _loadYahooStation();
+            }
+        };
+        xhr.send();
+    }
+
+    function releaseNiedStation(){
+        niedStationData={};
+        detailedYahooStationData={};
+        yahooStationRealtimeData=[];
+        yahooStationRealtimeDataTimestampSec=0;
+        yahooStationDataTimer.stop();
+        for(var i=0;i<yahooStationQMLItem.length;i++){
+            yahooStationMarkMapView.removeMapItem(yahooStationQMLItem[i]);
+            yahooStationQMLItem[i].destroy();
+        }
+        yahooStationQMLItem=[];
+    }
+
+    function getYahooStationColor(intensity){
+        if(intensity<0||intensity>20){
+            return {color: "transparent", borderColor: "transparent"};
+        }else{
+            const colors=[
+                {color:"#97b7cc",borderColor:"#97b7cc"},
+                {color:"#90b3ca",borderColor:"#90b3ca"},
+                {color:"#89afc8",borderColor:"#89afc8"},
+                {color:"#71a2cb",borderColor:"#71a2cb"},
+                {color:"#5ea7ac",borderColor:"#5ea7ac"},
+                {color:"#38a477",borderColor:"#38a477"},
+                {color:"#0fb02b",borderColor:"#0fb02b"},
+                {color:"#f4e200",borderColor:"#f4e200"},
+                {color:"#fbc300",borderColor:"#fbc300"},
+                {color:"#ffaf00",borderColor:"#ffaf00"},
+                {color:"#f90",   borderColor:"#f90"},
+                {color:"#ff7e00",borderColor:"#ff7e00"},
+                {color:"#ff6200",borderColor:"#ff6200"},
+                {color:"#fc4c02",borderColor:"#fc4c02"},
+                {color:"#f53605",borderColor:"#f53605"},
+                {color:"#f11520",borderColor:"#f11520"},
+                {color:"#ed0047",borderColor:"#ed0047"},
+                {color:"#e30071",borderColor:"#e30071"},
+                {color:"#dc009c",borderColor:"#dc009c"},
+                {color:"#c900ba",borderColor:"#c900ba"},
+                {color:"#b600d7",borderColor:"#b600d7"}
+            ];
+            return colors[intensity];
+        }
+    }
+
+    //获取实时数据
+    function getYahooStationData(){
+        if(detailedYahooStationData.siteConfigId===undefined){
+            //尚未加载到站点列表，无法获取数据
+            yahooStationDataTimer.start();
+            return;
+        }
+        var now=new Date();
+        now.setSeconds(now.getSeconds()-yahooStationQueryAccumulatedDelaySec);
+        //使用UTC+9时区
+        now.setUTCHours(now.getUTCHours()+9);
+        var yyyy=now.getUTCFullYear().toString();
+        var mm=(now.getUTCMonth()+1).toString().padStart(2,"0");
+        var dd=now.getUTCDate().toString().padStart(2,"0");
+        var hh=now.getUTCHours().toString().padStart(2,"0");
+        var min=now.getUTCMinutes().toString().padStart(2,"0");
+        var ss=now.getUTCSeconds().toString().padStart(2,"0");
+        var url=yahooStationDataUrlTemplate.replace("{yyyy}",yyyy)
+        .replace("{mm}",mm)
+        .replace("{dd}",dd)
+        .replace("{yyyy}",yyyy)
+        .replace("{mm}",mm)
+        .replace("{dd}",dd)
+        .replace("{hh}",hh)
+        .replace("{mm}",min)
+        .replace("{ss}",ss);
+        var xhr=new XMLHttpRequest();
+        xhr.open("GET",url,true);
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState===4&&xhr.status===200){
+                var data=JSON.parse(xhr.responseText);
+                if(data.realTimeData.siteConfigId!==detailedYahooStationData.siteConfigId){
+                    //站点列表发生变化，重新加载
+                    _loadYahooStation();
+                }else if(data.realTimeData!==null){
+                    var tsSec=Math.floor(new Date(data.realTimeData.dataTime).getTime()/1000);
+                    var delayCount=yahooStationRealtimeDataTimestampSec===0?0:Math.round((tsSec-yahooStationRealtimeDataTimestampSec)/yahooStationQueryIntervalSec-1);
+                    yahooStationRealtimeDataTimestampSec=tsSec;
+                    var intensityStr=data.realTimeData.intensity;
+                    var stationIntensityList=intensityStr.split("");
+                    for(var i=0;i<stationIntensityList.length;i++){
+                        if(yahooStationRealtimeData[i]===undefined){
+                            yahooStationRealtimeData[i]=[];
+                        }
+                        // 根据delayCount填充数据
+                        for(var j=0;j<delayCount;j++){
+                            yahooStationRealtimeData[i].push(-1);
+                        }
+                        var yahooInt=_yahooNumIntFromChar(stationIntensityList[i]);
+                        yahooStationRealtimeData[i].push(yahooInt);
+                        // 限制数据长度
+                        while(yahooStationRealtimeData[i].length > yahooStationRealtimeDataMaxLength){
+                            yahooStationRealtimeData[i].shift();
+                        }
+                        yahooStationQMLItem[i].sourceItem.color=getYahooStationColor(yahooInt).color;
+                        yahooStationQMLItem[i].sourceItem.border.color=getYahooStationColor(yahooInt).borderColor;
+                        yahooStationQMLItem[i].z=yahooInt; //根据震度调整显示层级，震度越大越靠上
+                    }
+                    yahooStationDataTimer.start();
+                }
+            }else{
+                if(xhr.readyState===4&&xhr.status===403){
+                    yahooStationQueryAccumulatedDelaySec+=1;
+                }
+                yahooStationDataTimer.start();
+            }
+        };
+        xhr.send();
     }
 
     function setMapboxLogoVisible(v){
@@ -1059,6 +1337,10 @@ Item {
         stationMarkMapView.clearMapItems();
         for(item of stationItems){
             stationMarkMapView.addMapItem(item);
+        }
+        yahooStationMarkMapView.clearMapItems();
+        for(item of yahooStationQMLItem){
+            yahooStationMarkMapView.addMapItem(item);
         }
     }
 
