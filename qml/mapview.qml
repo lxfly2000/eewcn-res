@@ -324,6 +324,24 @@ Item {
         }
     }
     Map{
+        id:yahooStationMarkMapView
+        anchors.fill: parent
+        plugin: overlayPlugin
+        gesture.enabled: false//禁用此图层的操作
+        center: mapView.center//可直接绑定基本图层的中心
+        color: "transparent"//背景透明
+        minimumFieldOfView: mapView.minimumFieldOfView
+        maximumFieldOfView: mapView.maximumFieldOfView
+        minimumTilt: mapView.minimumTilt
+        maximumTilt: mapView.maximumTilt
+        minimumZoomLevel: mapView.minimumZoomLevel
+        maximumZoomLevel: mapView.maximumZoomLevel
+        zoomLevel: mapView.zoomLevel
+        tilt: mapView.tilt;
+        bearing: mapView.bearing
+        fieldOfView: mapView.fieldOfView
+    }
+    Map{
         id:eewCircleMapView
         anchors.fill: parent
         plugin: overlayPlugin
@@ -398,24 +416,6 @@ Item {
     }
     Map{
         id:stationMarkMapView
-        anchors.fill: parent
-        plugin: overlayPlugin
-        gesture.enabled: false//禁用此图层的操作
-        center: mapView.center//可直接绑定基本图层的中心
-        color: "transparent"//背景透明
-        minimumFieldOfView: mapView.minimumFieldOfView
-        maximumFieldOfView: mapView.maximumFieldOfView
-        minimumTilt: mapView.minimumTilt
-        maximumTilt: mapView.maximumTilt
-        minimumZoomLevel: mapView.minimumZoomLevel
-        maximumZoomLevel: mapView.maximumZoomLevel
-        zoomLevel: mapView.zoomLevel
-        tilt: mapView.tilt;
-        bearing: mapView.bearing
-        fieldOfView: mapView.fieldOfView
-    }
-    Map{
-        id:yahooStationMarkMapView
         anchors.fill: parent
         plugin: overlayPlugin
         gesture.enabled: false//禁用此图层的操作
