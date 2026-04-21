@@ -1189,23 +1189,51 @@ Item {
         //while(true){
             if(mapView.zoomLevel<=3)
                 return;
-            leftP=360;
-            rightP=0;
-            topP=-90;
-            bottomP=90;
+            var sumLongitude=0;
             for(var key in swaveItems){
-                var item=swaveItems[key];
-                leftP=Math.min(leftP,_PC(item.center.atDistanceAndAzimuth(item.radius,270).longitude));
-                topP=Math.max(topP,item.center.atDistanceAndAzimuth(item.radius,0).latitude);
-                rightP=Math.max(rightP,_PC(item.center.atDistanceAndAzimuth(item.radius,90).longitude));
-                bottomP=Math.min(bottomP,item.center.atDistanceAndAzimuth(item.radius,180).latitude);
+                sumLongitude+=swaveItems[key].center.longitude;
             }
-            var tl=posToGeo(0,0);
-            var br=posToGeo(mapView.width,mapView.height);
-            if(leftP<_PC(tl.longitude)||topP>tl.latitude||rightP>_PC(br.longitude)||bottomP<br.latitude){
-                focusLocation((topP+bottomP)/2,_AC((leftP+rightP)/2),fitViewportCalcZoom()-0.25);
-            //}else{
-                //break;
+            var avgLongitude=sumLongitude/Object.keys(swaveItems).length;
+            if(Math.abs(avgLongitude)>90){
+                //使用太平洋视角中心
+                leftP=360;
+                rightP=0;
+                topP=-90;
+                bottomP=90;
+                for(var key in swaveItems){
+                    var item=swaveItems[key];
+                    leftP=Math.min(leftP,_PC(item.center.atDistanceAndAzimuth(item.radius,270).longitude));
+                    topP=Math.max(topP,item.center.atDistanceAndAzimuth(item.radius,0).latitude);
+                    rightP=Math.max(rightP,_PC(item.center.atDistanceAndAzimuth(item.radius,90).longitude));
+                    bottomP=Math.min(bottomP,item.center.atDistanceAndAzimuth(item.radius,180).latitude);
+                }
+                var tl=posToGeo(0,0);
+                var br=posToGeo(mapView.width,mapView.height);
+                if(leftP<_PC(tl.longitude)||topP>tl.latitude||rightP>_PC(br.longitude)||bottomP<br.latitude){
+                    focusLocation((topP+bottomP)/2,_AC((leftP+rightP)/2),fitViewportCalcZoom()-0.25);
+                //}else{
+                    //break;
+                }
+            }else{
+                //使用大西洋视角中心
+                leftP=180;
+                rightP=-180;
+                topP=-90;
+                bottomP=90;
+                for(var key in swaveItems){
+                    var item=swaveItems[key];
+                    leftP=Math.min(leftP,_AC(item.center.atDistanceAndAzimuth(item.radius,270).longitude));
+                    topP=Math.max(topP,item.center.atDistanceAndAzimuth(item.radius,0).latitude);
+                    rightP=Math.max(rightP,_AC(item.center.atDistanceAndAzimuth(item.radius,90).longitude));
+                    bottomP=Math.min(bottomP,item.center.atDistanceAndAzimuth(item.radius,180).latitude);
+                }
+                var tl=posToGeo(0,0);
+                var br=posToGeo(mapView.width,mapView.height);
+                if(leftP<tl.longitude||topP>tl.latitude||rightP>br.longitude||bottomP<br.latitude){
+                    focusLocation((topP+bottomP)/2,(leftP+rightP)/2,fitViewportCalcZoom()-0.25);
+                //}else{
+                    //break;
+                }
             }
         //}
     }
