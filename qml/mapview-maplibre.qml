@@ -375,34 +375,75 @@ Item {
         scale: getWindowZoom()
         transformOrigin: Item.BottomLeft
 
-        Text {
-            id: textLegendIntensity
-            text: qsTr("Intensity")
-            color: "white"
-            style: Text.Outline
-            font.pixelSize: 14
-            font.bold: true
-        }
-
-        Column{
-            id: columnLegendIntensities
-            Repeater {
-                model: 12
-                Row{
-                    spacing: 2
-                    Rectangle{
-                        width: 20
-                        height: 20
-                        color: getIntColors(12-index)
-                        anchors.verticalCenter: parent.verticalCenter
+        Row{
+            Column{
+                Text {
+                    id: textLegendIntensity
+                    text: qsTr("Intensity")
+                    color: "white"
+                    style: Text.Outline
+                    font.pixelSize: 14
+                    font.bold: true
+                }
+                Column{
+                    id: columnLegendIntensities
+                    Repeater {
+                        model: 12
+                        Row{
+                            spacing: 2
+                            Rectangle{
+                                width: 20
+                                height: 20
+                                color: getIntColors(12-index)
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                            Text {
+                                text: (12-index).toString()
+                                color: "white"
+                                style: Text.Outline
+                                font.pixelSize: 14
+                                font.bold: true
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                        }
                     }
-                    Text {
-                        text: (12-index).toString()
-                        color: "white"
-                        style: Text.Outline
-                        font.pixelSize: 14
-                        font.bold: true
-                        anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+
+            Column{
+                Text {
+                    id: textLegendShindo
+                    visible: checkShowNiedStations.checked
+                    text: qsTr("Shindo")
+                    color: "white"
+                    style: Text.Outline
+                    font.pixelSize: 14
+                    font.bold: true
+                }
+                Column{
+                    id: columnLegendShindos
+                    visible: checkShowNiedStations.checked
+                    Repeater {
+                        model: 21
+                        Row{
+                            spacing: 2
+                            Rectangle{
+                                width: 20
+                                height: 20*12/21
+                                color: getYahooStationColor(20-index).color
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                            Text {
+                                text: yahooStationShindoStr[20-index]
+                                visible: index%2===0
+                                height: 20*12/21
+                                color: "white"
+                                style: Text.Outline
+                                font.pixelSize: 14
+                                font.bold: true
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                        }
                     }
                 }
             }
@@ -679,6 +720,24 @@ Item {
                     }
                 }
             }
+            /*MenuItem{
+                id: checkShowShindoTimeGraphNiedStations
+                checkable: true
+                checked: false
+                text: qsTr("Show &Shindo-Time Graph of NIED Stations")
+                Settings{
+                    property alias showShindoTimeGraphNiedStations: checkShowShindoTimeGraphNiedStations.checked
+                }
+            }*/
+            /*MenuItem{
+                id: checkEstimateShindo
+                checkable: true
+                checked: true
+                text: qsTr("&Estimate Shindo")
+                Settings{
+                    property alias estimateShindo: checkEstimateShindo.checked
+                }
+            }*/
             MenuItem{
                 text: qsTr("&Help")
                 onClicked: Qt.openUrlExternally("https://lxfly2000.github.io/eewcn-res/link.htm?key=EEWCNHelp")
@@ -886,6 +945,11 @@ Item {
     property var yahooStationQueryIntervalSec: 1
     property var yahooStationQueryAccumulatedDelaySec: 0
     property var yahooStationQMLItem: []
+    property var yahooStationShindoStr: [
+        "-3", "-2.5", "-2", "-1.5", "-1", "-0.5", "0", "0.5",
+        "1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5",
+        "5", "5.5", "6", "6.5", "7"
+    ]
 
     //num:数值
     function _yahooRound(num) {
@@ -1538,6 +1602,7 @@ Item {
         textSwaveArrivingIn.font.family=fontName[language];
         textEEWTime.font.family=fontName[language];
         textLegendIntensity.font.family=fontName[language];
+        textLegendShindo.font.family=fontName[language];
         textLegendPWave.font.family=fontName[language];
         textLegendSWave.font.family=fontName[language];
         textWarnInfoTitle.font.family=fontName[language];
@@ -1546,6 +1611,9 @@ Item {
         //textCheckNoAnimation.font.family=fontName[language];
         for(var i=0;i<12;i++){
             columnLegendIntensities.children[i].children[1].font.family=fontName[language];
+        }
+        for(var i=0;i<21;i++){
+            columnLegendShindos.children[i].children[1].font.family=fontName[language];
         }
     }
 
