@@ -1143,8 +1143,11 @@ Item {
         for(var i=0;i<detailedYahooStationData.items.length;i++){
             var itemData=detailedYahooStationData.items[i];
             var item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
-                'MapQuickItem {anchorPoint.x:dot.width/2;anchorPoint.y:dot.height/2;'+
-                'sourceItem:Rectangle{id:dot;width:5;height:5;color:"white";radius:2.5}}',yahooStationMarkMapView);
+                'MapQuickItem {property var shindo:-1;sourceItem:Rectangle{id:dot;width:5+Math.max(0,mapView.zoomLevel-8)*5;height:width;'+
+                'color:getYahooStationColor(shindo).color;border.color:getYahooStationColor(shindo).borderColor;radius:width/2;anchors.centerIn:parent;'+
+                'Text{text:"'+itemData.name+':"+yahooStationShindoStr[shindo];font.family:textEEWTime.font.family;font.pixelSize:14;font.bold:true;'+
+                'style:Text.Outline;color:"white";anchors.horizontalCenter:parent.horizontalCenter;anchors.top:parent.bottom;'+
+                'visible:mapView.zoomLevel>=9&&parent.color.a>0}}}',yahooStationMarkMapView);
             item.coordinate=QtPositioning.coordinate(itemData.lat,itemData.lon);
             yahooStationMarkMapView.addMapItem(item);
             yahooStationQMLItem.push(item);
@@ -1268,9 +1271,7 @@ Item {
                         while(yahooStationRealtimeData[i].length > yahooStationRealtimeDataMaxLength){
                             yahooStationRealtimeData[i].shift();
                         }
-                        yahooStationQMLItem[i].sourceItem.color=getYahooStationColor(yahooInt).color;
-                        yahooStationQMLItem[i].sourceItem.border.color=getYahooStationColor(yahooInt).borderColor;
-                        yahooStationQMLItem[i].z=yahooInt; //根据震度调整显示层级，震度越大越靠上
+                        yahooStationQMLItem[i].shindo=yahooInt; //根据震度调整显示层级，震度越大越靠上
                     }
                     updateNIEDTime(yahooStationRealtimeDataTimestampSec);
                     yahooStationDataTimer.start();
