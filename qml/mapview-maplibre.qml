@@ -1045,7 +1045,7 @@ Item {
         for(var i=0;i<detailedYahooStationData.items.length;i++){
             var itemData=detailedYahooStationData.items[i];
             var item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
-                'MapQuickItem {property var shindo:-1;sourceItem:Rectangle{id:dot;width:5+Math.max(0,mapView.zoomLevel-8)*5;height:width;'+
+                'MapQuickItem {property var shindo:-1;z:shindo;sourceItem:Rectangle{id:dot;width:5+Math.max(0,mapView.zoomLevel-8)*5;height:width;'+
                 'color:getYahooStationColor(shindo).color;border.color:getYahooStationColor(shindo).borderColor;radius:width/2;anchors.centerIn:parent;'+
                 'Text{text:"'+itemData.name+':"+yahooStationShindoStr[shindo];font.family:textEEWTime.font.family;font.pixelSize:14;font.bold:true;'+
                 'style:Text.Outline;color:"white";anchors.horizontalCenter:parent.horizontalCenter;anchors.top:parent.bottom;'+
