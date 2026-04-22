@@ -194,9 +194,22 @@ TabView {
         return new Date(fmt).getTime()/1000;
     }
 
+    function bar_height(mag,full_height,max_mag){
+        var e=1.25;
+        var m=1.4;
+        return full_height*Math.pow(e,mag*m)/(Math.pow(e,(Math.floor(Math.max(6,max_mag))+0.5)*m));
+    }
+
     //必须放在ScrollView外面
     ListModel{
         id: historyListModel
+        property real maxMagnitude: 0
+        function calcMaxMagnitude(){
+            maxMagnitude=0;
+            for(var i=0;i<count;i++){
+                maxMagnitude=Math.max(maxMagnitude,get(i).eqMagnitude);
+            }
+        }
     }
     Tab {
         id: tabHistory
@@ -239,10 +252,14 @@ TabView {
                     }
 
                     Timer{
-                        interval: 60000
+                        interval: 30000
                         running: true
                         repeat: true
-                        onTriggered: parent.nowTimeSecond=now_ts()
+                        onTriggered: {
+                            parent.nowTimeSecond=now_ts();
+                            historyListModel.calcMaxMagnitude();
+                            mtCanvas.requestPaint();
+                        }
                     }
 
                     Repeater {
@@ -250,7 +267,7 @@ TabView {
                         delegate: Component {
                             Rectangle {
                                 width: Math.max(parent.barMinWidth, parent.width*60/parent.recordSeconds)
-                                height: parent.height*eqMagnitude/10
+                                height: bar_height(eqMagnitude,parent.height,historyListModel.maxMagnitude)
                                 x: parent.width*(fmt_to_ts(eqTime)-parent.nowTimeSecond+parent.recordSeconds)/parent.recordSeconds-width/2
                                 y: parent.height-height
                                 color: eqBkColor
@@ -258,16 +275,19 @@ TabView {
                         }
                     }
                     Canvas {
+                        id: mtCanvas
                         anchors.fill: parent
                         onPaint: {
                             var ctx = getContext("2d");
+                            ctx.clearRect(0,0,parent.width,parent.height);
                             ctx.strokeStyle = "silver";
                             ctx.font="12px monospace";
                             ctx.beginPath();
                             for (var i=2;i<10;i=i+2){
-                                ctx.moveTo(20,parent.height*(10-i)/10);
-                                ctx.lineTo(parent.width,parent.height*(10-i)/10);
-                                ctx.fillText("M"+i,0,parent.height*(10-i)/10);
+                                var y=parent.height-bar_height(i,parent.height,historyListModel.maxMagnitude);
+                                ctx.moveTo(20,y);
+                                ctx.lineTo(parent.width,y);
+                                ctx.fillText("M"+i,0,y);
                             }
                             ctx.stroke();
                             ctx.closePath();

@@ -464,6 +464,7 @@ Item {
         transformOrigin: Item.BottomLeft
 
         Row{
+            spacing: 2
             Column{
                 Text {
                     id: textLegendIntensity
@@ -710,14 +711,26 @@ Item {
             }
         }
 
-        Text {
-            id: textEEWTime
-            color: "red"
-            text: "0000-00-00 00:00:00"
-            font.pixelSize: 14
-            font.bold: true
+        Row {
+            spacing: 12
             anchors.right: parent.right
-            style: Text.Outline
+            Text {
+                id: textEEWTime
+                color: "red"
+                text: "0000-00-00 00:00:00"
+                font.pixelSize: 14
+                font.bold: true
+                style: Text.Outline
+            }
+            Text {
+                id: textNIEDTime
+                visible: checkShowNiedStations.checked
+                color: "red"
+                text: "NIED: 00:00:00"
+                font.pixelSize: 14
+                font.bold: true
+                style: Text.Outline
+            }
         }
     }
 
@@ -927,6 +940,9 @@ Item {
         onTriggered: {
             if(Date.now()-msEEWTime>5000){
                 textEEWTime.color="red";
+            }
+            if(checkShowNiedStations.checked&&Date.now()-yahooStationRealtimeDataTimestampSec*1000>5000){
+                textNIEDTime.color="red";
             }
         }
     }
@@ -1256,6 +1272,7 @@ Item {
                         yahooStationQMLItem[i].sourceItem.border.color=getYahooStationColor(yahooInt).borderColor;
                         yahooStationQMLItem[i].z=yahooInt; //根据震度调整显示层级，震度越大越靠上
                     }
+                    updateNIEDTime(yahooStationRealtimeDataTimestampSec);
                     yahooStationDataTimer.start();
                 }
             }else{
@@ -1658,6 +1675,7 @@ Item {
         textCross.font.family=fontName[language];
         textSwaveArrivingIn.font.family=fontName[language];
         textEEWTime.font.family=fontName[language];
+        textNIEDTime.font.family=fontName[language];
         textLegendIntensity.font.family=fontName[language];
         textLegendShindo.font.family=fontName[language];
         textLegendPWave.font.family=fontName[language];
@@ -1748,7 +1766,16 @@ Item {
     function updateEEWTime(milliseconds,fmtText){
         msEEWTime=milliseconds;
         textEEWTime.color="white";
-        textEEWTime.text=fmtText;
+        if(checkShowNiedStations.checked)
+            textEEWTime.text="EEW: "+fmtText.split(" ").pop();
+        else
+            textEEWTime.text=fmtText;
+    }
+
+    function updateNIEDTime(sec){
+        yahooStationRealtimeDataTimestampSec=sec;
+        textNIEDTime.color="white";
+        textNIEDTime.text="NIED: "+new Date(sec*1000).toTimeString().substr(0,8);
     }
 
     //0-12
