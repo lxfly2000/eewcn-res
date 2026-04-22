@@ -849,15 +849,19 @@ Item {
         interval: 1000
         running: true
         repeat: true
+        property real lastNIEDTimeSec:0
         onTriggered: {
             if(Date.now()-msEEWTime>5000){
                 textEEWTime.color="red";
             }
-            if(checkShowNiedStations.checked&&Date.now()-yahooStationRealtimeDataTimestampSec*1000>10000){
-                textNIEDTime.color="red";
-                if(yahooStationQueryAccumulatedDelaySec>0){
-                    yahooStationQueryAccumulatedDelaySec--;
+            if(checkShowNiedStations.checked){
+                if(Date.now()-yahooStationRealtimeDataTimestampSec*1000>10000){
+                    textNIEDTime.color="red";
+                    if(lastNIEDTimeSec!==yahooStationRealtimeDataTimestampSec&&yahooStationQueryAccumulatedDelaySec>0){
+                        yahooStationQueryAccumulatedDelaySec--;
+                    }
                 }
+                lastNIEDTimeSec=yahooStationRealtimeDataTimestampSec;
             }
         }
     }
