@@ -665,6 +665,7 @@ Item {
         spacing: 2
         Text {
             text: qsTr("NIED Max Shindo")
+            visible: checkShowNiedStations.checked
             font.bold: true
             font.family: textEEWTime.font.family
             font.pixelSize: 14
@@ -673,6 +674,7 @@ Item {
             anchors.verticalCenter: buttonMenu.verticalCenter
         }
         Rectangle{
+            visible: checkShowNiedStations.checked
             width: 30
             height: 20
             color: getYahooStationColor(yahooStationRealtimeDataMaxShindo)
