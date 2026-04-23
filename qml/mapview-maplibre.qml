@@ -431,7 +431,7 @@ Item {
                             Rectangle{
                                 width: 20
                                 height: 20*12/21
-                                color: getYahooStationColor(20-index).color
+                                color: getYahooStationColor(20-index)
                                 anchors.verticalCenter: parent.verticalCenter
                             }
                             Text {
@@ -662,7 +662,31 @@ Item {
         anchors.topMargin: 8
         transformOrigin: Item.TopRight
         scale: getWindowZoom()
+        spacing: 2
+        Text {
+            text: qsTr("NIED Max Shindo")
+            font.bold: true
+            font.family: textEEWTime.font.family
+            font.pixelSize: 14
+            color: "white"
+            style: Text.Outline
+            anchors.verticalCenter: buttonMenu.verticalCenter
+        }
+        Rectangle{
+            width: 30
+            height: 20
+            color: getYahooStationColor(yahooStationRealtimeDataMaxShindo)
+            Text {
+                text: yahooStationShindoStr[yahooStationRealtimeDataMaxShindo]
+                font.bold: true
+                font.family: textEEWTime.font.family
+                font.pixelSize: 14
+                color: getYahooStationTextColor(yahooStationRealtimeDataMaxShindo)
+                anchors.centerIn: parent
+            }
+        }
         Button{
+            id: buttonMenu
             width: 20
             height: 20
             background: Rectangle{
@@ -973,6 +997,7 @@ Item {
         "1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5",
         "5", "5.5", "6", "6.5", "7"
     ]
+    property var yahooStationRealtimeDataMaxShindo: -10
 
     //num:数值
     function _yahooRound(num) {
@@ -1053,7 +1078,7 @@ Item {
             var itemData=detailedYahooStationData.items[i];
             var item=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
                 'MapQuickItem {property var shindo:-1;z:shindo;sourceItem:Rectangle{id:dot;width:5+Math.max(0,mapView.zoomLevel-8)*5;height:width;'+
-                'color:getYahooStationColor(shindo).color;border.color:getYahooStationColor(shindo).borderColor;radius:width/2;anchors.centerIn:parent;'+
+                'color:getYahooStationColor(shindo);radius:width/2;anchors.centerIn:parent;'+
                 'Text{text:"'+itemData.name+':"+yahooStationShindoStr[shindo];font.family:textEEWTime.font.family;font.pixelSize:14;font.bold:true;'+
                 'style:Text.Outline;color:"white";anchors.horizontalCenter:parent.horizontalCenter;anchors.top:parent.bottom;'+
                 'visible:mapView.zoomLevel>=9&&parent.color.a>0}}}',yahooStationMarkMapView);
@@ -1097,33 +1122,27 @@ Item {
 
     function getYahooStationColor(intensity){
         if(intensity<0||intensity>20){
-            return {color: "transparent", borderColor: "transparent"};
+            return "transparent";
         }else{
-            const colors=[
-                {color:"#97b7cc",borderColor:"#97b7cc"},
-                {color:"#90b3ca",borderColor:"#90b3ca"},
-                {color:"#89afc8",borderColor:"#89afc8"},
-                {color:"#71a2cb",borderColor:"#71a2cb"},
-                {color:"#5ea7ac",borderColor:"#5ea7ac"},
-                {color:"#38a477",borderColor:"#38a477"},
-                {color:"#0fb02b",borderColor:"#0fb02b"},
-                {color:"#f4e200",borderColor:"#f4e200"},
-                {color:"#fbc300",borderColor:"#fbc300"},
-                {color:"#ffaf00",borderColor:"#ffaf00"},
-                {color:"#f90",   borderColor:"#f90"},
-                {color:"#ff7e00",borderColor:"#ff7e00"},
-                {color:"#ff6200",borderColor:"#ff6200"},
-                {color:"#fc4c02",borderColor:"#fc4c02"},
-                {color:"#f53605",borderColor:"#f53605"},
-                {color:"#f11520",borderColor:"#f11520"},
-                {color:"#ed0047",borderColor:"#ed0047"},
-                {color:"#e30071",borderColor:"#e30071"},
-                {color:"#dc009c",borderColor:"#dc009c"},
-                {color:"#c900ba",borderColor:"#c900ba"},
-                {color:"#b600d7",borderColor:"#b600d7"}
-            ];
+            const colors=["#97b7cc","#90b3ca","#89afc8","#71a2cb","#5ea7ac",
+                "#38a477","#0fb02b","#f4e200","#fbc300","#ffaf00",
+                "#f90","#ff7e00","#ff6200","#fc4c02","#f53605",
+                "#f11520","#ed0047","#e30071","#dc009c","#c900ba",
+                "#b600d7"];
             return colors[intensity];
         }
+    }
+
+    function getYahooStationTextColor(intensity){
+        if(intensity<0||intensity>20){
+            return "black";
+        }
+        const colors=["black","black","black","white","white",
+                      "white","white","black","black","black",
+                      "black","white","white","white","white",
+                      "white","white","white","white","white",
+                      "white"];
+        return colors[intensity];
     }
 
     //获取实时数据
@@ -1166,6 +1185,7 @@ Item {
                     yahooStationRealtimeDataTimestampSec=tsSec;
                     var intensityStr=data.realTimeData.intensity;
                     var stationIntensityList=intensityStr.split("");
+                    yahooStationRealtimeDataMaxShindo=-10;
                     for(var i=0;i<stationIntensityList.length;i++){
                         if(yahooStationRealtimeData[i]===undefined){
                             yahooStationRealtimeData[i]=[];
@@ -1181,8 +1201,10 @@ Item {
                             yahooStationRealtimeData[i].shift();
                         }
                         yahooStationQMLItem[i].shindo=yahooInt; //根据震度调整显示层级，震度越大越靠上
+                        yahooStationRealtimeDataMaxShindo=Math.max(yahooStationRealtimeDataMaxShindo,yahooInt);
                     }
                     updateNIEDTime(yahooStationRealtimeDataTimestampSec);
+                    estimateEpicenter();
                     yahooStationDataTimer.start();
                 }
             }else{
@@ -1193,6 +1215,10 @@ Item {
             }
         };
         xhr.send();
+    }
+
+    function estimateEpicenter(){
+        //TODO
     }
 
     property string mapboxStyleJson: ""//保存转换后的Mapbox Style
