@@ -711,6 +711,16 @@ Item {
         yahooStationRealtimeData=[];
     }
 
+    function getMaxShindo(){
+        var index=stationIndexSortByShindo[0];
+        if(index===undefined)
+            return -1;
+        var shindo=yahooStationQMLItem[index].shindo;
+        if(shindo===undefined)
+            return -1;
+        return shindo;
+    }
+
     Row{
         anchors.right: parent.right
         anchors.top: parent.top
@@ -730,16 +740,18 @@ Item {
             anchors.verticalCenter: buttonMenu.verticalCenter
         }
         Rectangle{
+            id: rcMaxShindoIndicator
+            property var maxShindo: -1
             visible: checkShowNiedStations.checked
             width: 30
             height: 20
-            color: getYahooStationColor(yahooStationRealtimeDataMaxShindo)
+            color: getYahooStationColor(maxShindo)
             Text {
-                text: yahooStationShindoStr[yahooStationRealtimeDataMaxShindo]
+                text: yahooStationShindoStr[parent.maxShindo]
                 font.bold: true
                 font.family: textEEWTime.font.family
                 font.pixelSize: 14
-                color: getYahooStationTextColor(yahooStationRealtimeDataMaxShindo)
+                color: getYahooStationTextColor(parent.maxShindo)
                 anchors.centerIn: parent
             }
         }
@@ -1060,8 +1072,31 @@ Item {
         "1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5",
         "5", "5.5", "6", "6.5", "7"
     ]
-    property var yahooStationRealtimeDataMaxShindo: -10
     property var yahooPlaybackDeltaSec: 0
+    property var stationIndexGrid: [] //测站按[整数纬度+90][整数经度+180][测站列表]划分的索引阵列
+    property var stationIndexSortByShindo: [] //测站索引按震度大到小排序
+
+    function rearrangeStationIndexGrid(){
+        stationIndexGrid=[];
+        for(var i=0;i<detailedYahooStationData.items.length;i++){
+            var item=detailedYahooStationData.items[i];
+            var indexLat=Math.floor(item.lat+90);
+            var indexLon=Math.floor(item.lon+180);
+            if(stationIndexGrid[indexLat]===undefined){
+                stationIndexGrid[indexLat]=[];
+            }
+            if(stationIndexGrid[indexLat][indexLon]===undefined){
+                stationIndexGrid[indexLat][indexLon]=[];
+            }
+            stationIndexGrid[indexLat][indexLon].push(i);
+        }
+    }
+
+    function getStationIndexListFromGrid(latitude,longitude){
+        var indexLat=Math.floor(latitude+90);
+        var indexLon=Math.floor(longitude+180);
+        return stationIndexGrid[indexLat][indexLon];
+    }
 
     //num:数值
     function _yahooRound(num) {
@@ -1124,7 +1159,12 @@ Item {
                         });
                     }
                 }
+                stationIndexSortByShindo=[];
+                for(i=0;i<detailedYahooStationData.items.length;i++){
+                    stationIndexSortByShindo.push(i);
+                }
                 _recreateYahooStationQMLItem();
+                rearrangeStationIndexGrid();
                 yahooStationDataTimer.start();
             }
         };
@@ -1249,7 +1289,6 @@ Item {
                     yahooStationRealtimeDataTimestampSec=tsSec;
                     var intensityStr=data.realTimeData.intensity;
                     var stationIntensityList=intensityStr.split("");
-                    yahooStationRealtimeDataMaxShindo=-10;
                     for(var i=0;i<stationIntensityList.length;i++){
                         if(yahooStationRealtimeData[i]===undefined){
                             yahooStationRealtimeData[i]=[];
@@ -1265,8 +1304,11 @@ Item {
                             yahooStationRealtimeData[i].shift();
                         }
                         yahooStationQMLItem[i].shindo=yahooInt; //根据震度调整显示层级，震度越大越靠上
-                        yahooStationRealtimeDataMaxShindo=Math.max(yahooStationRealtimeDataMaxShindo,yahooInt);
                     }
+                    stationIndexSortByShindo.sort(function(a,b){
+                        return yahooStationQMLItem[b].shindo-yahooStationQMLItem[a].shindo;
+                    });
+                    rcMaxShindoIndicator.maxShindo=getMaxShindo();
                     updateNIEDTime(yahooStationRealtimeDataTimestampSec);
                     estimateEpicenter();
                     yahooStationDataTimer.start();
