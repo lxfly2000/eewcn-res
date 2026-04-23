@@ -1,4 +1,5 @@
 import QtQuick 2.14
+import QtQuick.Controls 1.4 as QControl1
 import QtLocation 5.15
 import QtPositioning 5.15
 import QtGraphicalEffects 1.12
@@ -743,6 +744,61 @@ Item {
         font.pixelSize: 18
     }
 
+    Rectangle{
+        id: rcNIEDPlayback
+        visible: false
+        anchors.centerIn: parent
+        color: "white"
+        border.color: "black"
+        border.width: 2
+        width: columnRcNIEDPlayback.width
+        height: columnRcNIEDPlayback.height
+        Column{
+            id: columnRcNIEDPlayback
+            padding: 5
+            Text {
+                text: qsTr("Enter Time:")
+            }
+            QControl1.TextField{
+                id: inputNIEDPlaybackTime
+                width: 300
+                placeholderText: "YYYY-MM-DD HH:MM:SS"
+            }
+            Row{
+                anchors.horizontalCenter: parent.horizontalCenter
+                QControl1.Button{
+                    text: qsTr("&OK")
+                    onClicked: {
+                        setNIEDPlaybackTime(inputNIEDPlaybackTime.text);
+                        rcNIEDPlayback.visible=false;
+                    }
+                }
+                QControl1.Button{
+                    text: qsTr("&Cancel")
+                    onClicked: rcNIEDPlayback.visible=false
+                }
+                QControl1.Button{
+                    text: qsTr("&Reset")
+                    onClicked: {
+                        inputNIEDPlaybackTime.text="";
+                        setNIEDPlaybackTime(inputNIEDPlaybackTime.text);
+                        rcNIEDPlayback.visible=false;
+                    }
+                }
+            }
+        }
+    }
+
+    function setNIEDPlaybackTime(chineseFormatDateTimeStr){
+        if(chineseFormatDateTimeStr===""){
+            yahooPlaybackDeltaSec=0;
+        }else{
+            yahooPlaybackDeltaSec=Math.floor((Date.now()-new Date(chineseFormatDateTimeStr).getTime())/1000);
+        }
+        yahooStationRealtimeDataTimestampSec=0;
+        yahooStationRealtimeData=[];
+    }
+
     Row{
         anchors.right: parent.right
         anchors.top: parent.top
@@ -846,6 +902,10 @@ Item {
                         releaseNiedStation();
                     }
                 }
+            }
+            MenuItem{
+                text: qsTr("NIED Station &Playback")
+                onClicked: rcNIEDPlayback.visible=true
             }
             /*MenuItem{
                 id: checkShowShindoTimeGraphNiedStations
@@ -971,7 +1031,7 @@ Item {
             if(checkShowNiedStations.checked){
                 if(Date.now()-yahooStationRealtimeDataTimestampSec*1000>10000){
                     textNIEDTime.color="red";
-                    if(lastNIEDTimeSec!==yahooStationRealtimeDataTimestampSec&&yahooStationQueryAccumulatedDelaySec>0){
+                    if(lastNIEDTimeSec!==yahooStationRealtimeDataTimestampSec&&yahooStationQueryAccumulatedDelaySec>0&&yahooPlaybackDeltaSec===0){
                         yahooStationQueryAccumulatedDelaySec--;
                     }
                 }
@@ -1098,6 +1158,7 @@ Item {
         "5", "5.5", "6", "6.5", "7"
     ]
     property var yahooStationRealtimeDataMaxShindo: -10
+    property var yahooPlaybackDeltaSec: 0
 
     //num:数值
     function _yahooRound(num) {
@@ -1253,7 +1314,7 @@ Item {
             return;
         }
         var now=new Date();
-        now.setSeconds(now.getSeconds()-yahooStationQueryAccumulatedDelaySec);
+        now.setSeconds(now.getSeconds()-yahooStationQueryAccumulatedDelaySec-yahooPlaybackDeltaSec);
         //使用UTC+9时区
         now.setUTCHours(now.getUTCHours()+9);
         var yyyy=now.getUTCFullYear().toString();
@@ -1810,7 +1871,9 @@ Item {
 
     function updateNIEDTime(sec){
         yahooStationRealtimeDataTimestampSec=sec;
-        textNIEDTime.color="white";
+        if(yahooPlaybackDeltaSec===0){
+            textNIEDTime.color="white";
+        }
         textNIEDTime.text="NIED: "+new Date(sec*1000).toTimeString().substr(0,8);
     }
 

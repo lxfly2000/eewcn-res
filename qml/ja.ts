@@ -4,72 +4,97 @@
 <context>
     <name>mapview</name>
     <message>
-        <location filename="mapview.qml" line="700"/>
+        <location filename="mapview.qml" line="701"/>
         <source>S Wave arriving in…</source>
         <translation type="unfinished">S波到達まで…</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="471"/>
+        <location filename="mapview.qml" line="472"/>
         <source>Intensity</source>
         <translation type="unfinished">烈度</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="506"/>
+        <location filename="mapview.qml" line="507"/>
         <source>Shindo</source>
         <translation type="unfinished">震度</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="557"/>
+        <location filename="mapview.qml" line="558"/>
         <source>Home</source>
         <translation type="unfinished">ホーム</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="579"/>
+        <location filename="mapview.qml" line="580"/>
         <source>Earthquake Record</source>
         <translation type="unfinished">地震記録</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="601"/>
+        <location filename="mapview.qml" line="602"/>
         <source>EEW Record</source>
         <translation type="unfinished">速報記録</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="625"/>
+        <location filename="mapview.qml" line="626"/>
         <source>P Wave</source>
         <translation type="unfinished">P波</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="660"/>
+        <location filename="mapview.qml" line="661"/>
         <source>S Wave</source>
         <translation type="unfinished">S波</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="755"/>
+        <location filename="mapview.qml" line="760"/>
+        <source>Enter Time:</source>
+        <translation type="unfinished">時間を入力：</translation>
+    </message>
+    <message>
+        <location filename="mapview.qml" line="770"/>
+        <source>&amp;OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mapview.qml" line="777"/>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished">キャンセル(&amp;C)</translation>
+    </message>
+    <message>
+        <location filename="mapview.qml" line="781"/>
+        <source>&amp;Reset</source>
+        <translation type="unfinished">リセット(&amp;R)</translation>
+    </message>
+    <message>
+        <location filename="mapview.qml" line="811"/>
         <source>NIED Max Shindo</source>
         <translation type="unfinished">NIED最大震度</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="801"/>
+        <location filename="mapview.qml" line="859"/>
         <source>&amp;Lock View</source>
         <translation type="unfinished">ビューをロック(&amp;L)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="814"/>
+        <location filename="mapview.qml" line="872"/>
         <source>&amp;No Animation</source>
         <translation type="unfinished">アニメーションを無効(&amp;N)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="827"/>
+        <location filename="mapview.qml" line="885"/>
         <source>&amp;Old EEW Head</source>
         <translation type="unfinished">以前のEEWバナー(&amp;O)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="836"/>
+        <location filename="mapview.qml" line="894"/>
         <source>Show &amp;NIED Stations</source>
         <translation type="unfinished">NIED観測点を表示(&amp;N)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="867"/>
+        <location filename="mapview.qml" line="907"/>
+        <source>NIED Station &amp;Playback</source>
+        <translation type="unfinished">NIED観測点プレイバック(&amp;P)</translation>
+    </message>
+    <message>
+        <location filename="mapview.qml" line="929"/>
         <source>&amp;Help</source>
         <translation type="unfinished">ヘルプ(&amp;H)</translation>
     </message>
@@ -78,7 +103,7 @@
         <translation type="obsolete">ビューをロック</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="805"/>
+        <location filename="mapview.qml" line="863"/>
         <source>Prevent the program from getting stuck.</source>
         <translation type="unfinished">プログラムがフリーズするのを防ぐ。</translation>
     </message>
@@ -87,7 +112,7 @@
         <translation type="obsolete">アニメーションを無効</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="818"/>
+        <location filename="mapview.qml" line="876"/>
         <source>May relieve the program getting stuck.</source>
         <translation type="unfinished">プログラムがフリーズするのを緩和するかもしれない。</translation>
     </message>
@@ -95,82 +120,107 @@
 <context>
     <name>mapview-maplibre</name>
     <message>
-        <location filename="mapview-maplibre.qml" line="383"/>
+        <location filename="mapview-maplibre.qml" line="384"/>
         <source>Intensity</source>
         <translation type="unfinished">烈度</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="418"/>
+        <location filename="mapview-maplibre.qml" line="419"/>
         <source>Shindo</source>
         <translation type="unfinished">震度</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="469"/>
+        <location filename="mapview-maplibre.qml" line="470"/>
         <source>Home</source>
         <translation type="unfinished">ホーム</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="491"/>
+        <location filename="mapview-maplibre.qml" line="492"/>
         <source>Earthquake Record</source>
         <translation type="unfinished">地震記録</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="513"/>
+        <location filename="mapview-maplibre.qml" line="514"/>
         <source>EEW Record</source>
         <translation type="unfinished">速報記録</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="537"/>
+        <location filename="mapview-maplibre.qml" line="538"/>
         <source>P Wave</source>
         <translation type="unfinished">P波</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="572"/>
+        <location filename="mapview-maplibre.qml" line="573"/>
         <source>S Wave</source>
         <translation type="unfinished">S波</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="612"/>
+        <location filename="mapview-maplibre.qml" line="613"/>
         <source>S Wave arriving in…</source>
         <translation type="unfinished">S波到達まで…</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="667"/>
-        <source>NIED Max Shindo</source>
+        <location filename="mapview-maplibre.qml" line="672"/>
+        <source>Enter Time:</source>
+        <translation type="unfinished">時間を入力：</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="682"/>
+        <source>&amp;OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="713"/>
+        <location filename="mapview-maplibre.qml" line="689"/>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished">キャンセル(&amp;C)</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="693"/>
+        <source>&amp;Reset</source>
+        <translation type="unfinished">リセット(&amp;R)</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="723"/>
+        <source>NIED Max Shindo</source>
+        <translation type="unfinished">NIED最大震度</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="771"/>
         <source>&amp;Lock View</source>
         <translation type="unfinished">ビューをロック(&amp;L)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="717"/>
+        <location filename="mapview-maplibre.qml" line="775"/>
         <source>Prevent the program from getting stuck.</source>
         <translation type="unfinished">プログラムがフリーズするのを防ぐ。</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="726"/>
+        <location filename="mapview-maplibre.qml" line="784"/>
         <source>&amp;No Animation</source>
         <translation type="unfinished">アニメーションを無効(&amp;N)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="730"/>
+        <location filename="mapview-maplibre.qml" line="788"/>
         <source>May relieve the program getting stuck.</source>
         <translation type="unfinished">プログラムがフリーズするのを緩和するかもしれない。</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="739"/>
+        <location filename="mapview-maplibre.qml" line="797"/>
         <source>&amp;Old EEW Head</source>
         <translation type="unfinished">以前のEEWバナー(&amp;O)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="748"/>
+        <location filename="mapview-maplibre.qml" line="806"/>
         <source>Show &amp;NIED Stations</source>
         <translation type="unfinished">NIED観測点を表示(&amp;N)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="779"/>
+        <location filename="mapview-maplibre.qml" line="819"/>
+        <source>NIED Station &amp;Playback</source>
+        <translation type="unfinished">NIED観測点プレイバック(&amp;P)</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="841"/>
         <source>&amp;Help</source>
         <translation type="unfinished">ヘルプ(&amp;H)</translation>
     </message>
