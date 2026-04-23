@@ -818,6 +818,7 @@ Item {
             MenuItem{
                 text: qsTr("NIED Station &Playback")
                 onClicked: rcNIEDPlayback.visible=true
+                enabled: checkShowNiedStations.checked
             }
             /*MenuItem{
                 id: checkShowShindoTimeGraphNiedStations
