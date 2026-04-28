@@ -1,4 +1,5 @@
 DISTFILES += \
+    qml/TravelTime.qml \
     qml/mapview-maplibre.qml \
     qml/mapview.qml \
     qml/rectanglehead.qml \

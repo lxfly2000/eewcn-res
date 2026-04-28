@@ -343,6 +343,25 @@ Item {
         fieldOfView: mapView.fieldOfView
     }
     Map{
+        id:estimateEpicenterMapView
+        anchors.fill: parent
+        plugin: overlayPlugin
+        gesture.enabled: false//禁用此图层的操作
+        center: mapView.center//可直接绑定基本图层的中心
+        color: "transparent"//背景透明
+        minimumFieldOfView: mapView.minimumFieldOfView
+        maximumFieldOfView: mapView.maximumFieldOfView
+        minimumTilt: mapView.minimumTilt
+        maximumTilt: mapView.maximumTilt
+        minimumZoomLevel: mapView.minimumZoomLevel
+        maximumZoomLevel: mapView.maximumZoomLevel
+        zoomLevel: mapView.zoomLevel
+        tilt: mapView.tilt;
+        bearing: mapView.bearing
+        fieldOfView: mapView.fieldOfView
+        //z:mapView.z+1//若不指定则按先后顺序确定Z序，代码中下面的在上面的上一层
+    }
+    Map{
         id:eewCircleMapView
         anchors.fill: parent
         plugin: overlayPlugin
@@ -916,28 +935,25 @@ Item {
                 }
             }
             MenuItem{
+                id: checkEstimateEpicenter
+                checkable: true
+                checked: false//true
+                enabled: checkShowNiedStations.checked
+                visible: false
+                text: qsTr("&Estimate Epicenter")
+                ToolTip.delay: 1000
+                ToolTip.timeout: 10000
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Low precision.")
+                Settings{
+                    property alias estimateShindo: checkEstimateEpicenter.checked
+                }
+            }
+            MenuItem{
                 text: qsTr("NIED Station &Playback")
                 onClicked: rcNIEDPlayback.visible=true
                 enabled: checkShowNiedStations.checked
             }
-            /*MenuItem{
-                id: checkShowShindoTimeGraphNiedStations
-                checkable: true
-                checked: false
-                text: qsTr("Show &Shindo-Time Graph of NIED Stations")
-                Settings{
-                    property alias showShindoTimeGraphNiedStations: checkShowShindoTimeGraphNiedStations.checked
-                }
-            }*/
-            /*MenuItem{
-                id: checkEstimateShindo
-                checkable: true
-                checked: true
-                text: qsTr("&Estimate Shindo")
-                Settings{
-                    property alias estimateShindo: checkEstimateShindo.checked
-                }
-            }*/
             MenuItem{
                 text: qsTr("&Help")
                 onClicked: Qt.openUrlExternally("https://lxfly2000.github.io/eewcn-res/link.htm?key=EEWCNHelp")
@@ -1042,7 +1058,7 @@ Item {
                 textEEWTime.color="red";
             }
             if(checkShowNiedStations.checked){
-                if(Date.now()-yahooStationRealtimeDataTimestampSec*1000>10000){
+                if(Date.now()-yahooStationRealtimeDataTimestampSec*1000>5000){
                     textNIEDTime.color="red";
                     if(lastNIEDTimeSec!==yahooStationRealtimeDataTimestampSec&&yahooStationQueryAccumulatedDelaySec>0&&yahooPlaybackDeltaSec===0){
                         yahooStationQueryAccumulatedDelaySec--;
@@ -1160,7 +1176,7 @@ Item {
     //[[测站1数据], [测站2数据], ...]
     property var yahooStationRealtimeData: []
     //每个测站存储最近的30条数据，超过30条则删除最早的数据
-    property var yahooStationRealtimeDataMaxLength: 30
+    property var yahooStationRealtimeDataMaxLength: 120
     property var yahooStationRealtimeDataTimestampSec: 0
     property var yahooStationQueryIntervalSec: 1
     property var yahooStationQueryAccumulatedDelaySec: 0
@@ -1173,9 +1189,12 @@ Item {
     property var yahooPlaybackDeltaSec: 0
     property var stationIndexGrid: [] //测站按[整数纬度+90][整数经度+180][测站列表]划分的索引阵列
     property var stationIndexSortByShindo: [] //测站索引按震度大到小排序
+    property var gridsThatHaveStationLatLng: null //有测站的格子（不重复的集合，(整数纬度+90)*65536+(整数经度+180)）
+    property var uriSvgEstimateEpicenter: 'data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><line x1="20" y1="20" x2="580" y2="580" stroke="white" stroke-width="40" stroke-linecap="round"/><line x1="580" y1="20" x2="20" y2="580" stroke="white" stroke-width="40" stroke-linecap="round"/></svg>'
 
     function rearrangeStationIndexGrid(){
         stationIndexGrid=[];
+        gridsThatHaveStationLatLng=new Set();
         for(var i=0;i<detailedYahooStationData.items.length;i++){
             var item=detailedYahooStationData.items[i];
             var indexLat=Math.floor(item.lat+90);
@@ -1187,13 +1206,14 @@ Item {
                 stationIndexGrid[indexLat][indexLon]=[];
             }
             stationIndexGrid[indexLat][indexLon].push(i);
+            gridsThatHaveStationLatLng.add(indexLat*65536+indexLon);
         }
     }
 
     function getStationIndexListFromGrid(latitude,longitude){
         var indexLat=Math.floor(latitude+90);
         var indexLon=Math.floor(longitude+180);
-        return stationIndexGrid[indexLat][indexLon];
+        return stationIndexGrid[indexLat]&&stationIndexGrid[indexLat][indexLon];
     }
 
     //num:数值
@@ -1232,8 +1252,8 @@ Item {
                         if(_yahooRound(parseFloat(niedItem.lat_jgd))===item[0]&&_yahooRound(parseFloat(niedItem.lon_jgd))===item[1]){
                             //认为匹配成功，记录数据并跳出循环
                             detailedYahooStationData.items.push({
-                                lat: niedItem.lat_jgd,
-                                lon: niedItem.lon_jgd,
+                                lat: parseFloat(niedItem.lat_jgd),
+                                lon: parseFloat(niedItem.lon_jgd),
                                 name: niedItem.sitename_j,
                                 elevation: parseFloat(niedItem.elevation),
                                 depth: parseFloat(niedItem.depth)
@@ -1408,7 +1428,8 @@ Item {
                     });
                     rcMaxShindoIndicator.maxShindo=getMaxShindo();
                     updateNIEDTime(yahooStationRealtimeDataTimestampSec);
-                    estimateEpicenter();
+                    if(checkEstimateEpicenter.checked)
+                        estimateEpicenter();
                     yahooStationDataTimer.start();
                 }
             }else{
@@ -1421,8 +1442,589 @@ Item {
         xhr.send();
     }
 
+    Loader {
+        id: travelTimeLoader
+        source: "TravelTime.qml"
+    }
+
+    function getTravelTimeObject(){
+        return travelTimeLoader.children[0];
+    }
+
+    function calcSurfaceDistanceKm(lat1,lon1,lat2,lon2){
+        var c1=QtPositioning.coordinate(lat1,lon1);
+        var c2=QtPositioning.coordinate(lat2,lon2);
+        return c1.distanceTo(c2)/1000;
+    }
+
+    function limitLon(noLimitLon){
+        while(noLimitLon>180)
+            noLimitLon-=360;
+        while(noLimitLon<-180)
+            noLimitLon+=360;
+        return noLimitLon;
+    }
+
+    function hasDetectedStationInIndexList(indexList,stationsEarliestDetectedTimeSec){
+        for(var i of indexList){
+            if(stationsEarliestDetectedTimeSec[i]!==undefined)
+                return true;
+        }
+        return false;
+    }
+
+    //lat,lon:假设震源的位置, earliestLat,earliestLon:最早检测到的测站的位置
+    function _calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,earliestLat,earliestLon,lat,lon,depth){
+        var earliestStationDistanceToEpi=Math.max(1,calcSurfaceDistanceKm(lat,lon,earliestLat,earliestLon));//不能为0
+        var stationsEstimatedQuakeTimeSec=[];//各测站反推的发震时刻
+        var stationsWeight=[];//各测站的权重
+        var avgEstimatedQuakeTimeSec=0;//平均发生时间
+        var maxDistanceToEpi=0;//距震中最远的检出测站
+        for(var i=0;i<stationsEarliestDetectedTimeSec.length;i++){
+            if(stationsEarliestDetectedTimeSec[i]!==undefined){
+                //假设深度是10km
+                var tt=getTravelTimeObject().getTravelTimeToSurfaceDistanceByTable(0,depth,calcSurfaceDistanceKm(lat,lon,
+                    detailedYahooStationData.items[i].lat,detailedYahooStationData.items[i].lon));
+                stationsEstimatedQuakeTimeSec[i]=stationsEarliestDetectedTimeSec[i]-tt;
+                avgEstimatedQuakeTimeSec+=stationsEstimatedQuakeTimeSec[i];
+                //当前测站震中距
+                var distanceToEpi=calcSurfaceDistanceKm(lat,lon,
+                    detailedYahooStationData.items[i].lat,detailedYahooStationData.items[i].lon)
+                maxDistanceToEpi=Math.max(maxDistanceToEpi,distanceToEpi);
+                stationsWeight[i]=(distanceToEpi<50)?1:(earliestStationDistanceToEpi/distanceToEpi);
+            }
+        }
+        avgEstimatedQuakeTimeSec=avgEstimatedQuakeTimeSec/countStationsDetected;
+        var variance=0;
+        for(i=0;i<stationsEstimatedQuakeTimeSec.length;i++){
+            if(stationsEstimatedQuakeTimeSec[i]!==undefined){
+                var d=stationsEstimatedQuakeTimeSec[i]-avgEstimatedQuakeTimeSec;//时间差
+                variance+=stationsWeight[i]*d*d;
+            }
+        }
+        //记录方差
+        if(varianceAtLatLngDepth[lat]===undefined)
+            varianceAtLatLngDepth[lat]={};
+        if(varianceAtLatLngDepth[lat][lon]===undefined)
+            varianceAtLatLngDepth[lat][lon]={};
+        varianceAtLatLngDepth[lat][lon][depth]={d:variance,t:avgEstimatedQuakeTimeSec};
+        //着未着法：检测3秒内或10秒内30点未满时：
+        //检测站周围格子内，最大震中距（离这个假设震源距离最大的检出测站）+30km内选取未检知点，计算震中距和走时（到达所需时间）
+        //推测发震平均时间加上走时，得到到达时间
+        //若到达时间小于现在时间（也就是计算上应该已经到达的），误差+1
+        if(yahooStationRealtimeDataTimestampSec<stationsEarliestDetectedTimeSec+3||
+                (yahooStationRealtimeDataTimestampSec<stationsEarliestDetectedTimeSec+10&&countStationsDetected<30)){
+            for(i=0;i<detailedYahooStationData.items.length;i++){
+                distanceToEpi=calcSurfaceDistanceKm(lat,lon,detailedYahooStationData.items[i].lat,detailedYahooStationData.items[i].lon);
+                if(stationsEarliestDetectedTimeSec[i]===undefined&&maxDistanceToEpi+30>distanceToEpi){//未检测到的
+                    //周围格子是否有已检出
+                    var iDown=getStationIndexListFromGrid(detailedYahooStationData.items[i].lat-1,detailedYahooStationData.items[i].lon);
+                    var iUp=getStationIndexListFromGrid(detailedYahooStationData.items[i].lat+1,detailedYahooStationData.items[i].lon);
+                    var iLeft=getStationIndexListFromGrid(detailedYahooStationData.items[i].lat,limitLon(detailedYahooStationData.items[i].lon-1));
+                    var iRight=getStationIndexListFromGrid(detailedYahooStationData.items[i].lat,limitLon(detailedYahooStationData.items[i].lon+1));
+                    if(hasDetectedStationInIndexList(iDown||[],stationsEarliestDetectedTimeSec)||
+                            hasDetectedStationInIndexList(iUp||[],stationsEarliestDetectedTimeSec)||
+                            hasDetectedStationInIndexList(iLeft||[],stationsEarliestDetectedTimeSec)||
+                            hasDetectedStationInIndexList(iRight||[],stationsEarliestDetectedTimeSec)){
+                        if(getTravelTimeObject().getTravelTimeToSurfaceDistanceByTable(0,depth,distanceToEpi)+avgEstimatedQuakeTimeSec<yahooStationRealtimeDataTimestampSec)
+                            varianceAtLatLngDepth[lat][lon][depth].d+=1;
+                    }
+                }
+            }
+        }
+        return variance;
+    }
+
+    //由于计算量大，最好放到子线程中去算
     function estimateEpicenter(){
-        //TODO
+        //1.先判断是否达到检测条件（存在同一格子内至少3点或全部检出震度1（雅虎震度8）以上）
+        //举例：（北京时间）2026-04-24 08:44:10-08:44:50单点震度7不应检出
+        //2026-04-20 15:52:55-16:02:57有警报检出(2026-04-20 15:53:15)
+        //2025-07-30 07:24:29无警报检出
+        //2026-02-23 00:57:46远震检出
+        //2024-04-03 07:58:08台湾单点检出
+        //日本北海道 2026-04-27 04:23:55 (UTC+8) M6.1 80km 预估最大烈度7
+        //注意雅虎只能回放近一个月内的
+        var triggeredDetection=false;
+        for(var e of gridsThatHaveStationLatLng){
+            var indexLat=Math.floor(e/65536);//纬度索引（整数纬度+90）
+            var indexLon=e%65536;//经度索引（整数经度+180）
+            var eachGridStationIndexList=stationIndexGrid[indexLat][indexLon];//这个格子里的测站索引列表
+            var stationLevel1Count=0;//这个格子里震度1以上的测站数
+            for(var index of eachGridStationIndexList){
+                if(yahooStationQMLItem[index].shindo>=8){
+                    stationLevel1Count++;
+                }
+            }
+            //是否符合检测条件（可适当修改）
+            if(stationLevel1Count>=3||stationLevel1Count>=eachGridStationIndexList.length){
+                triggeredDetection=true;
+                break;
+            }
+        }
+        if(!triggeredDetection)
+            return;
+        //2.记录检出时刻，找到最早检测到的站点（从震度-时间图上找，必须采用这种方法，后面还会用到这个结果）
+        var stationsEarliestDetectedTimeSec=[];//时间戳秒数，没有则为undefined
+        var countStationsDetected=0;
+        var earliestDetectedStationIndex=-1;
+        var foundEarliestDetected=false;
+        var i;
+        for(i=0;i<yahooStationRealtimeData.length;i++){
+            for(var realTimeDataTime=0;realTimeDataTime<yahooStationRealtimeData[i].length;realTimeDataTime++){
+                //未考虑单点误检出问题
+                if(yahooStationRealtimeData[i][realTimeDataTime]>=8){
+                    countStationsDetected++;
+                    stationsEarliestDetectedTimeSec[i]=yahooStationRealtimeDataTimestampSec-yahooStationRealtimeData[i].length+1+realTimeDataTime;
+                    if(earliestDetectedStationIndex===-1||stationsEarliestDetectedTimeSec[i]<stationsEarliestDetectedTimeSec[earliestDetectedStationIndex]){
+                        earliestDetectedStationIndex=i;
+                    }
+                    break;
+                }
+            }
+        }
+        //数据被重置造成最早检出数据消失，停止运算
+        if(earliestDetectedStationIndex===-1)
+            return;
+        //数据超过记录的有效期，停止运算
+        if(stationsEarliestDetectedTimeSec[earliestDetectedStationIndex]<=yahooStationRealtimeDataTimestampSec-yahooStationRealtimeDataMaxLength+2)
+            return;
+        //3.1.从该点深处10km开始搜索：按0.5度步长（4个边方向），0.1度步长（4个边方向，0.5度以内），深度50km带0.1度步长（6个面方向，0.5度以内），深度10km带0.1度步长（6个面方向，）搜索
+        var varianceAtLatLngDepth={};//方差，以字典方式存储，key为数值型，{##.###(lat):{##.###(lng):{##(depth):{d:方差数值,t:发震时间（时间戳秒数）},...},...},...}
+        var minVariance=null;
+        //先假设为10km深，发震时刻为最初检出时-2秒
+        //0.5度步长
+        var earliestDetectedStationLat=detailedYahooStationData.items[earliestDetectedStationIndex].lat;
+        var earliestDetectedStationLon=detailedYahooStationData.items[earliestDetectedStationIndex].lon;
+        for(var stepMaxDegree=0;stepMaxDegree<180;stepMaxDegree+=0.5){
+            //上下左右四个边
+            var lat,lon,variance;
+            var newMinVariance=false;
+            //上边
+            lat=earliestDetectedStationLat+stepMaxDegree;
+            for(lon=earliestDetectedStationLon-stepMaxDegree;
+                lon<=earliestDetectedStationLon+stepMaxDegree;lon+=0.5){
+                if(lat>-90&&lat<90){
+                    //有效位置
+                    variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                     earliestDetectedStationLat,
+                                                     earliestDetectedStationLon,lat,limitLon(lon),10);
+                    if(minVariance===null||variance<minVariance){
+                        newMinVariance=true;
+                        minVariance=variance;
+                    }
+                }
+            }
+            //下边
+            lat=earliestDetectedStationLat-stepMaxDegree;
+            for(lon=earliestDetectedStationLon-stepMaxDegree;
+                lon<=earliestDetectedStationLon+stepMaxDegree;lon+=0.5){
+                if(lat>-90&&lat<90){
+                    //有效位置
+                    variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                     earliestDetectedStationLat,
+                                                     earliestDetectedStationLon,lat,limitLon(lon),10);
+                    if(minVariance===null||variance<minVariance){
+                        newMinVariance=true;
+                        minVariance=variance;
+                    }
+                }
+            }
+            //左边
+            lon=limitLon(earliestDetectedStationLon-stepMaxDegree);
+            for(lat=earliestDetectedStationLat-stepMaxDegree+0.5;
+                lat<earliestDetectedStationLat+stepMaxDegree;lat+=0.5){
+                if(lat>-90&&lat<90){
+                    //有效位置
+                    variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                     earliestDetectedStationLat,
+                                                     earliestDetectedStationLon,lat,lon,10);
+                    if(minVariance===null||variance<minVariance){
+                        newMinVariance=true;
+                        minVariance=variance;
+                    }
+                }
+            }
+            //右边
+            lon=limitLon(earliestDetectedStationLon+stepMaxDegree);
+            for(lat=earliestDetectedStationLat-stepMaxDegree+0.5;
+                lat<earliestDetectedStationLat+stepMaxDegree;lat+=0.5){
+                if(lat>-90&&lat<90){
+                    //有效位置
+                    variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                     earliestDetectedStationLat,
+                                                     earliestDetectedStationLon,lat,lon,10);
+                    if(minVariance===null||variance<minVariance){
+                        newMinVariance=true;
+                        minVariance=variance;
+                    }
+                }
+            }
+            if(!newMinVariance)//没有更小的方差，结束搜索
+                break;
+        }
+        //3.2.计算方差极小值的点，并判断是否符合精度条件（N点检出L长度，可以设为多个等级）
+        //找到所有极小值点
+        var veryMinVarianceLocationList=[];//[[lat,lon],...]
+        for(lat=earliestDetectedStationLat-stepMaxDegree;
+            lat<=earliestDetectedStationLat+stepMaxDegree;lat+=0.5){
+            for(lon=earliestDetectedStationLon-stepMaxDegree;
+                lon<=earliestDetectedStationLon+stepMaxDegree;lon+=0.5){
+                var findlon=limitLon(lon);
+                var upVar=varianceAtLatLngDepth[lat+0.5]&&varianceAtLatLngDepth[lat+0.5][findlon]&&varianceAtLatLngDepth[lat+0.5][findlon][10].d;
+                var downVar=varianceAtLatLngDepth[lat-0.5]&&varianceAtLatLngDepth[lat-0.5][findlon]&&varianceAtLatLngDepth[lat-0.5][findlon][10].d;
+                var leftLon=limitLon(lon-0.5);
+                var leftVar=varianceAtLatLngDepth[lat]&&varianceAtLatLngDepth[lat][leftLon]&&varianceAtLatLngDepth[lat][leftLon][10].d;
+                var rightLon=limitLon(lon+0.5);
+                var rightVar=varianceAtLatLngDepth[lat]&&varianceAtLatLngDepth[lat][rightLon]&&varianceAtLatLngDepth[lat][rightLon][10].d;
+                var myVar=varianceAtLatLngDepth[lat]&&varianceAtLatLngDepth[lat][findlon]&&varianceAtLatLngDepth[lat][findlon][10].d;
+                if(upVar&&downVar&&leftVar&&rightVar&&myVar<upVar&&myVar<downVar&&myVar<leftVar&&myVar<rightVar){
+                    veryMinVarianceLocationList.push([lat,findlon]);
+                }
+            }
+        }
+        //3.3.符合条件的列入结果，计算经纬度、深度、时间、震级
+        //只算最多前3个方差小的候选点（先排序）
+        veryMinVarianceLocationList.sort((a,b)=>(varianceAtLatLngDepth[a[0]][a[1]][10].d-varianceAtLatLngDepth[b[0]][b[1]][10].d));
+        if(veryMinVarianceLocationList.length>3)
+            veryMinVarianceLocationList.length=3;
+        //0.1度步长
+        var minimumVarianceLocationList=[];//[[lat,lon],...]
+        for(i=0;i<veryMinVarianceLocationList.length;i++){
+            minVariance=null;
+            var searchingLat=veryMinVarianceLocationList[i][0];
+            var searchingLon=veryMinVarianceLocationList[i][1];
+            for(stepMaxDegree=0;stepMaxDegree<0.5/*180*/;stepMaxDegree+=0.1){
+                newMinVariance=false;
+                //上边
+                lat=searchingLat+stepMaxDegree;
+                for(lon=searchingLon-stepMaxDegree;lon<=searchingLon+stepMaxDegree;lon+=0.1){
+                    if(lat>-90&&lat<90){
+                        findlon=limitLon(lon);
+                        variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                         searchingLat,searchingLon,lat,findlon,10);
+                        if(minVariance===null||variance<minVariance){
+                            newMinVariance=true;
+                            minVariance=variance;
+                            minimumVarianceLocationList[i]=[lat,findlon];
+                        }
+                    }
+                }
+                //下边
+                lat=searchingLat-stepMaxDegree;
+                for(lon=searchingLon-stepMaxDegree;lon<=searchingLon+stepMaxDegree;lon+=0.1){
+                    if(lat>-90&&lat<90){
+                        findlon=limitLon(lon);
+                        variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                         searchingLat,searchingLon,lat,findlon,10);
+                        if(minVariance===null||variance<minVariance){
+                            newMinVariance=true;
+                            minVariance=variance;
+                            minimumVarianceLocationList[i]=[lat,findlon];
+                        }
+                    }
+                }
+                //左边
+                lon=limitLon(searchingLon-stepMaxDegree);
+                for(lat=searchingLat-stepMaxDegree+0.1;lat<searchingLat+stepMaxDegree;lat+=0.1){
+                    if(lat>-90&&lat<90){
+                        variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                         searchingLat,searchingLon,lat,lon,10);
+                        if(minVariance===null||variance<minVariance){
+                            newMinVariance=true;
+                            minVariance=variance;
+                            minimumVarianceLocationList[i]=[lat,lon];
+                        }
+                    }
+                }
+                //右边
+                lon=limitLon(searchingLon+stepMaxDegree);
+                for(lat=searchingLat-stepMaxDegree+0.1;lat<searchingLat+stepMaxDegree;lat+=0.1){
+                    if(lat>-90&&lat<90){
+                        variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                         searchingLat,searchingLon,lat,lon,10);
+                        if(minVariance===null||variance<minVariance){
+                            newMinVariance=true;
+                            minVariance=variance;
+                            minimumVarianceLocationList[i]=[lat,lon];
+                        }
+                    }
+                }
+                if(!newMinVariance)
+                    break;
+            }
+        }
+        //深度50km带0.1度步长（由于性能太差，0.1度步长只在深度确定好后再计算）
+        //在这步中minimumVarianceLocationList还要存储深度信息
+        const mixDepthAndLocSearching=false;//同时搜索深度和经纬度（增加一重循环，性能低）
+        var minVarDepth=0;//km
+        for(i=0;i<minimumVarianceLocationList.length;i++){
+            minVariance=null;
+            searchingLat=minimumVarianceLocationList[i][0];
+            searchingLon=minimumVarianceLocationList[i][1];
+            for(var searchingDepth=0;searchingDepth<=700;searchingDepth+=50){
+                newMinVariance=false;
+                for(stepMaxDegree=0;stepMaxDegree<0.5;stepMaxDegree+=mixDepthAndLocSearching?0.1:1){
+                    //上边
+                    lat=searchingLat+stepMaxDegree;
+                    for(lon=searchingLon-stepMaxDegree;lon<=searchingLon+stepMaxDegree;lon+=0.1){
+                        if(lat>-90&&lat<90){
+                            findlon=limitLon(lon);
+                            variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                             searchingLat,searchingLon,lat,findlon,searchingDepth);
+                            if(minVariance===null||variance<minVariance){
+                                newMinVariance=true;
+                                minVariance=variance;
+                                minimumVarianceLocationList[i]=[lat,findlon,searchingDepth];
+                            }
+                        }
+                    }
+                    //下边
+                    lat=searchingLat-stepMaxDegree;
+                    for(lon=searchingLon-stepMaxDegree;lon<=searchingLon+stepMaxDegree;lon+=0.1){
+                        if(lat>-90&&lat<90){
+                            findlon=limitLon(lon);
+                            variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                             searchingLat,searchingLon,lat,findlon,searchingDepth);
+                            if(minVariance===null||variance<minVariance){
+                                newMinVariance=true;
+                                minVariance=variance;
+                                minimumVarianceLocationList[i]=[lat,findlon,searchingDepth];
+                            }
+                        }
+                    }
+                    //左边
+                    lon=limitLon(searchingLon-stepMaxDegree);
+                    for(lat=searchingLat-stepMaxDegree+0.1;lat<searchingLat+stepMaxDegree;lat+=0.1){
+                        if(lat>-90&&lat<90){
+                            variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                             searchingLat,searchingLon,lat,lon,searchingDepth);
+                            if(minVariance===null||variance<minVariance){
+                                newMinVariance=true;
+                                minVariance=variance;
+                                minimumVarianceLocationList[i]=[lat,lon,searchingDepth];
+                            }
+                        }
+                    }
+                    //右边
+                    lon=limitLon(searchingLon+stepMaxDegree);
+                    for(lat=searchingLat-stepMaxDegree+0.1;lat<searchingLat+stepMaxDegree;lat+=0.1){
+                        if(lat>-90&&lat<90){
+                            variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                             searchingLat,searchingLon,lat,lon,searchingDepth);
+                            if(minVariance===null||variance<minVariance){
+                                newMinVariance=true;
+                                minVariance=variance;
+                                minimumVarianceLocationList[i]=[lat,lon,searchingDepth];
+                            }
+                        }
+                    }
+                }
+                if(newMinVariance)
+                    minVarDepth=searchingDepth;
+                else
+                    break;
+            }
+            if(!mixDepthAndLocSearching){
+            newMinVariance=false;
+            searchingDepth=minVarDepth;
+            for(stepMaxDegree=0;stepMaxDegree<0.5;stepMaxDegree+=0.1){
+                //上边
+                lat=searchingLat+stepMaxDegree;
+                for(lon=searchingLon-stepMaxDegree;lon<=searchingLon+stepMaxDegree;lon+=0.1){
+                    if(lat>-90&&lat<90){
+                        findlon=limitLon(lon);
+                        variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                         searchingLat,searchingLon,lat,findlon,searchingDepth);
+                        if(minVariance===null||variance<minVariance){
+                            newMinVariance=true;
+                            minVariance=variance;
+                            minimumVarianceLocationList[i]=[lat,findlon,searchingDepth];
+                        }
+                    }
+                }
+                //下边
+                lat=searchingLat-stepMaxDegree;
+                for(lon=searchingLon-stepMaxDegree;lon<=searchingLon+stepMaxDegree;lon+=0.1){
+                    if(lat>-90&&lat<90){
+                        findlon=limitLon(lon);
+                        variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                         searchingLat,searchingLon,lat,findlon,searchingDepth);
+                        if(minVariance===null||variance<minVariance){
+                            newMinVariance=true;
+                            minVariance=variance;
+                            minimumVarianceLocationList[i]=[lat,findlon,searchingDepth];
+                        }
+                    }
+                }
+                //左边
+                lon=limitLon(searchingLon-stepMaxDegree);
+                for(lat=searchingLat-stepMaxDegree+0.1;lat<searchingLat+stepMaxDegree;lat+=0.1){
+                    if(lat>-90&&lat<90){
+                        variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                         searchingLat,searchingLon,lat,lon,searchingDepth);
+                        if(minVariance===null||variance<minVariance){
+                            newMinVariance=true;
+                            minVariance=variance;
+                            minimumVarianceLocationList[i]=[lat,lon,searchingDepth];
+                        }
+                    }
+                }
+                //右边
+                lon=limitLon(searchingLon+stepMaxDegree);
+                for(lat=searchingLat-stepMaxDegree+0.1;lat<searchingLat+stepMaxDegree;lat+=0.1){
+                    if(lat>-90&&lat<90){
+                        variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                         searchingLat,searchingLon,lat,lon,searchingDepth);
+                        if(minVariance===null||variance<minVariance){
+                            newMinVariance=true;
+                            minVariance=variance;
+                            minimumVarianceLocationList[i]=[lat,lon,searchingDepth];
+                        }
+                    }
+                }
+                if(!minVariance)
+                    break;
+            }
+            }
+        }
+        //深度10km带0.1度步长（同上性能太差分开计算）
+        for(i=0;i<minimumVarianceLocationList.length;i++){
+            minVariance=null;
+            searchingLat=minimumVarianceLocationList[i][0];
+            searchingLon=minimumVarianceLocationList[i][1];
+            var searchingStartDepth=minimumVarianceLocationList[i][2];
+            for(searchingDepth=Math.max(0,searchingStartDepth-50);searchingDepth<=700&&searchingDepth<=searchingStartDepth+50;searchingDepth+=10){
+                newMinVariance=false;
+                for(stepMaxDegree=0;stepMaxDegree<0.5;stepMaxDegree+=mixDepthAndLocSearching?0.1:1){
+                    //上边
+                    lat=searchingLat+stepMaxDegree;
+                    for(lon=searchingLon-stepMaxDegree;lon<=searchingLon+stepMaxDegree;lon+=0.1){
+                        if(lat>-90&&lat<90){
+                            findlon=limitLon(lon);
+                            variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                             searchingLat,searchingLon,lat,findlon,searchingDepth);
+                            if(minVariance===null||variance<minVariance){
+                                newMinVariance=true;
+                                minVariance=variance;
+                                minimumVarianceLocationList[i]=[lat,findlon,searchingDepth];
+                            }
+                        }
+                    }
+                    //下边
+                    lat=searchingLat-stepMaxDegree;
+                    for(lon=searchingLon-stepMaxDegree;lon<=searchingLon+stepMaxDegree;lon+=0.1){
+                        if(lat>-90&&lat<90){
+                            findlon=limitLon(lon);
+                            variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                             searchingLat,searchingLon,lat,findlon,searchingDepth);
+                            if(minVariance===null||variance<minVariance){
+                                newMinVariance=true;
+                                minVariance=variance;
+                                minimumVarianceLocationList[i]=[lat,findlon,searchingDepth];
+                            }
+                        }
+                    }
+                    //左边
+                    lon=limitLon(searchingLon-stepMaxDegree);
+                    for(lat=searchingLat-stepMaxDegree+0.1;lat<searchingLat+stepMaxDegree;lat+=0.1){
+                        if(lat>-90&&lat<90){
+                            variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                             searchingLat,searchingLon,lat,lon,searchingDepth);
+                            if(minVariance===null||variance<minVariance){
+                                newMinVariance=true;
+                                minVariance=variance;
+                                minimumVarianceLocationList[i]=[lat,lon,searchingDepth];
+                            }
+                        }
+                    }
+                    //右边
+                    lon=limitLon(searchingLon+stepMaxDegree);
+                    for(lat=searchingLat-stepMaxDegree+0.1;lat<searchingLat+stepMaxDegree;lat+=0.1){
+                        if(lat>-90&&lat<90){
+                            variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                             searchingLat,searchingLon,lat,lon,searchingDepth);
+                            if(minVariance===null||variance<minVariance){
+                                newMinVariance=true;
+                                minVariance=variance;
+                                minimumVarianceLocationList[i]=[lat,lon,searchingDepth];
+                            }
+                        }
+                    }
+                }
+                if(newMinVariance)
+                    minVarDepth=searchingDepth;
+                else
+                    break;
+            }
+            if(!mixDepthAndLocSearching){
+            newMinVariance=false;
+            searchingDepth=minVarDepth;
+            for(stepMaxDegree=0;stepMaxDegree<0.5;stepMaxDegree+=0.1){
+                //上边
+                lat=searchingLat+stepMaxDegree;
+                for(lon=searchingLon-stepMaxDegree;lon<=searchingLon+stepMaxDegree;lon+=0.1){
+                    if(lat>-90&&lat<90){
+                        findlon=limitLon(lon);
+                        variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                         searchingLat,searchingLon,lat,findlon,searchingDepth);
+                        if(minVariance===null||variance<minVariance){
+                            newMinVariance=true;
+                            minVariance=variance;
+                            minimumVarianceLocationList[i]=[lat,findlon,searchingDepth];
+                        }
+                    }
+                }
+                //下边
+                lat=searchingLat-stepMaxDegree;
+                for(lon=searchingLon-stepMaxDegree;lon<=searchingLon+stepMaxDegree;lon+=0.1){
+                    if(lat>-90&&lat<90){
+                        findlon=limitLon(lon);
+                        variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                         searchingLat,searchingLon,lat,findlon,searchingDepth);
+                        if(minVariance===null||variance<minVariance){
+                            newMinVariance=true;
+                            minVariance=variance;
+                            minimumVarianceLocationList[i]=[lat,findlon,searchingDepth];
+                        }
+                    }
+                }
+                //左边
+                lon=limitLon(searchingLon-stepMaxDegree);
+                for(lat=searchingLat-stepMaxDegree+0.1;lat<searchingLat+stepMaxDegree;lat+=0.1){
+                    if(lat>-90&&lat<90){
+                        variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                         searchingLat,searchingLon,lat,lon,searchingDepth);
+                        if(minVariance===null||variance<minVariance){
+                            newMinVariance=true;
+                            minVariance=variance;
+                            minimumVarianceLocationList[i]=[lat,lon,searchingDepth];
+                        }
+                    }
+                }
+                //右边
+                lon=limitLon(searchingLon+stepMaxDegree);
+                for(lat=searchingLat-stepMaxDegree+0.1;lat<searchingLat+stepMaxDegree;lat+=0.1){
+                    if(lat>-90&&lat<90){
+                        variance=_calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,
+                                                         searchingLat,searchingLon,lat,lon,searchingDepth);
+                        if(minVariance===null||variance<minVariance){
+                            newMinVariance=true;
+                            minVariance=variance;
+                            minimumVarianceLocationList[i]=[lat,lon,searchingDepth];
+                        }
+                    }
+                }
+                if(!newMinVariance)
+                    break;
+            }
+            }
+        }
+        //minimumVarianceLocationList即为所求，在varianceAtLatLngDepth上查找可得发震时间，方差数值，sqrt（方差/检出数）均摊误差
+        //minimumVarianceLocationList在此处新增时间，震级，方差，误差等信息，存储变为：[lat,lon,depth,time,mag,var,rms]
+        //4.1.备份原视图位置，将视图移动到检出点和推算震源位置
+        //4.2.若遇到其他事件造成视图变化则将备份视图位置改为其他事件的位置
+        //4.3.所有检出结束后恢复备份视图位置
     }
 
     function setMapboxLogoVisible(v){
@@ -1838,7 +2440,7 @@ Item {
         //columnHeads.visible=true;
         columnCounter.visible=true;
         //根据 https://doc.qt.io/qt-5/qtqml-javascript-dynamicobjectcreation.html 的文档，创建是有可能直接就完成的
-        var compHead=Qt.createComponent("https://lxfly2000.github.io/eewcn-res/qml/rectanglehead"+(checkOldEewHead.checked?"_original.qml":".qml"),Component.Asynchronous);
+        var compHead=Qt.createComponent("rectanglehead"+(checkOldEewHead.checked?"_original.qml":".qml"),Component.Asynchronous);
         if(compHead.status===Component.Ready){
             var oHead=compHead.createObject(columnHeads);
             oHead.setFontFamily(textEEWTime.font.family);
@@ -1850,7 +2452,7 @@ Item {
                 }
             });
         }
-        var compCounter=Qt.createComponent("https://lxfly2000.github.io/eewcn-res/qml/rowcounter.qml",Component.Asynchronous);
+        var compCounter=Qt.createComponent("rowcounter.qml",Component.Asynchronous);
         if(compCounter.status===Component.Ready){
             var oCounter=compCounter.createObject(columnListCounters);
             oCounter.setFontFamily(textEEWTime.font.family);

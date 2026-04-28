@@ -4,97 +4,107 @@
 <context>
     <name>mapview</name>
     <message>
-        <location filename="mapview.qml" line="701"/>
+        <location filename="mapview.qml" line="720"/>
         <source>S Wave arriving in…</source>
         <translation type="unfinished">距横波到达…</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="472"/>
+        <location filename="mapview.qml" line="491"/>
         <source>Intensity</source>
         <translation type="unfinished">烈度</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="507"/>
+        <location filename="mapview.qml" line="526"/>
         <source>Shindo</source>
         <translation type="unfinished">震度</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="558"/>
+        <location filename="mapview.qml" line="577"/>
         <source>Home</source>
         <translation type="unfinished">所在地</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="580"/>
+        <location filename="mapview.qml" line="599"/>
         <source>Earthquake Record</source>
         <translation type="unfinished">地震记录</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="602"/>
+        <location filename="mapview.qml" line="621"/>
         <source>EEW Record</source>
         <translation type="unfinished">预警记录</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="626"/>
+        <location filename="mapview.qml" line="645"/>
         <source>P Wave</source>
         <translation type="unfinished">纵波</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="661"/>
+        <location filename="mapview.qml" line="680"/>
         <source>S Wave</source>
         <translation type="unfinished">横波</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="760"/>
+        <location filename="mapview.qml" line="779"/>
         <source>Enter Time:</source>
         <translation type="unfinished">输入时间：</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="770"/>
+        <location filename="mapview.qml" line="789"/>
         <source>&amp;OK</source>
         <translation type="unfinished">确定(&amp;O)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="777"/>
+        <location filename="mapview.qml" line="796"/>
         <source>&amp;Cancel</source>
         <translation type="unfinished">取消(&amp;C)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="781"/>
+        <location filename="mapview.qml" line="800"/>
         <source>&amp;Reset</source>
         <translation type="unfinished">重置(&amp;R)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="811"/>
+        <location filename="mapview.qml" line="840"/>
         <source>NIED Max Shindo</source>
         <translation type="unfinished">NIED最大震度</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="859"/>
+        <location filename="mapview.qml" line="890"/>
         <source>&amp;Lock View</source>
         <translation type="unfinished">锁定视图(&amp;L)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="872"/>
+        <location filename="mapview.qml" line="903"/>
         <source>&amp;No Animation</source>
         <translation type="unfinished">禁用动画(&amp;N)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="885"/>
+        <location filename="mapview.qml" line="916"/>
         <source>&amp;Old EEW Head</source>
         <translation type="unfinished">旧预警框(&amp;O)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="894"/>
+        <location filename="mapview.qml" line="925"/>
         <source>Show &amp;NIED Stations</source>
         <translation type="unfinished">显示NIED测站(&amp;N)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="907"/>
+        <location filename="mapview.qml" line="943"/>
+        <source>&amp;Estimate Epicenter</source>
+        <translation type="unfinished">震源推算(&amp;E)</translation>
+    </message>
+    <message>
+        <location filename="mapview.qml" line="947"/>
+        <source>Low precision.</source>
+        <translation type="unfinished">低精度。</translation>
+    </message>
+    <message>
+        <location filename="mapview.qml" line="953"/>
         <source>NIED Station &amp;Playback</source>
         <translation type="unfinished">NIED测站回放(&amp;P)</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="929"/>
+        <location filename="mapview.qml" line="958"/>
         <source>&amp;Help</source>
         <translation type="unfinished">帮助(&amp;H)</translation>
     </message>
@@ -103,7 +113,7 @@
         <translation type="obsolete">锁定视图</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="863"/>
+        <location filename="mapview.qml" line="894"/>
         <source>Prevent the program from getting stuck.</source>
         <translation type="unfinished">防止程序卡死。</translation>
     </message>
@@ -112,7 +122,7 @@
         <translation type="obsolete">禁用动画</translation>
     </message>
     <message>
-        <location filename="mapview.qml" line="876"/>
+        <location filename="mapview.qml" line="907"/>
         <source>May relieve the program getting stuck.</source>
         <translation type="unfinished">可能会减轻程序卡死情况。</translation>
     </message>
@@ -120,107 +130,117 @@
 <context>
     <name>mapview-maplibre</name>
     <message>
-        <location filename="mapview-maplibre.qml" line="384"/>
+        <location filename="mapview-maplibre.qml" line="403"/>
         <source>Intensity</source>
         <translation type="unfinished">烈度</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="419"/>
+        <location filename="mapview-maplibre.qml" line="438"/>
         <source>Shindo</source>
         <translation type="unfinished">震度</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="470"/>
+        <location filename="mapview-maplibre.qml" line="489"/>
         <source>Home</source>
         <translation type="unfinished">所在地</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="492"/>
+        <location filename="mapview-maplibre.qml" line="511"/>
         <source>Earthquake Record</source>
         <translation type="unfinished">地震记录</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="514"/>
+        <location filename="mapview-maplibre.qml" line="533"/>
         <source>EEW Record</source>
         <translation type="unfinished">预警记录</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="538"/>
+        <location filename="mapview-maplibre.qml" line="557"/>
         <source>P Wave</source>
         <translation type="unfinished">纵波</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="573"/>
+        <location filename="mapview-maplibre.qml" line="592"/>
         <source>S Wave</source>
         <translation type="unfinished">横波</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="613"/>
+        <location filename="mapview-maplibre.qml" line="632"/>
         <source>S Wave arriving in…</source>
         <translation type="unfinished">距横波到达…</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="672"/>
+        <location filename="mapview-maplibre.qml" line="691"/>
         <source>Enter Time:</source>
         <translation type="unfinished">输入时间：</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="682"/>
+        <location filename="mapview-maplibre.qml" line="701"/>
         <source>&amp;OK</source>
         <translation type="unfinished">确定(&amp;O)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="689"/>
+        <location filename="mapview-maplibre.qml" line="708"/>
         <source>&amp;Cancel</source>
         <translation type="unfinished">取消(&amp;C)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="693"/>
+        <location filename="mapview-maplibre.qml" line="712"/>
         <source>&amp;Reset</source>
         <translation type="unfinished">重置(&amp;R)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="723"/>
+        <location filename="mapview-maplibre.qml" line="752"/>
         <source>NIED Max Shindo</source>
         <translation type="unfinished">NIED最大震度</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="771"/>
+        <location filename="mapview-maplibre.qml" line="802"/>
         <source>&amp;Lock View</source>
         <translation type="unfinished">锁定视图(&amp;L)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="775"/>
+        <location filename="mapview-maplibre.qml" line="806"/>
         <source>Prevent the program from getting stuck.</source>
         <translation type="unfinished">防止程序卡死。</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="784"/>
+        <location filename="mapview-maplibre.qml" line="815"/>
         <source>&amp;No Animation</source>
         <translation type="unfinished">禁用动画(&amp;N)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="788"/>
+        <location filename="mapview-maplibre.qml" line="819"/>
         <source>May relieve the program getting stuck.</source>
         <translation type="unfinished">可能会减轻程序卡死情况。</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="797"/>
+        <location filename="mapview-maplibre.qml" line="828"/>
         <source>&amp;Old EEW Head</source>
         <translation type="unfinished">旧预警框(&amp;O)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="806"/>
+        <location filename="mapview-maplibre.qml" line="837"/>
         <source>Show &amp;NIED Stations</source>
         <translation type="unfinished">显示NIED测站(&amp;N)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="819"/>
+        <location filename="mapview-maplibre.qml" line="855"/>
+        <source>&amp;Estimate Epicenter</source>
+        <translation type="unfinished">震源推算(&amp;E)</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="859"/>
+        <source>Low precision.</source>
+        <translation type="unfinished">低精度。</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="865"/>
         <source>NIED Station &amp;Playback</source>
         <translation type="unfinished">NIED测站回放(&amp;P)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="841"/>
+        <location filename="mapview-maplibre.qml" line="870"/>
         <source>&amp;Help</source>
         <translation type="unfinished">帮助(&amp;H)</translation>
     </message>
