@@ -11,4 +11,4 @@
 * 烈度颜色：[CEIV](https://lxfly2000.github.io/eewcn-res/link.htm?key=CEIV)
 * 烈度计算：[SCEEW](https://lxfly2000.github.io/eewcn-res/link.htm?key=SCEEW)
 * NIED测站功能：[要石](https://github.com/Lipomoea/kanameishi)
-* 震源推测（低精度，未经过测试）：[kotoho7](https://note.com/kotoho7)
+* 震源推测：[kotoho7](https://github.com/kotoho7)
