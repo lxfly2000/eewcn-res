@@ -1399,7 +1399,7 @@ Item {
 
     //lat,lon:假设震源的位置, earliestLat,earliestLon:最早检测到的测站的位置
     function _calcVarianceAtLocation(varianceAtLatLngDepth,countStationsDetected,stationsEarliestDetectedTimeSec,earliestLat,earliestLon,lat,lon,depth){
-        var earliestStationDistanceToEpi=Math.max(1,calcSurfaceDistanceKm(lat,lon,earliestLat,earliestLon));//不能为0
+        var earliestStationDistanceToEpi=calcSurfaceDistanceKm(lat,lon,earliestLat,earliestLon);
         var stationsEstimatedQuakeTimeSec=[];//各测站反推的发震时刻
         var stationsWeight=[];//各测站的权重
         var avgEstimatedQuakeTimeSec=0;//平均发生时间
@@ -1508,6 +1508,23 @@ Item {
         return Math.min(Math.max(0.0,Math.round(a / b)),12.0);
     }
 
+    function isMisDetectedStation(stationIndex,recordTimeIndex){
+        var lat=detailedYahooStationData.items[stationIndex].lat;
+        var lon=detailedYahooStationData.items[stationIndex].lon;
+        var indexLat=Math.floor(lat)+90;
+        var indexLon=Math.floor(lon)+180;
+        var gridStationIndexList=stationIndexGrid[indexLat][indexLon];
+        var stationLevel1Count=0;
+        for(var index of gridStationIndexList){
+            if(yahooStationRealtimeData[index][recordTimeIndex]>=8)
+                stationLevel1Count++;
+        }
+        if(stationLevel1Count>=3||stationLevel1Count>=gridStationIndexList.length){
+            return false;
+        }
+        return true;
+    }
+
     //由于计算量大，最好放到子线程中去算
     function estimateEpicenter(){
         //有EEW时不推算
@@ -1552,8 +1569,7 @@ Item {
         var i;
         for(i=0;i<yahooStationRealtimeData.length;i++){
             for(var realTimeDataTime=0;realTimeDataTime<yahooStationRealtimeData[i].length;realTimeDataTime++){
-                //未考虑单点误检出问题
-                if(yahooStationRealtimeData[i][realTimeDataTime]>=8){
+                if(yahooStationRealtimeData[i][realTimeDataTime]>=8&&!isMisDetectedStation(i,realTimeDataTime)){
                     countStationsDetected++;
                     stationsEarliestDetectedTimeSec[i]=yahooStationRealtimeDataTimestampSec-yahooStationRealtimeData[i].length+1+realTimeDataTime;
                     if(earliestDetectedStationIndex===-1||stationsEarliestDetectedTimeSec[i]<stationsEarliestDetectedTimeSec[earliestDetectedStationIndex]){
@@ -2089,6 +2105,8 @@ Item {
             estimateEpicenterMapView.removeMapItem(estEpiSWaveQMLItem[i]);
         }
         estimateQMLMarkList.length=minimumVarianceLocationList.length;
+        estEpiPWaveQMLItem.length=minimumVarianceLocationList.length;
+        estEpiSWaveQMLItem.length=minimumVarianceLocationList.length;
         if(minimumVarianceLocationList.length===0){
             estimateEpicenterMapView.visible=false;
             legendEstimateEpicenter.visible=false;
