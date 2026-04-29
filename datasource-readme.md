@@ -6,3 +6,9 @@
 * [日本防灾科研强震观测网](https://www.kyoshin.bosai.go.jp/)
 * [Wolfx](https://api.wolfx.jp)
 * [FAN Studio](https://api.fanstudio.tech/)
+
+# 参考
+* 烈度颜色：[CEIV](https://lxfly2000.github.io/eewcn-res/link.htm?key=CEIV)
+* 烈度计算：[SCEEW](https://lxfly2000.github.io/eewcn-res/link.htm?key=SCEEW)
+* NIED测站功能：[要石](https://github.com/Lipomoea/kanameishi)
+* 震源推测（低精度，未经过测试）：[kotoho7](https://note.com/kotoho7)

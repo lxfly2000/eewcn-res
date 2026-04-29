@@ -598,6 +598,29 @@ Item {
                     }
                 }
             }
+            Row{
+                id: legendEstimateEpicenter
+                visible: false
+                anchors.bottom: parent.bottom
+                spacing: 2
+                Image{
+                    width: 20
+                    height: 20
+                    source: uriSvgEstimateEpicenter
+                    fillMode: Image.PreserveAspectFit
+                    anchors.verticalCenter: parent.verticalCenter
+                    mipmap: true
+                }
+                Text{
+                    text: qsTr("Estimated Epicenter")
+                    color: "white"
+                    style: Text.Outline
+                    font.pixelSize: 14
+                    font.bold: true
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.family: textLegendSWave.font.family
+                }
+            }
         }
     }
 
@@ -786,7 +809,7 @@ Item {
                 radius: 2
                 Image{
                     anchors.fill: parent
-                    source: 'data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><rect x="100" y="150" rx="25" ry="25" width="400" height="50" fill="white"/><rect x="100" y="275" rx="25" ry="25" width="400" height="50" fill="white"/><rect x="100" y="400" rx="25" ry="25" width="400" height="50" fill="white"/></svg>'
+                    source: 'menubtn.svg'
                     mipmap: true
                 }
             }
@@ -849,9 +872,8 @@ Item {
             MenuItem{
                 id: checkEstimateEpicenter
                 checkable: true
-                checked: false//true
+                checked: true
                 enabled: checkShowNiedStations.checked
-                visible: false
                 text: qsTr("&Estimate Epicenter")
                 ToolTip.delay: 1000
                 ToolTip.timeout: 10000
@@ -1092,7 +1114,7 @@ Item {
     property var stationIndexGrid: [] //测站按[整数纬度+90][整数经度+180][测站列表]划分的索引阵列
     property var stationIndexSortByShindo: [] //测站索引按震度大到小排序
     property var gridsThatHaveStationLatLng: null //有测站的格子（不重复的集合，(整数纬度+90)*65536+(整数经度+180)）
-    property var uriSvgEstimateEpicenter: 'data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><line x1="20" y1="20" x2="580" y2="580" stroke="white" stroke-width="40" stroke-linecap="round"/><line x1="580" y1="20" x2="20" y2="580" stroke="white" stroke-width="40" stroke-linecap="round"/></svg>'
+    property var uriSvgEstimateEpicenter: 'estepi.svg'
 
     function rearrangeStationIndexGrid(){
         stationIndexGrid=[];
@@ -1330,7 +1352,7 @@ Item {
                     });
                     rcMaxShindoIndicator.maxShindo=getMaxShindo();
                     updateNIEDTime(yahooStationRealtimeDataTimestampSec);
-                    if(checkEstimateEpicenter.checked)
+                    if(checkShowNiedStations.checked&&checkEstimateEpicenter.checked)
                         estimateEpicenter();
                     yahooStationDataTimer.start();
                 }
@@ -1437,8 +1459,62 @@ Item {
         return variance;
     }
 
+    function calcLineDis(dep, dis){
+        const r = 6371;
+        const theta = dis / r;
+        const a = r - dep;
+        const lineDis = Math.sqrt(a * a + r * r - 2 * a * r * Math.cos(theta));
+        return lineDis;
+    }
+
+    function calcJmaShindo(mj, dep, hypoLat, hypoLng, atLocLat,atLocLng){
+        const mw = mj - 0.171;
+        const lo = Math.pow(10, 0.5 * mw - 1.85) / 2;
+        const surfaceDist = calcSurfaceDistanceKm(hypoLat,hypoLng,atLocLat,atLocLng);
+        const lineDis = calcLineDis(dep, surfaceDist);
+        const hypoDist = lineDis - lo;
+        const x = Math.max(hypoDist, 3);
+        const pgv600 = Math.pow(10, (0.58 * mw + 0.0038 * dep - 1.29 - Math.log10(x + 0.0028 * Math.pow(10, 0.5 * mw)) - 0.002 * x));
+        const arv = 1.0;//Number(loc.arv); //不考虑地表增幅
+        const pgv400 = pgv600 * 1.307;
+        const pgv = pgv400 * arv;
+        const instShindo = 2.68 + 1.72 * Math.log10(pgv);
+        return instShindo;
+    }
+
+    function calcEstimateMagnitude(epiLat,epiLon,epiDepth,atLat,atLon,atDepth,yahooShindo){
+        //暂时不考虑测站的高度或深度atDepth
+        var niedShindo=yahooShindo/2-3;
+        //不清楚算法时采用遍历方法
+        var closestError=2147483647;
+        var closestM=0;
+        for(var m=10;m>0;m-=0.125){
+            var shindo=calcJmaShindo(m,epiDepth,epiLat,epiLon,atLat,atLon);
+            var error=Math.abs(shindo-niedShindo);
+            if(error<closestError){
+                closestError=error;
+                closestM=m;
+            }
+        }
+        return closestM;
+    }
+
+    property var estimateQMLMarkList: []
+
+    function calcMaxInt(magnitude,depth)
+    {
+        var a = 1.65 * magnitude;
+        var b = depth < 10 ? 1.21 : 1.21 * Math.log10(depth);
+        return Math.min(Math.max(0.0,Math.round(a / b)),12.0);
+    }
+
     //由于计算量大，最好放到子线程中去算
     function estimateEpicenter(){
+        //有EEW时不推算
+        if(eewCircleMapView.mapItems.length>0){
+            setEstimateQMLMark([]);
+            return;
+        }
         //1.先判断是否达到检测条件（存在同一格子内至少3点或全部检出震度1（雅虎震度8）以上）
         //举例：（北京时间）2026-04-24 08:44:10-08:44:50单点震度7不应检出
         //2026-04-20 15:52:55-16:02:57有警报检出(2026-04-20 15:53:15)
@@ -1464,8 +1540,10 @@ Item {
                 break;
             }
         }
-        if(!triggeredDetection)
+        if(!triggeredDetection){
+            setEstimateQMLMark([]);
             return;
+        }
         //2.记录检出时刻，找到最早检测到的站点（从震度-时间图上找，必须采用这种方法，后面还会用到这个结果）
         var stationsEarliestDetectedTimeSec=[];//时间戳秒数，没有则为undefined
         var countStationsDetected=0;
@@ -1486,11 +1564,15 @@ Item {
             }
         }
         //数据被重置造成最早检出数据消失，停止运算
-        if(earliestDetectedStationIndex===-1)
+        if(earliestDetectedStationIndex===-1){
+            setEstimateQMLMark([]);
             return;
+        }
         //数据超过记录的有效期，停止运算
-        if(stationsEarliestDetectedTimeSec[earliestDetectedStationIndex]<=yahooStationRealtimeDataTimestampSec-yahooStationRealtimeDataMaxLength+2)
+        if(stationsEarliestDetectedTimeSec[earliestDetectedStationIndex]<=yahooStationRealtimeDataTimestampSec-yahooStationRealtimeDataMaxLength+2){
+            setEstimateQMLMark([]);
             return;
+        }
         //3.1.从该点深处10km开始搜索：按0.5度步长（4个边方向），0.1度步长（4个边方向，0.5度以内），深度50km带0.1度步长（6个面方向，0.5度以内），深度10km带0.1度步长（6个面方向，）搜索
         var varianceAtLatLngDepth={};//方差，以字典方式存储，key为数值型，{##.###(lat):{##.###(lng):{##(depth):{d:方差数值,t:发震时间（时间戳秒数）},...},...},...}
         var minVariance=null;
@@ -1924,9 +2006,131 @@ Item {
         }
         //minimumVarianceLocationList即为所求，在varianceAtLatLngDepth上查找可得发震时间，方差数值，sqrt（方差/检出数）均摊误差
         //minimumVarianceLocationList在此处新增时间，震级，方差，误差等信息，存储变为：[lat,lon,depth,time,mag,var,rms]
+        for(i=0;i<minimumVarianceLocationList.length;i++){
+            //求震级（这里为了计算快只取第一个检出测站的最大震度计算）
+            var loc=minimumVarianceLocationList[i];
+            var earliestDetectedStationMaxShindo=-1;
+            for(var j=0;j<yahooStationRealtimeData[earliestDetectedStationIndex].length;j++){
+                earliestDetectedStationMaxShindo=Math.max(earliestDetectedStationMaxShindo,yahooStationRealtimeData[earliestDetectedStationIndex][j]);
+            }
+            var estiMag=calcEstimateMagnitude(loc[0],loc[1],loc[2],
+                                              detailedYahooStationData.items[earliestDetectedStationIndex].lat,
+                                              detailedYahooStationData.items[earliestDetectedStationIndex].lon,
+                                              0,earliestDetectedStationMaxShindo);
+            minimumVarianceLocationList[i].push(varianceAtLatLngDepth[loc[0]][loc[1]][loc[2]].t,
+                estiMag,varianceAtLatLngDepth[loc[0]][loc[1]][loc[2]].d,
+                varianceAtLatLngDepth[loc[0]][loc[1]][loc[2]].d/countStationsDetected);
+        }
+
+        //显示在地图上
+        setEstimateQMLMark(minimumVarianceLocationList);
+
         //4.1.备份原视图位置，将视图移动到检出点和推算震源位置
         //4.2.若遇到其他事件造成视图变化则将备份视图位置改为其他事件的位置
         //4.3.所有检出结束后恢复备份视图位置
+    }
+
+    property var estEpiBackupLatitude: 0
+    property var estEpiBackupLongitude: 0
+    property var estEpiBackupZoom: 0
+    property var estEpiLastEpiCount: 0
+    property var estEpiPWaveQMLItem: []
+    property var estEpiSWaveQMLItem: []
+
+    function setEstimateQMLMark(minimumVarianceLocationList){
+        for(var i=0;i<minimumVarianceLocationList.length;i++){
+            var loc=minimumVarianceLocationList[i];
+            var sl=(3+1.5*Math.exp(0.25*calcMaxInt(loc[4],loc[2])))*5;
+            if(estimateQMLMarkList[i]===undefined){
+                estimateQMLMarkList[i]=Qt.createQmlObject('import QtLocation 5.14;import QtQuick 2.14;'+
+                    'MapQuickItem {property var magnitude:0;property var depth:0;property var dvar:0;property var rms:0;property var sl:1;property var eqtime:0;'+
+                    'anchorPoint.x:img.width/2;anchorPoint.y:img.height/2;'+
+                    'sourceItem:Rectangle{anchors.centerIn:parent;'+
+                    'Image{id:img;width:sl;height:width;source:\''+uriSvgEstimateEpicenter+'\';mipmap:true}'+
+                    'Text{text:new Date(eqtime*1000).toTimeString().substr(0,8)+" M"+magnitude.toFixed(1)+" "+Math.round(depth)+"km\nD="+dvar.toFixed(2)+" R="+rms.toFixed(2);font.family:textEEWTime.font.family;font.pixelSize:14;font.bold:true;'+
+                    'style:Text.Outline;color:"white";anchors.horizontalCenter:img.horizontalCenter;anchors.top:img.bottom}}}',estimateEpicenterMapView);
+                estimateEpicenterMapView.addMapItem(estimateQMLMarkList[i]);
+            }
+            estimateQMLMarkList[i].sl=sl;
+            estimateQMLMarkList[i].magnitude=loc[4];
+            estimateQMLMarkList[i].depth=loc[2];
+            estimateQMLMarkList[i].dvar=loc[5];
+            estimateQMLMarkList[i].rms=loc[6];
+            estimateQMLMarkList[i].eqtime=loc[3];
+            estimateQMLMarkList[i].coordinate=QtPositioning.coordinate(loc[0],loc[1]);
+
+            if(estEpiPWaveQMLItem[i]===undefined){
+                estEpiPWaveQMLItem[i]=Qt.createQmlObject('import QtLocation 5.14; MapCircle{'+
+                    'property var eqtime:0;property var depth:0}',estimateEpicenterMapView);
+                estEpiPWaveQMLItem[i].color="transparent";
+                estEpiPWaveQMLItem[i].border.color="white";
+                estEpiPWaveQMLItem[i].border.width=1;
+                estimateEpicenterMapView.addMapItem(estEpiPWaveQMLItem[i]);
+            }
+            estEpiPWaveQMLItem[i].center=QtPositioning.coordinate(loc[0],loc[1]);
+            estEpiPWaveQMLItem[i].eqtime=loc[3];
+            estEpiPWaveQMLItem[i].depth=loc[2];
+
+            if(estEpiSWaveQMLItem[i]===undefined){
+                estEpiSWaveQMLItem[i]=Qt.createQmlObject('import QtLocation 5.14; MapCircle{'+
+                    'property var eqtime:0;property var depth:0}',estimateEpicenterMapView);
+                estEpiSWaveQMLItem[i].color="transparent";
+                estEpiSWaveQMLItem[i].border.color="white";
+                estEpiSWaveQMLItem[i].border.width=1;
+                estimateEpicenterMapView.addMapItem(estEpiSWaveQMLItem[i]);
+            }
+            estEpiSWaveQMLItem[i].center=QtPositioning.coordinate(loc[0],loc[1]);
+            estEpiSWaveQMLItem[i].eqtime=loc[3];
+            estEpiSWaveQMLItem[i].depth=loc[2];
+        }
+        for(;i<estimateQMLMarkList.length;i++){
+            estimateEpicenterMapView.removeMapItem(estimateQMLMarkList[i]);
+            estimateEpicenterMapView.removeMapItem(estEpiPWaveQMLItem[i]);
+            estimateEpicenterMapView.removeMapItem(estEpiSWaveQMLItem[i]);
+        }
+        estimateQMLMarkList.length=minimumVarianceLocationList.length;
+        if(minimumVarianceLocationList.length===0){
+            estimateEpicenterMapView.visible=false;
+            legendEstimateEpicenter.visible=false;
+            eewMarkMapView.visible=true;
+            historyMarkMapView.visible=true;
+            if(estEpiLastEpiCount>0){
+                //恢复视图
+                focusLocationWithEstEpi(estEpiBackupLatitude,estEpiBackupLongitude,estEpiBackupZoom,true);
+                //停止计算震波的计时器
+                timerEstEpiWave.stop();
+            }
+        }else{
+            estimateEpicenterMapView.visible=true;
+            legendEstimateEpicenter.visible=minimumVarianceLocationList.length>0;
+            eewMarkMapView.visible=minimumVarianceLocationList.length===0;
+            historyMarkMapView.visible=minimumVarianceLocationList.length===0;
+            //调整视图
+            if(estEpiLastEpiCount===0){
+                //需要备份当前视图
+                estEpiBackupLatitude=mapView.center.latitude;
+                estEpiBackupLongitude=mapView.center.longitude;
+                estEpiBackupZoom=mapView.zoomLevel;
+                //启动计算震波的计时器
+                timerEstEpiWave.start();
+            }
+            fitViewportToEstimateEpicenter();
+        }
+        estEpiLastEpiCount=minimumVarianceLocationList.length;
+    }
+
+    Timer{
+        id:timerEstEpiWave
+        interval: 50
+        repeat: true
+        running: false
+        onTriggered: {
+            var now=Date.now()/1000-yahooPlaybackDeltaSec-yahooStationQueryAccumulatedDelaySec;
+            for(var i=0;i<estEpiPWaveQMLItem.length;i++){
+                estEpiPWaveQMLItem[i].radius=getTravelTimeObject().getTravelSurfaceDistanceByTable(0,estEpiPWaveQMLItem[i].depth,now-estEpiPWaveQMLItem[i].eqtime)*1000;
+                estEpiSWaveQMLItem[i].radius=getTravelTimeObject().getTravelSurfaceDistanceByTable(1,estEpiSWaveQMLItem[i].depth,now-estEpiSWaveQMLItem[i].eqtime)*1000;
+            }
+        }
     }
 
     property string mapboxStyleJson: ""//保存转换后的Mapbox Style
@@ -2056,9 +2260,19 @@ Item {
     }
 
     function focusLocation(latitude,longitude,zoom){
+        return focusLocationWithEstEpi(latitude,longitude,zoom,false);
+    }
+
+    function focusLocationWithEstEpi(latitude,longitude,zoom,isEstEpi){
         if(checkLockView.checked){
             return;
         }
+        if(!isEstEpi){
+            estEpiBackupLatitude=latitude;
+            estEpiBackupLongitude=longitude;
+            estEpiBackupZoom=zoom;
+        }
+
         mapView.tilt=0;
         mapView.bearing=0;
         if(checkNoAnimation.checked){
@@ -2107,6 +2321,10 @@ Item {
         yahooStationMarkMapView.clearMapItems();
         for(item of yahooStationQMLItem){
             yahooStationMarkMapView.addMapItem(item);
+        }
+        estimateEpicenterMapView.clearMapItems();
+        for(item of estimateQMLMarkList){
+            estimateEpicenterMapView.addMapItem(item);
         }
     }
 
@@ -2288,7 +2506,7 @@ Item {
     }
 
     function fitViewportToEEWCircle(){
-        //使用太平洋视角确定中心，Bug：当震源在0经度附近时，视角会被强制调整到太平洋，这个没法修复
+        //使用太平洋视角确定中心
         var leftP,topP,rightP,bottomP;
         //使用动画后不能像这样用即时属性去判断
         //while(true){
@@ -2336,6 +2554,108 @@ Item {
                 var br=posToGeo(mapView.width,mapView.height);
                 if(leftP<tl.longitude||topP>tl.latitude||rightP>br.longitude||bottomP<br.latitude){
                     focusLocation((topP+bottomP)/2,(leftP+rightP)/2,fitViewportCalcZoom()-0.25);
+                //}else{
+                    //break;
+                }
+            }
+        //}
+    }
+
+    function fitViewportEstimateCenterCalcZoom(){
+        //使用太平洋视角缩放
+        var leftP=360,topP=-90,rightP=0,bottomP=90;
+        for(var i=0;i<yahooStationQMLItem.length;i++){
+            var item=yahooStationQMLItem[i];
+            if(item.shindo>=8){
+                leftP=Math.min(leftP,_PC(item.coordinate.longitude));
+                topP=Math.max(topP,item.coordinate.latitude);
+                rightP=Math.max(rightP,_PC(item.coordinate.longitude));
+                bottomP=Math.min(bottomP,item.coordinate.latitude);
+            }
+        }
+        for(i=0;i<estimateQMLMarkList.length;i++){
+            item=estimateQMLMarkList[i];
+            leftP=Math.min(leftP,_PC(item.coordinate.longitude));
+            topP=Math.max(topP,item.coordinate.latitude);
+            rightP=Math.max(rightP,_PC(item.coordinate.longitude));
+            bottomP=Math.min(bottomP,item.coordinate.latitude);
+        }
+        //注意此处恢复为大西洋视角
+        supplementMapView.visibleRegion=QtPositioning.rectangle(QtPositioning.coordinate(topP,_AC(leftP)),QtPositioning.coordinate(bottomP,_AC(rightP)));
+        return supplementMapView.zoomLevel;
+    }
+
+    function fitViewportToEstimateEpicenter(){
+        //使用太平洋视角确定中心
+        var leftP,topP,rightP,bottomP;
+        //使用动画后不能像这样用即时属性去判断
+        //while(true){
+            if(mapView.zoomLevel<=3)
+                return;
+            var sumLongitude=0;
+            for(var i=0;i<yahooStationQMLItem.length;i++){
+                if(yahooStationQMLItem[i].shindo>=8)
+                    sumLongitude+=yahooStationQMLItem[i].coordinate.longitude;
+            }
+            for(i=0;i<estimateQMLMarkList.length;i++){
+                sumLongitude+=estimateQMLMarkList[i].coordinate.longitude;
+            }
+            var avgLongitude=sumLongitude/(yahooStationQMLItem.filter(e=>(e.shindo>=8)).length+estimateQMLMarkList.length);
+            if(Math.abs(avgLongitude)>90){
+                //使用太平洋视角中心
+                leftP=360;
+                rightP=0;
+                topP=-90;
+                bottomP=90;
+                for(i=0;i<yahooStationQMLItem.length;i++){
+                    var item=yahooStationQMLItem[i];
+                    if(item.shindo>=8){
+                        leftP=Math.min(leftP,_PC(item.coordinate.longitude));
+                        topP=Math.max(topP,item.coordinate.latitude);
+                        rightP=Math.max(rightP,_PC(item.coordinate.longitude));
+                        bottomP=Math.min(bottomP,item.coordinate.latitude);
+                    }
+                }
+                for(i=0;i<estimateQMLMarkList.length;i++){
+                    item=estimateQMLMarkList[i];
+                    leftP=Math.min(leftP,_PC(item.coordinate.longitude));
+                    topP=Math.max(topP,item.coordinate.latitude);
+                    rightP=Math.max(rightP,_PC(item.coordinate.longitude));
+                    bottomP=Math.min(bottomP,item.coordinate.latitude);
+                }
+                var tl=posToGeo(0,0);
+                var br=posToGeo(mapView.width,mapView.height);
+                if(leftP<_PC(tl.longitude)||topP>tl.latitude||rightP>_PC(br.longitude)||bottomP<br.latitude){
+                    focusLocationWithEstEpi((topP+bottomP)/2,_AC((leftP+rightP)/2),fitViewportEstimateCenterCalcZoom()-0.25,true);
+                //}else{
+                    //break;
+                }
+            }else{
+                //使用大西洋视角中心
+                leftP=180;
+                rightP=-180;
+                topP=-90;
+                bottomP=90;
+                for(i=0;i<yahooStationQMLItem.length;i++){
+                    item=yahooStationQMLItem[i];
+                    if(item.shindo>=8){
+                        leftP=Math.min(leftP,_AC(item.coordinate.longitude));
+                        topP=Math.max(topP,item.coordinate.latitude);
+                        rightP=Math.max(rightP,_AC(item.coordinate.longitude));
+                        bottomP=Math.min(bottomP,item.coordinate.latitude);
+                    }
+                }
+                for(i=0;i<estimateQMLMarkList.length;i++){
+                    item=estimateQMLMarkList[i];
+                    leftP=Math.min(leftP,_AC(item.coordinate.longitude));
+                    topP=Math.max(topP,item.coordinate.latitude);
+                    rightP=Math.max(rightP,_AC(item.coordinate.longitude));
+                    bottomP=Math.min(bottomP,item.coordinate.latitude);
+                }
+                tl=posToGeo(0,0);
+                br=posToGeo(mapView.width,mapView.height);
+                if(leftP<tl.longitude||topP>tl.latitude||rightP>br.longitude||bottomP<br.latitude){
+                    focusLocationWithEstEpi((topP+bottomP)/2,(leftP+rightP)/2,fitViewportEstimateCenterCalcZoom()-0.25,true);
                 //}else{
                     //break;
                 }
