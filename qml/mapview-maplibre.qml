@@ -2344,6 +2344,12 @@ Item {
         for(item of estimateQMLMarkList){
             estimateEpicenterMapView.addMapItem(item);
         }
+        for(item of estEpiPWaveQMLItem){
+            estimateEpicenterMapView.addMapItem(item);
+        }
+        for(item of estEpiSWaveQMLItem){
+            estimateEpicenterMapView.addMapItem(item);
+        }
     }
 
     function setEEWCircle(eventId,latitude,longitude,depth,elapsedMilliseconds,radiusPwave,radiusSwave,intensity,iNumber){
