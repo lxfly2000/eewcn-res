@@ -93,7 +93,7 @@ Item {
                             _travelTime.jma2001.distances[usingTimeIndex];
                 }
             }
-            if(usingTimeIndex>=timeData.length-1)
+            if(usingTimeIndex+1>=timeData.length-1)
                 usingTravelTime=1;
         }
         if(usingTravelTime===1){
@@ -106,9 +106,6 @@ Item {
                 }
             }
             timeData=_travelTime.jb[keys[waveType]][usingDepthIndex];
-            if(sec<=timeData[0]){
-                return timeData[0]===0?0:sec*_travelTime.jb.depths[usingDepthIndex]/timeData[0]-_travelTime.jb.depths[usingDepthIndex];
-            }
             for(usingTimeIndex=0;usingTimeIndex+1<timeData.length-1;usingTimeIndex++){
                 if(timeData[usingTimeIndex+1]>=sec){
                     return (sec-timeData[usingTimeIndex])/(timeData[usingTimeIndex+1]-timeData[usingTimeIndex])*
@@ -116,7 +113,7 @@ Item {
                             _travelTime.jb.distances[usingTimeIndex];
                 }
             }
-            /*if(usingTimeIndex>=timeData.length-1)
+            /*if(usingTimeIndex+1>=timeData.length-1)
                 usingTravelTime=2;*/
         }
         return getTravelSurfaceDistanceByLinear(waveType,depth,sec);
