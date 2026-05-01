@@ -1213,6 +1213,7 @@ Item {
     property var stationIndexSortByShindo: [] //测站索引按震度大到小排序
     property var gridsThatHaveStationLatLng: null //有测站的格子（不重复的集合，(整数纬度+90)*65536+(整数经度+180)）
     property var uriSvgEstimateEpicenter: 'estepi.svg'
+    property var yahooStationMinDetectShindo: 7
 
     function rearrangeStationIndexGrid(){
         stationIndexGrid=[];
@@ -1620,7 +1621,7 @@ Item {
         var gridStationIndexList=stationIndexGrid[indexLat][indexLon];
         var stationLevel1Count=0;
         for(var index of gridStationIndexList){
-            if(yahooStationRealtimeData[index][recordTimeIndex]>=8)
+            if(yahooStationRealtimeData[index][recordTimeIndex]>=yahooStationMinDetectShindo)
                 stationLevel1Count++;
         }
         if(stationLevel1Count>=3||stationLevel1Count>=gridStationIndexList.length){
@@ -1651,7 +1652,7 @@ Item {
             var eachGridStationIndexList=stationIndexGrid[indexLat][indexLon];//这个格子里的测站索引列表
             var stationLevel1Count=0;//这个格子里震度1以上的测站数
             for(var index of eachGridStationIndexList){
-                if(yahooStationQMLItem[index].shindo>=8){
+                if(yahooStationQMLItem[index].shindo>=yahooStationMinDetectShindo){
                     stationLevel1Count++;
                 }
             }
@@ -1673,7 +1674,7 @@ Item {
         var i;
         for(i=0;i<yahooStationRealtimeData.length;i++){
             for(var realTimeDataTime=0;realTimeDataTime<yahooStationRealtimeData[i].length;realTimeDataTime++){
-                if(yahooStationRealtimeData[i][realTimeDataTime]>=8&&!isMisDetectedStation(i,realTimeDataTime)){
+                if(yahooStationRealtimeData[i][realTimeDataTime]>=yahooStationMinDetectShindo&&!isMisDetectedStation(i,realTimeDataTime)){
                     countStationsDetected++;
                     stationsEarliestDetectedTimeSec[i]=yahooStationRealtimeDataTimestampSec-yahooStationRealtimeData[i].length+1+realTimeDataTime;
                     if(earliestDetectedStationIndex===-1||stationsEarliestDetectedTimeSec[i]<stationsEarliestDetectedTimeSec[earliestDetectedStationIndex]){
@@ -2653,7 +2654,7 @@ Item {
         var leftP=360,topP=-90,rightP=0,bottomP=90;
         for(var i=0;i<yahooStationQMLItem.length;i++){
             var item=yahooStationQMLItem[i];
-            if(item.shindo>=8){
+            if(item.shindo>=yahooStationMinDetectShindo){
                 leftP=Math.min(leftP,_PC(item.coordinate.longitude));
                 topP=Math.max(topP,item.coordinate.latitude);
                 rightP=Math.max(rightP,_PC(item.coordinate.longitude));
@@ -2681,13 +2682,13 @@ Item {
                 return;
             var sumLongitude=0;
             for(var i=0;i<yahooStationQMLItem.length;i++){
-                if(yahooStationQMLItem[i].shindo>=8)
+                if(yahooStationQMLItem[i].shindo>=yahooStationMinDetectShindo)
                     sumLongitude+=yahooStationQMLItem[i].coordinate.longitude;
             }
             for(i=0;i<estimateQMLMarkList.length;i++){
                 sumLongitude+=estimateQMLMarkList[i].coordinate.longitude;
             }
-            var avgLongitude=sumLongitude/(yahooStationQMLItem.filter(e=>(e.shindo>=8)).length+estimateQMLMarkList.length);
+            var avgLongitude=sumLongitude/(yahooStationQMLItem.filter(e=>(e.shindo>=yahooStationMinDetectShindo)).length+estimateQMLMarkList.length);
             if(Math.abs(avgLongitude)>90){
                 //使用太平洋视角中心
                 leftP=360;
@@ -2696,7 +2697,7 @@ Item {
                 bottomP=90;
                 for(i=0;i<yahooStationQMLItem.length;i++){
                     var item=yahooStationQMLItem[i];
-                    if(item.shindo>=8){
+                    if(item.shindo>=yahooStationMinDetectShindo){
                         leftP=Math.min(leftP,_PC(item.coordinate.longitude));
                         topP=Math.max(topP,item.coordinate.latitude);
                         rightP=Math.max(rightP,_PC(item.coordinate.longitude));
@@ -2725,7 +2726,7 @@ Item {
                 bottomP=90;
                 for(i=0;i<yahooStationQMLItem.length;i++){
                     item=yahooStationQMLItem[i];
-                    if(item.shindo>=8){
+                    if(item.shindo>=yahooStationMinDetectShindo){
                         leftP=Math.min(leftP,_AC(item.coordinate.longitude));
                         topP=Math.max(topP,item.coordinate.latitude);
                         rightP=Math.max(rightP,_AC(item.coordinate.longitude));
