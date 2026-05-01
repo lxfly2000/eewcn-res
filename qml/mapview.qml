@@ -1339,10 +1339,16 @@ Item {
             if(xhr.readyState===4&&xhr.status===200){
                 niedStationData=JSON.parse(xhr.responseText);
                 niedStationData.items.sort(function(a,b){
-                    if(a.data_type_name===b.data_type_name){
-                        return a.sitecode.localeCompare(b.sitecode);
+                    if(a.data_type_name<b.data_type_name){
+                        return -1;
+                    }else if(a.data_type_name>b.data_type_name){
+                        return 1;
+                    }else if(a.sitecode<b.sitecode){
+                        return -1;
+                    }else if(a.sitecode>b.sitecode){
+                        return 1;
                     }else{
-                        return a.data_type_name.localeCompare(b.data_type_name);
+                        return 0;
                     }
                 });
                 _loadYahooStation();
