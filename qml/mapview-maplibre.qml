@@ -1100,7 +1100,7 @@ Item {
     //[[测站1数据], [测站2数据], ...]
     property var yahooStationRealtimeData: []
     //每个测站存储最近的30条数据，超过30条则删除最早的数据
-    property var yahooStationRealtimeDataMaxLength: 120
+    property var yahooStationRealtimeDataMaxLength: 300
     property var yahooStationRealtimeDataTimestampSec: 0
     property var yahooStationQueryIntervalSec: 1
     property var yahooStationQueryAccumulatedDelaySec: 0
