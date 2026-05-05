@@ -2110,6 +2110,9 @@ Item {
             estimateEpicenterMapView.removeMapItem(estimateQMLMarkList[i]);
             estimateEpicenterMapView.removeMapItem(estEpiPWaveQMLItem[i]);
             estimateEpicenterMapView.removeMapItem(estEpiSWaveQMLItem[i]);
+            estimateQMLMarkList[i].destroy();
+            estEpiPWaveQMLItem[i].destroy();
+            estEpiSWaveQMLItem[i].destroy();
         }
         estimateQMLMarkList.length=minimumVarianceLocationList.length;
         estEpiPWaveQMLItem.length=minimumVarianceLocationList.length;
@@ -2950,6 +2953,7 @@ Item {
             var removedItems=stationItems.splice(count,stationItems.length-count);
             for(var item of removedItems){
                 stationMarkMapView.removeMapItem(item);
+                item.destroy();
             }
         }else{
             while(stationItems.length<count){
