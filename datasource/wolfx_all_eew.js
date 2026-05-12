@@ -42,6 +42,20 @@ function eew_onsuccess(str_response){
             source:"sc"
         };
         last_eew={data:[converted]};
+    }else if(original.type==="cq_eew"){
+        converted={
+            eventId:original.EventID.split("_")[0],
+            updates:original.ReportNum,
+            latitude:original.Latitude,
+            longitude:original.Longitude,
+            depth:original.Depth,
+            epicenter:"[CQ]"+original.HypoCenter,
+            startAt:fmt_to_msts(original.OriginTime+" UTC+8"),//注意时区问题
+            magnitude:original.Magnitude,
+            ttsepicenter:original.HypoCenter,
+            source:"cq"
+        };
+        last_eew={data:[converted]};
     }else if(original.type==="jma_eew"){
         converted={
             eventId:original.EventID,
