@@ -6,6 +6,8 @@
 * [日本防灾科研强震观测网](https://www.kyoshin.bosai.go.jp/)
 * [Wolfx](https://api.wolfx.jp)
 * [FAN Studio](https://api.fanstudio.tech/)
+* [Project BS JMAEEW API](https://telegram-cf.projectbs.cn)
+* [EQSC](https://equake.top)
 
 # 参考
 * 烈度颜色：[CEIV](https://lxfly2000.github.io/eewcn-res/link.htm?key=CEIV)
