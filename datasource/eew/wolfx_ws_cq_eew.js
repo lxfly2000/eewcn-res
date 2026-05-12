@@ -10,7 +10,7 @@ function eew_method(){return "websocket";}
 function eew_header(){return {/*"Accept":"application/json"*/};}
 
 //请求方式为POST时提交的数据，或WebSocket连接成功后要发送的数据，字符串形式，空字符串表示不发送
-function eew_postdata(){return "query_sceew";}
+function eew_postdata(){return "query_cqeew";}
 
 //成功返回数据时请将响应内容转换为指定的JSON形式
 //格式如下：
@@ -69,7 +69,7 @@ function eew_onreport(str_data){
 function history_url(){return "";}
 function history_method(){return "get";}
 function history_header(){return {/*"Accept":"application/json"*/};}
-function history_postdata(){return "query_sceew";}
+function history_postdata(){return "query_cqeew";}
 function history_onsuccess(str_response){return {};}
 function history_onfail(num_errorcode){logger.error("history_onfail: "+num_errorcode);}
 function is_history_data(url){return url==="";}

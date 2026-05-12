@@ -2,6 +2,8 @@
     "eew":[
         {"name":{"en":"Wolfx Sichuan E.A.","zh_CN":"Wolfx 四川地震局","zh_TW":"Wolfx 四川地震局","ja":"Wolfx 四川省地震局"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_sc_eew.js"},
         {"name":{"en":"Wolfx Sichuan E.A. (WebSocket)","zh_CN":"Wolfx 四川地震局 (WebSocket)","zh_TW":"Wolfx 四川地震局 (WebSocket)","ja":"Wolfx 四川省地震局 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_ws_sc_eew.js"},
+        {"name":{"en":"Wolfx Chongqing E.A.","zh_CN":"Wolfx 重庆地震局","zh_TW":"Wolfx 重慶地震局","ja":"Wolfx 重慶市地震局"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_cq_eew.js"},
+        {"name":{"en":"Wolfx Chongqing E.A. (WebSocket)","zh_CN":"Wolfx 重庆地震局 (WebSocket)","zh_TW":"Wolfx 重慶地震局 (WebSocket)","ja":"Wolfx 重慶市地震局 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_ws_cq_eew.js"},
         {"name":{"en":"Wolfx Fujian E.A.","zh_CN":"Wolfx 福建地震局","zh_TW":"Wolfx 福建地震局","ja":"Wolfx 福建省地震局"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_fj_eew.js"},
         {"name":{"en":"Wolfx Fujian E.A. (WebSocket)","zh_CN":"Wolfx 福建地震局 (WebSocket)","zh_TW":"Wolfx 福建地震局 (WebSocket)","ja":"Wolfx 福建省地震局 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_ws_fj_eew.js"},
         {"name":{"en":"Wolfx CWA","zh_CN":"Wolfx 台湾中央气象署","zh_TW":"Wolfx 臺灣中央氣象署","ja":"Wolfx 台湾中央気象署"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_cwa_eew.js"},
