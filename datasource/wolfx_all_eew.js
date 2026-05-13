@@ -63,10 +63,10 @@ function eew_onsuccess(str_response){
             latitude:original.Latitude,
             longitude:original.Longitude,
             depth:original.Depth,
-            epicenter:original.HypoCenter,
+            epicenter:original.Hypocenter,
             startAt:fmt_to_msts(original.OriginTime+" UTC+9"),//注意时区问题
             magnitude:original.Magunitude,
-            ttsepicenter:original.HypoCenter,
+            ttsepicenter:original.Hypocenter,
             source:"jma"
         };
         if(original.isWarn){
