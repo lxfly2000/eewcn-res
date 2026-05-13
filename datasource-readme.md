@@ -3,7 +3,7 @@
 * <strike><a href="https://www.cenc.ac.cn/earthquake-manage-publish-web/">中国地震台网</a></strike>
 * <strike><a href="https://www.scdzj.gov.cn">四川省地震局</a></strike>
 * <strike><a href="https://www.fjdzj.gov.cn">福建省地震局</a></strike>
-* [日本防灾科研强震观测网](https://www.kyoshin.bosai.go.jp/)
+* [Yahoo天气 实时震度](https://typhoon.yahoo.co.jp/weather/jp/earthquake/kyoshin/)
 * [Wolfx](https://api.wolfx.jp)
 * [FAN Studio](https://api.fanstudio.tech/)
 * [Project BS JMAEEW API](https://telegram-cf.projectbs.cn)
