@@ -2,8 +2,6 @@
     "eew":[
         {"name":{"en":"Wolfx Sichuan E.A.","zh_CN":"Wolfx 四川地震局","zh_TW":"Wolfx 四川地震局","ja":"Wolfx 四川省地震局"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_sc_eew.js"},
         {"name":{"en":"Wolfx Sichuan E.A. (WebSocket)","zh_CN":"Wolfx 四川地震局 (WebSocket)","zh_TW":"Wolfx 四川地震局 (WebSocket)","ja":"Wolfx 四川省地震局 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_ws_sc_eew.js"},
-        {"name":{"en":"Wolfx Chongqing E.A.","zh_CN":"Wolfx 重庆地震局","zh_TW":"Wolfx 重慶地震局","ja":"Wolfx 重慶市地震局"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_cq_eew.js"},
-        {"name":{"en":"Wolfx Chongqing E.A. (WebSocket)","zh_CN":"Wolfx 重庆地震局 (WebSocket)","zh_TW":"Wolfx 重慶地震局 (WebSocket)","ja":"Wolfx 重慶市地震局 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_ws_cq_eew.js"},
         {"name":{"en":"Wolfx Fujian E.A.","zh_CN":"Wolfx 福建地震局","zh_TW":"Wolfx 福建地震局","ja":"Wolfx 福建省地震局"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_fj_eew.js"},
         {"name":{"en":"Wolfx Fujian E.A. (WebSocket)","zh_CN":"Wolfx 福建地震局 (WebSocket)","zh_TW":"Wolfx 福建地震局 (WebSocket)","ja":"Wolfx 福建省地震局 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_ws_fj_eew.js"},
         {"name":{"en":"Wolfx CWA","zh_CN":"Wolfx 台湾中央气象署","zh_TW":"Wolfx 臺灣中央氣象署","ja":"Wolfx 台湾中央気象署"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_cwa_eew.js"},
@@ -16,6 +14,8 @@
         {"name":{"en":"Wolfx CENC (WebSocket)","zh_CN":"Wolfx 中国地震台网 (WebSocket)","zh_TW":"Wolfx 中國地震台網 (WebSocket)","ja":"Wolfx CENC (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_ws_cenc_eew.js"},
         {"name":{"en":"FAN Studio CEA (WebSocket)","zh_CN":"FAN Studio 中国地震预警网地震预警 (WebSocket)","zh_TW":"FAN Studio 中國地震預警網地震預警 (WebSocket)","ja":"FAN Studio CEA (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/fanstudio_ws_cea.js"},
         {"name":{"en":"FAN Studio CEA-PR (WebSocket)","zh_CN":"FAN Studio 中国地震预警网各省级网地震预警 (WebSocket)","zh_TW":"FAN Studio 中國地震預警網各省級地震預警 (WebSocket)","ja":"FAN Studio CEA-PR (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/fanstudio_ws_cea-pr.js"},
+        {"name":{"en":"Wolfx Chongqing E.A.","zh_CN":"Wolfx 重庆地震局","zh_TW":"Wolfx 重慶地震局","ja":"Wolfx 重慶市地震局"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_cq_eew.js"},
+        {"name":{"en":"Wolfx Chongqing E.A. (WebSocket)","zh_CN":"Wolfx 重庆地震局 (WebSocket)","zh_TW":"Wolfx 重慶地震局 (WebSocket)","ja":"Wolfx 重慶市地震局 (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/wolfx_ws_cq_eew.js"},
         {"name":{"en":"Project BS JMAEEW API","zh_CN":"Project BS JMAEEW API","zh_TW":"Project BS JMAEEW API","ja":"Project BS JMAEEW API"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/projectbs_jmaeew.js"},
         {"name":{"en":"Project BS JMAEEW API (WebSocket)","zh_CN":"Project BS JMAEEW API (WebSocket)","zh_TW":"Project BS JMAEEW API (WebSocket)","ja":"Project BS JMAEEW API (WebSocket)"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/projectbs_jmaeew_ws.js"},
         {"name":{"en":"EQSC JMA (Configuration Required)","zh_CN":"EQSC 日本气象厅（需要配置）","zh_TW":"EQSC 日本氣象廳（需要配置）","ja":"EQSC 気象庁（設定必要）"},"url":"https://lxfly2000.github.io/eewcn-res/datasource/eew/eqsc_jma_eew.js"},
