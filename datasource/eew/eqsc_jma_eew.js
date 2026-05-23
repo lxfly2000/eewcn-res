@@ -18,7 +18,7 @@ var lastReturnCode=-1;
 //指定一个URL，若不想使用脚本的预警或地震历史功能请将相应的URL指定为空字符串，即""
 function eew_url(){
     if(lastReturnCode<0){//需要重新获取AccessToken
-        return "https://equake.top/createAccessToken";
+        return "https://equake.top/createAccessToken#eqsc_jma_eew";
     }else{//正常获取预警数据
         return "https://equake.top/jma_eew.json";
     }
@@ -92,7 +92,7 @@ function eew_onsuccess(str_response){
 function eew_onfail(num_errorcode){logger.error("eew_onfail: "+num_errorcode);}
 
 //根据URL判断该URL返回的是否为EEW数据，使用WebSocket时此函数不会被调用
-function is_eew_data(url){return url.startsWith("https://equake.top/");}
+function is_eew_data(url){return url==="https://equake.top/createAccessToken#eqsc_jma_eew"||url==="https://equake.top/jma_eew.json";}
 
 var last_report_data=null;
 function eew_onreport(str_data){

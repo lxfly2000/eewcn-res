@@ -28,7 +28,7 @@ function is_eew_data(url){return url==="";}
 
 function history_url(){
     if(lastReturnCode<0){//需要重新获取AccessToken
-        return "https://equake.top/createAccessToken";
+        return "https://equake.top/createAccessToken#eqsc_cenc_eqlist";
     }else{//正常获取预警数据
         return "https://equake.top/eqlistCENC.json?limit={historyQueryCount}";
     }
@@ -90,7 +90,7 @@ function history_onsuccess(str_response){
 function history_onfail(num_errorcode){logger.error("history_onfail: "+num_errorcode);}
 
 //根据URL判断该URL返回的是否为地震历史数据
-function is_history_data(url){return url.startsWith("https://equake.top/");}
+function is_history_data(url){return url==="https://equake.top/createAccessToken#eqsc_cenc_eqlist"||url.substr(0,34)==="https://equake.top/eqlistCENC.json";}
 
 function history_onreport(str_data){
     var data=JSON.parse(str_data);
