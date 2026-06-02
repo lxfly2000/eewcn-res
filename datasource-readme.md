@@ -8,6 +8,7 @@
 * [FAN Studio](https://api.fanstudio.tech/)
 * [Project BS JMAEEW API](https://telegram-cf.projectbs.cn)
 * [EQSC](https://equake.top)
+* [P2PQuake 気象庁 地震情報・津波予報 JSON API](https://www.p2pquake.net/develop/json_api_v2)
 
 # 参考
 * 烈度颜色：[CEIV](https://lxfly2000.github.io/eewcn-res/link.htm?key=CEIV)

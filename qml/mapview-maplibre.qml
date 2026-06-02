@@ -4,6 +4,8 @@ import QtLocation 5.15
 import QtPositioning 5.15
 import QtGraphicalEffects 1.12
 import QtQuick.Controls 2.15
+import QtMultimedia 5.15
+import QtWebSockets 1.15
 import Qt.labs.settings 1.1
 import MapLibre 3.0
 
@@ -219,6 +221,45 @@ Item {
                 type: "fill"
                 property string source: "intensity12Source"
                 paint: {"fill-color": getIntColors(12),"fill-opacity": 0.75}
+            }
+            SourceParameter {
+                id: tsunami1Source
+                styleId: "tsunami1Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                id: tsunami1LayerParameter
+                styleId: "tsunami1Layer"
+                type: "line"
+                property string source: "tsunami1Source"
+                paint: {"line-color": getTsunamiColor(1),"line-width": 5}
+            }
+            SourceParameter {
+                id: tsunami2Source
+                styleId: "tsunami2Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                id: tsunami2LayerParameter
+                styleId: "tsunami2Layer"
+                type: "line"
+                property string source: "tsunami2Source"
+                paint: {"line-color": getTsunamiColor(2),"line-width": 8}
+            }
+            SourceParameter {
+                id: tsunami3Source
+                styleId: "tsunami3Source"
+                type: "geojson"
+                property string data: emptyGeoJson
+            }
+            LayerParameter {
+                id: tsunami3LayerParameter
+                styleId: "tsunami3Layer"
+                type: "line"
+                property string source: "tsunami3Source"
+                paint: {"line-color": getTsunamiColor(3),"line-width": 11}
             }
         }
     }
@@ -539,6 +580,71 @@ Item {
                 }
             }
             Column{
+                id: legendTsunamiMark
+                visible: false
+                anchors.bottom: parent.bottom
+                Row{
+                    id: legendTsunamiOokeihou
+                    spacing: 2
+                    Rectangle{
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 20
+                        height: 6
+                        color: getTsunamiColor(3)
+                        radius: 3
+                    }
+                    Text{
+                        text: qsTr("Major Tsunami Warning")
+                        color: "white"
+                        style: Text.Outline
+                        font.pixelSize: 14
+                        font.bold: true
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.family: textLegendSWave.font.family
+                    }
+                }
+                Row{
+                    id: legendTsunamiKeihou
+                    spacing: 2
+                    Rectangle{
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 20
+                        height: 6
+                        color: getTsunamiColor(2)
+                        radius: 3
+                    }
+                    Text{
+                        text: qsTr("Tsunami Warning")
+                        color: "white"
+                        style: Text.Outline
+                        font.pixelSize: 14
+                        font.bold: true
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.family: textLegendSWave.font.family
+                    }
+                }
+                Row{
+                    id: legendTsunamiChuui
+                    spacing: 2
+                    Rectangle{
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 20
+                        height: 6
+                        color: getTsunamiColor(1)
+                        radius: 3
+                    }
+                    Text{
+                        text: qsTr("Tsunami Advisory")
+                        color: "white"
+                        style: Text.Outline
+                        font.pixelSize: 14
+                        font.bold: true
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.family: textLegendSWave.font.family
+                    }
+                }
+            }
+            Column{
                 id: legendPSWave
                 visible: false
                 anchors.bottom: parent.bottom
@@ -753,6 +859,293 @@ Item {
         yahooStationRealtimeData=[];
     }
 
+    function setTsunamiSettings(enabled){
+        if(enabled){
+            startTsunamiWarningQuery();
+        }else{
+            stopTsunamiWarningQuery();
+        }
+    }
+
+    Audio{
+        id:audioSfx
+        //source:""
+    }
+
+    function playSound(url){
+        audioSfx.stop();
+        audioSfx.source=url;
+        audioSfx.play();
+    }
+
+    Timer{
+        id:flashTsunamiCoastTimer
+        interval:1000
+        repeat:true
+        onTriggered:{
+            var isInvisibleSec=parseInt(Date.now()/1000)%5===0;
+            const layers=[tsunami1LayerParameter,tsunami2LayerParameter,tsunami3LayerParameter];
+            for(var i=0;i<layers.length;i++){
+                var oldPaint=layers[i].paint;
+                oldPaint.visibility=isInvisibleSec?"none":"visible";
+                layers[i].paint=oldPaint;
+            }
+        }
+    }
+
+    function quantitizeTsunamiLevelDescription(str){
+        const dict={
+            "巨大":100,
+            "高い":50,
+            "１０ｍ超":11,
+            "１０ｍ":10,
+            "５ｍ":5,
+            "３ｍ":3,
+            "１ｍ":1,
+            "０．２ｍ未満":0.2
+        };
+        return dict[str]||0;
+    }
+
+    function clearTsunamiData(){
+        //删除地图元素
+        tsunami1Source.data=emptyGeoJson;
+        tsunami2Source.data=emptyGeoJson;
+        tsunami3Source.data=emptyGeoJson;
+        //关闭图例元素
+        legendTsunamiOokeihou.visible=false;
+        legendTsunamiKeihou.visible=false;
+        legendTsunamiChuui.visible=false;
+        legendTsunamiMark.visible=false;
+        rcTsunamiIndicator.visible=false;
+        rcTsunamiIndicator.maxTsunamiLevelString="";
+        rcTsunamiIndicator.maxTsunamiType=0;
+    }
+
+    //type:1=注意 2=警报 3=大警报
+    function getTsunamiColor(type){
+        const colors=["white","yellow","orangered","violet"];
+        return colors[type]||"white";
+    }
+    
+    function getTsunamiTypeString(type){
+        const str = ["",qsTr("Tsunami Advisory"),qsTr("Tsunami Warning"),qsTr("Major Tsunami Warning")];
+        return str[type]||"";
+    }
+
+    function extendBoundariesFromLineGeojson(l,t,r,b,geojson){
+        for(var iFeature=0;iFeature<geojson.features.length;iFeature++){
+            if(!geojson.features[iFeature].geometry)
+                continue;
+            let arrays=geojson.features[iFeature].geometry.coordinates;
+            if(geojson.features[iFeature].geometry.type==="LineString"){
+                arrays=[arrays];
+            }
+            for(var iLine=0;iLine<arrays.length;iLine++){
+                for(var iCoord=0;iCoord<arrays[iLine].length;iCoord++){
+                    const coord=arrays[iLine][iCoord];
+                    l=Math.min(l,coord[0]);
+                    r=Math.max(r,coord[0]);
+                    t=Math.max(t,coord[1]);
+                    b=Math.min(b,coord[1]);
+                }
+            }
+        }
+        return [l,t,r,b];
+    }
+
+    //initialOrRt:0=Initial 1=Realtime
+    function processTsunamiData(jsonString,initialOrRt){
+        var jsonData=JSON.parse(jsonString);
+        if(initialOrRt===0){
+            jsonData=jsonData[0];
+        }else if(jsonData.code!==552){
+            return;
+        }
+        /*{
+            "areas": [{
+                "firstHeight": {
+                    "condition": "第１波の到達を確認"
+                },
+                "grade": "Watch",
+                "immediate": false,
+                "maxHeight": {
+                    "description": "１ｍ",
+                    "value": 1
+                },
+                "name": "北海道太平洋沿岸東部"
+            },...],
+            "cancelled": false,
+            "code": 552,
+            "created_at": "2026/04/20 20:15:50.661",
+            "id": "69e60ae664680b00075cbaaa",
+            "issue": {
+                "source": "気象庁",
+                "time": "2026/04/20 20:15:17",
+                "type": "Focus"
+            },
+            "time": "2026/04/20 20:15:18.545",
+            "timestamp": {
+                "convert": "2026/04/20 20:15:18.02",
+                "register": "2026/04/20 20:15:18.545"
+            },
+            "user_agent": "jmaxml-seis-parser-go, relay, register-api",
+            "ver": "20231023"
+        }*/
+        if(jsonData.cancelled){
+            flashTsunamiCoastTimer.stop();
+            clearTsunamiData();
+        }else{
+            clearTsunamiData();
+            let tsunamiJson={
+                "MajorWarning":[],
+                "Warning":[],
+                "Watch":[],
+                "Unknown":[]
+            };
+            const areas=jsonData.areas;
+            let maxLevelString="";
+            for(let i=0;i<areas.length;i++){
+                tsunamiJson[areas[i].grade].push(areas[i].name);
+                if(quantitizeTsunamiLevelDescription(maxLevelString)<quantitizeTsunamiLevelDescription(areas[i].maxHeight.description))
+                    maxLevelString=areas[i].maxHeight.description;
+            }
+            flashTsunamiCoastTimer.start();
+            //判断播放音频
+            //https://doc.qt.io/archives/qt-5.15/qtmultimedia-index.html
+            var showTsunamiLegend=false;
+            if(tsunamiJson.MajorWarning.length>0){
+                playSound("ookeihou.wav");
+                showTsunamiLegend=true;
+                rcTsunamiIndicator.maxTsunamiType=3;
+            }else if(tsunamiJson.Warning.length>0){
+                playSound("keihou.wav");
+                showTsunamiLegend=true;
+                rcTsunamiIndicator.maxTsunamiType=2;
+            }else if(tsunamiJson.Watch.length>0){
+                playSound("chuuihou.wav");
+                showTsunamiLegend=true;
+                rcTsunamiIndicator.maxTsunamiType=1;
+            }
+            //在地图上添加元素
+            let leftLon=180,rightLon=-180,topLat=-90,bottomLat=90;
+            let tjson=getJapanTsunamiGeoObject().makeGeojson(tsunamiJson.MajorWarning);
+            tsunami3Source.data=JSON.stringify(tjson);
+            let bound=extendBoundariesFromLineGeojson(leftLon,topLat,rightLon,bottomLat,tjson);
+            leftLon=bound[0];
+            topLat=bound[1];
+            rightLon=bound[2];
+            bottomLat=bound[3];
+
+            tjson=getJapanTsunamiGeoObject().makeGeojson(tsunamiJson.Warning);
+            tsunami2Source.data=JSON.stringify(tjson);
+            bound=extendBoundariesFromLineGeojson(leftLon,topLat,rightLon,bottomLat,tjson);
+            leftLon=bound[0];
+            topLat=bound[1];
+            rightLon=bound[2];
+            bottomLat=bound[3];
+            
+            tjson=getJapanTsunamiGeoObject().makeGeojson(tsunamiJson.Watch);
+            tsunami1Source.data=JSON.stringify(tjson);
+            bound=extendBoundariesFromLineGeojson(leftLon,topLat,rightLon,bottomLat,tjson);
+            leftLon=bound[0];
+            topLat=bound[1];
+            rightLon=bound[2];
+            bottomLat=bound[3];
+            
+            legendTsunamiOokeihou.visible=tsunamiJson.MajorWarning.length>0;
+            legendTsunamiKeihou.visible=tsunamiJson.Warning.length>0;
+            legendTsunamiChuui.visible=tsunamiJson.Watch.length>0;
+            legendTsunamiMark.visible=showTsunamiLegend;
+            rcTsunamiIndicator.visible=true;
+            rcTsunamiIndicator.maxTsunamiLevelString=maxLevelString;
+            //地图聚焦
+            supplementMapView.visibleRegion=QtPositioning.rectangle(QtPositioning.coordinate(topLat,leftLon),QtPositioning.coordinate(bottomLat,rightLon));
+            focusLocation((topLat+bottomLat)/2,(leftLon+rightLon)/2,Math.min(7,supplementMapView.zoomLevel-0.25));
+        }
+    }
+
+    Loader {
+        id: japanTsunamiGeoLoader
+        source: "JapanTsunamiGeo.qml"
+    }
+
+    function getJapanTsunamiGeoObject(){
+        return japanTsunamiGeoLoader.children[0];
+    }
+
+    //WebSocket用法：
+    //https://doc.qt.io/archives/qt-5.15/qml-qtwebsockets-websocket.html
+    /*测试数据
+    {
+        "id": "5ee1ad7e02add676dd5a67a0",
+        "time": "2020/06/11 13:05:18.249",
+        "code": 552,
+        "cancelled": false,
+        "issue": {
+            "source": "気象庁",
+            "time": "2019/06/18 22:24:00",
+            "type": "Focus"
+        },
+        "areas": [{
+            "grade": "Warning",
+            "immediate": true,
+            "name": "福島県",
+            "firstHeight": {
+                "condition": "津波到達中と推測"
+            },
+            "maxHeight": {
+                "description": "３ｍ",
+                "value": 3
+            }
+        },{
+            "grade": "Watch",
+            "immediate": false,
+            "name": "青森県太平洋沿岸",
+            "firstHeight": {
+                "arrivalTime": "2019/06/18 22:40:00"
+            },
+            "maxHeight": {
+                "description": "１ｍ",
+                "value": 1
+            }
+        }]
+    }
+    */
+    WebSocket{
+        id:wsTsunami
+        //active:false
+        property var processReconnect:false
+        url:"wss://api.p2pquake.net/v2/ws"
+        onStatusChanged:{
+            if(processReconnect&&(status===WebSocket.Closed||status===WebSocket.Error)){
+                wsTsunami.active=false;
+                wsTsunami.active=true;
+            }
+        }
+        onTextMessageReceived: processTsunamiData(message,1)
+    }
+
+    function startTsunamiWarningQuery(){
+        //https://www.p2pquake.net/develop/json_api_v2/
+        var xhr=new XMLHttpRequest();
+        xhr.open("GET","https://api.p2pquake.net/v2/jma/tsunami?limit=1&order=-1");
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState===4&&xhr.status===200){
+                processTsunamiData(xhr.responseText,0);
+                wsTsunami.active=true;
+                wsTsunami.processReconnect=true;
+            }
+        }
+        xhr.send();
+    }
+
+    function stopTsunamiWarningQuery(){
+        wsTsunami.processReconnect=false;
+        wsTsunami.active=false;
+        clearTsunamiData();
+    }
+
     function getMaxShindo(){
         var index=stationIndexSortByShindo[0];
         if(index===undefined)
@@ -771,6 +1164,25 @@ Item {
         transformOrigin: Item.TopRight
         scale: getWindowZoom()
         spacing: 2
+        Rectangle{
+            id: rcTsunamiIndicator
+            property var maxTsunamiLevelString: ""
+            property var maxTsunamiType: 0
+            visible: false
+            width: textTsunamiString.width+10
+            height: 20
+            color: getTsunamiColor(maxTsunamiType)
+            Text{
+                id: textTsunamiString
+                text: getTsunamiTypeString(parent.maxTsunamiType)+" "+parent.maxTsunamiLevelString
+                font.bold: true
+                font.family: textEEWTime.font.family
+                font.pixelSize: 14
+                color: "white"
+                anchors.centerIn: parent
+                style: Text.Outline
+            }
+        }
         Text {
             text: qsTr("NIED Max Shindo")
             visible: checkShowNiedStations.checked
@@ -887,6 +1299,16 @@ Item {
                 text: qsTr("NIED Station &Playback")
                 onClicked: rcNIEDPlayback.visible=true
                 enabled: checkShowNiedStations.checked
+            }
+            MenuItem{
+                id: checkEnableTsunamiWarning
+                text: qsTr("&Receive Tsunami Warning")
+                checkable: true
+                checked: true
+                onClicked: setTsunamiSettings(checkEnableTsunamiWarning.checked)
+                Settings{
+                    property alias enableTsunamiWarning: checkEnableTsunamiWarning.checked
+                }
             }
             MenuItem{
                 text: qsTr("&Help")
@@ -1081,6 +1503,9 @@ Item {
         }
         if(checkShowNiedStations.checked){
             initNiedStation();
+        }
+        if(checkEnableTsunamiWarning.checked){
+            startTsunamiWarningQuery();
         }
     }
 

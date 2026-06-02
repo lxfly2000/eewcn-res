@@ -135,122 +135,145 @@
 <context>
     <name>mapview-maplibre</name>
     <message>
-        <location filename="mapview-maplibre.qml" line="403"/>
+        <location filename="mapview-maplibre.qml" line="444"/>
         <source>Intensity</source>
         <translation type="unfinished">烈度</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="438"/>
+        <location filename="mapview-maplibre.qml" line="479"/>
         <source>Shindo</source>
         <translation type="unfinished">震度</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="489"/>
+        <location filename="mapview-maplibre.qml" line="530"/>
         <source>Home</source>
         <translation type="unfinished">ホーム</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="511"/>
+        <location filename="mapview-maplibre.qml" line="552"/>
         <source>Earthquake Record</source>
         <translation type="unfinished">地震記録</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="533"/>
+        <location filename="mapview-maplibre.qml" line="574"/>
         <source>EEW Record</source>
         <translation type="unfinished">速報記録</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="557"/>
+        <location filename="mapview-maplibre.qml" line="597"/>
+        <location filename="mapview-maplibre.qml" line="932"/>
+        <source>Major Tsunami Warning</source>
+        <translation type="unfinished">大津波警報</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="617"/>
+        <location filename="mapview-maplibre.qml" line="932"/>
+        <source>Tsunami Warning</source>
+        <translation type="unfinished">津波警報</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="637"/>
+        <location filename="mapview-maplibre.qml" line="932"/>
+        <source>Tsunami Advisory</source>
+        <translation type="unfinished">津波注意報</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="663"/>
         <source>P Wave</source>
         <translation type="unfinished">P波</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="592"/>
+        <location filename="mapview-maplibre.qml" line="698"/>
         <source>S Wave</source>
         <translation type="unfinished">S波</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="615"/>
+        <location filename="mapview-maplibre.qml" line="721"/>
         <source>Estimated Epicenter</source>
         <translation type="unfinished">推定震央</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="655"/>
+        <location filename="mapview-maplibre.qml" line="761"/>
         <source>S Wave arriving in…</source>
         <translation type="unfinished">S波到達まで…</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="714"/>
+        <location filename="mapview-maplibre.qml" line="820"/>
         <source>Enter Time:</source>
         <translation type="unfinished">時間を入力：</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="724"/>
+        <location filename="mapview-maplibre.qml" line="830"/>
         <source>&amp;OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="731"/>
+        <location filename="mapview-maplibre.qml" line="837"/>
         <source>&amp;Cancel</source>
         <translation type="unfinished">キャンセル(&amp;C)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="735"/>
+        <location filename="mapview-maplibre.qml" line="841"/>
         <source>&amp;Reset</source>
         <translation type="unfinished">リセット(&amp;R)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="775"/>
+        <location filename="mapview-maplibre.qml" line="1187"/>
         <source>NIED Max Shindo</source>
         <translation type="unfinished">NIED最大震度</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="825"/>
+        <location filename="mapview-maplibre.qml" line="1237"/>
         <source>&amp;Lock View</source>
         <translation type="unfinished">ビューをロック(&amp;L)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="829"/>
+        <location filename="mapview-maplibre.qml" line="1241"/>
         <source>Prevent the program from getting stuck.</source>
         <translation type="unfinished">プログラムがフリーズするのを防ぐ。</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="838"/>
+        <location filename="mapview-maplibre.qml" line="1250"/>
         <source>&amp;No Animation</source>
         <translation type="unfinished">アニメーションを無効(&amp;N)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="842"/>
+        <location filename="mapview-maplibre.qml" line="1254"/>
         <source>May relieve the program getting stuck.</source>
         <translation type="unfinished">プログラムがフリーズするのを緩和するかもしれない。</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="851"/>
+        <location filename="mapview-maplibre.qml" line="1263"/>
         <source>&amp;Old EEW Head</source>
         <translation type="unfinished">以前のEEWバナー(&amp;O)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="860"/>
+        <location filename="mapview-maplibre.qml" line="1272"/>
         <source>Show &amp;NIED Stations</source>
         <translation type="unfinished">NIED観測点を表示(&amp;N)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="877"/>
+        <location filename="mapview-maplibre.qml" line="1289"/>
         <source>&amp;Estimate Epicenter</source>
         <translation type="unfinished">震央推定(&amp;E)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="881"/>
+        <location filename="mapview-maplibre.qml" line="1293"/>
         <source>Low precision.</source>
         <translation type="unfinished">低精度。</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="887"/>
+        <location filename="mapview-maplibre.qml" line="1299"/>
         <source>NIED Station &amp;Playback</source>
         <translation type="unfinished">NIED観測点プレイバック(&amp;P)</translation>
     </message>
     <message>
-        <location filename="mapview-maplibre.qml" line="892"/>
+        <location filename="mapview-maplibre.qml" line="1305"/>
+        <source>&amp;Receive Tsunami Warning</source>
+        <translation type="unfinished">津波警報・注意報受信(&amp;R)</translation>
+    </message>
+    <message>
+        <location filename="mapview-maplibre.qml" line="1314"/>
         <source>&amp;Help</source>
         <translation type="unfinished">ヘルプ(&amp;H)</translation>
     </message>
