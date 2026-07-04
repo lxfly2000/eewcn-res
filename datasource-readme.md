@@ -1,4 +1,5 @@
 # 数据源
+[检查数据源状态](datasource_status.htm)
 * <strike><a href="http://www.365icl.com/">成都高新减灾研究所(ICL)</a></strike>
 * <strike><a href="https://www.cenc.ac.cn/earthquake-manage-publish-web/">中国地震台网</a></strike>
 * <strike><a href="https://www.scdzj.gov.cn">四川省地震局</a></strike>

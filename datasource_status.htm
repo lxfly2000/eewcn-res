@@ -1,0 +1,314 @@
+<!doctype html>
+<html>
+    <head>
+        <title>数据源状态</title>
+        <meta name="viewport" content="width=device-width,user-scalable=no"/>
+        <meta charset="utf-8"/>
+        <style>
+.CenterRoot{
+    max-width: 1024px;
+    margin: 0 auto;/*上下边距为0，左右使自身内容剧中自适应*/
+}
+.Footer{
+    margin: 50px 0;
+    text-align: right;
+}
+.SuccessCell{
+    color: green;
+}
+.ErrorCell{
+    color: red;
+}
+.PendingCell{
+    color: orange;
+}
+table{
+    table-layout: fixed;
+}
+textarea{
+    width: 100%;
+    height: 80px;
+}
+        </style>
+    </head>
+    <body onload="getDatasourceList()">
+        <div class="CenterRoot">
+            <h1>数据源状态</h1>
+            <div style="display: flex;">
+                用户数据（部分数据源需要提供）：<input type="text" id="userDataInput" placeholder="输入userExtra中的内容" style="flex-grow: 1;"/>
+                <button onclick="startTest()">开始测试</button>
+            </div>
+            <table border="1" cellspacing="0" cellpadding="5" width="100%">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">类型</th>
+                        <th>名称</th>
+                        <th style="width: 10%;">状态</th>
+                        <th style="width: 50%;">响应文本</th>
+                    </tr>
+                </thead>
+                <tbody id="datasourceTableBody">
+                    <!-- 数据源状态将通过JavaScript动态填充 -->
+                     <tr>
+                        <td align="center"></td>
+                        <td align="center">等待获取…</td>
+                        <td align="center"></td>
+                        <td>
+                            <details>
+                                <summary>响应文本</summary>
+                                <textarea>示例文字</textarea>
+                            </details>
+                        </td>
+                     </tr>
+                </tbody>
+            </table>
+            <div class="Footer">
+                <a href="https://lxfly2000.github.io/eewcn-res">eewcn-res</a>
+            </div>
+        </div>
+        <script>
+//先获取数据源列表
+function getDatasourceList(){
+    loadUserData();
+    var xhr=new XMLHttpRequest();
+    xhr.open("GET", "datasource_list.json", true);
+    xhr.onreadystatechange=function(){
+        if(xhr.readyState==4 && xhr.status==200){
+            var datasources=JSON.parse(xhr.responseText);
+            // 处理数据源列表
+            datasourceTableBody.innerHTML=""; // 清空表格内容
+            // eew
+            var eewList=datasources.eew;
+            for(var i=0;i<eewList.length;i++){
+                var eew=eewList[i];
+                testDatasourceStatus("eew",eew.name.zh_CN,eew.url);
+            }
+            // history
+            var historyList=datasources.history;
+            for(i=0;i<historyList.length;i++){
+                var history=historyList[i];
+                testDatasourceStatus("history",history.name.zh_CN,history.url);
+            }
+            // station
+            var stationList=datasources.station;
+            for(i=0;i<stationList.length;i++){
+                var station=stationList[i];
+                testDatasourceStatus("station",station.name.zh_CN,station.url);
+            }
+        }
+    };
+    xhr.send();
+}
+
+var entryList=[];//{type:type,name:name,url:url,id:id,iframe:iframe,code:""}
+
+function startTest(){
+    saveUserData();
+    for(var i=0;i<entryList.length;i++){
+        startTestEach(i,0);
+    }
+}
+
+function startTestEach(index,tryCount){
+    let entry=entryList[index];
+    let ifWin=entry.iframe.contentWindow;
+    if(!entry.code){
+        return;
+    }
+    if(tryCount===0){
+        ifWin.eval(entry.code); // 在iframe中执行脚本
+        //添加JS调用的功能
+        ifWin.logger={
+            info:function(a){},
+            warn:function(a){},
+            error:function(a){}
+        };
+        ifWin.tts={
+            play:function(a,b){}
+        };
+        ifWin.sound={
+            play:function(a,b){}
+        };
+        //向JS发送数据
+        try{ifWin.setLangTag("zh_CN");}catch(e){}
+        try{ifWin.setUserData(document.getElementById("userDataInput").value);}catch(e){}
+    }
+
+    let url="";
+    let method="";
+    let headers={};
+    let postData="";
+    switch(entry.type){
+        case "eew":
+            url=ifWin.eew_url().replace("{eewQueryCount}","5");
+            method=ifWin.eew_method();
+            headers=ifWin.eew_header();
+            postData=ifWin.eew_postdata();
+            break;
+        case "history":
+            url=ifWin.history_url().replace("{historyQueryCount}","5");
+            method=ifWin.history_method();
+            headers=ifWin.history_header();
+            postData=ifWin.history_postdata();
+            break;
+        case "station":
+            url=ifWin.station_url()[0];
+            method=ifWin.station_method()[0];
+            headers=ifWin.station_header()[0];
+            postData=ifWin.station_postdata()[0];
+            break;
+    }
+    if(url.toLowerCase().startsWith("http")){
+        let xhr=new XMLHttpRequest();
+        xhr.open(method.toUpperCase(), url, true);
+        for(let key in headers){
+            xhr.setRequestHeader(key, headers[key]);
+        }
+        xhr.onreadystatechange=function(){
+            let tr=document.getElementById(entry.id);
+            tr.childNodes[2].innerHTML=xhr.status;
+            if(xhr.readyState==4 && xhr.status==200){
+                tr.childNodes[2].className="SuccessCell";
+                let r;
+                switch(entry.type){
+                    case "eew":
+                        r=JSON.stringify(ifWin.eew_onsuccess(xhr.responseText));
+                        break;
+                    case "history":
+                        r=JSON.stringify(ifWin.history_onsuccess(xhr.responseText));
+                        break;
+                    case "station":
+                        r=JSON.stringify(ifWin.station_onsuccess(0, xhr.responseText));
+                        break;
+                }
+                if(tryCount==1){
+                    tr.childNodes[3].innerHTML="<details><summary>第二次响应文本</summary><textarea>"+r+"</textarea></details>";
+                    let jsonData=JSON.parse(r);
+                    let rootData;
+                    if(jsonData){
+                        rootData=entry.type==="history"?jsonData.shuju:jsonData.data;
+                    }
+                    if(!rootData||rootData.length===0){
+                        tr.childNodes[3].className="ErrorCell";
+                    }else{
+                        tr.childNodes[3].className="";
+                    }
+                }else{
+                    tr.childNodes[3].innerHTML="<details><summary>响应文本</summary><textarea>"+r+"</textarea></details>";
+                    let jsonData=JSON.parse(r);
+                    let rootData;
+                    if(jsonData){
+                        rootData=entry.type==="history"?jsonData.shuju:jsonData.data;
+                    }
+                    if(!rootData||rootData.length===0){
+                        startTestEach(index,1); // 如果第一次响应为空，则尝试第二次请求
+                    }else{
+                        tr.childNodes[3].className="";
+                    }
+                }
+            }
+        };
+        if(method.toUpperCase()==="POST"){
+            xhr.send(postData);
+        }else{
+            xhr.send();
+        }
+        let tr=document.getElementById(entry.id);
+        tr.childNodes[2].innerHTML="请求中";
+        tr.childNodes[2].className="PendingCell";
+        tr.childNodes[3].innerHTML="请求："+url;
+    }else if(method.toLowerCase()==="websocket"){
+        if(!entry.ws){
+            let tr=document.getElementById(entry.id);
+            tr.childNodes[2].innerHTML="连接中";
+            tr.childNodes[2].className="PendingCell";
+            tr.childNodes[3].innerHTML="请求："+url;
+            entry.ws=new WebSocket(url);
+        }
+        entry.ws.onopen=function(){
+            let tr=document.getElementById(entry.id);
+            tr.childNodes[2].innerHTML="已连接";
+            tr.childNodes[2].className="PendingCell";
+            if(postData){
+                entry.ws.send(postData);
+            }
+        };
+        entry.ws.onmessage=function(event){
+            let tr=document.getElementById(entry.id);
+            let r;
+            switch(entry.type){
+                case "eew":
+                    r=JSON.stringify(ifWin.eew_onsuccess(event.data));
+                    break;
+                case "history":
+                    r=JSON.stringify(ifWin.history_onsuccess(event.data));
+                    break;
+                case "station":
+                    r=JSON.stringify(ifWin.station_onsuccess(0,event.data));
+                    break;
+            }
+            tr.childNodes[3].innerHTML="<details><summary>响应文本</summary><textarea>"+r+"</textarea></details>";
+            let jsonData=JSON.parse(r);
+            let rootData;
+            if(jsonData){
+                rootData=entry.type==="history"?jsonData.shuju:jsonData.data;
+            }
+            if(rootData&&rootData.length>0){
+                entry.ws.close();
+                entry.ws=null;
+                tr.childNodes[2].innerHTML="已关闭";
+                tr.childNodes[2].className="SuccessCell";
+            }
+        };
+        entry.ws.onerror=function(){
+            entry.ws.close();
+            entry.ws=null;
+            let tr=document.getElementById(entry.id);
+            tr.childNodes[2].innerHTML="连接错误";
+            tr.childNodes[2].className="ErrorCell";
+        };
+    }
+}
+
+//测试每个数据源的状态
+function testDatasourceStatus(type,name,url){
+    var id=type+"_"+url.split("/").pop().split(".")[0]; // 生成唯一ID
+    var iframe=document.createElement("iframe");
+    iframe.style.display="none";
+    document.body.appendChild(iframe);
+    entryList.push({type:type,name:name,url:url,id:id,iframe:iframe,code:""}); // 保存数据源信息
+    datasourceTableBody.innerHTML+="<tr id='"+id+"'><td align='center'>"+type+"</td><td align='center'>"+name+"</td><td align='center' id='"+type+"_"+name+"_status'></td><td></td></tr>";
+    var xhr=new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.onreadystatechange=function(){
+        var tr=document.getElementById(id);
+        tr.childNodes[2].innerHTML=xhr.status;
+        if(xhr.readyState==4&&xhr.status==200){
+            entryList.find(entry=>entry.id===id).code=xhr.responseText; // 保存响应文本
+            tr.childNodes[2].className="PendingCell";
+            tr.childNodes[3].innerHTML="已加载脚本，准备测试";
+            if(type==="station"){
+                tr.childNodes[3].innerHTML+="（仅测试第一个URL）"
+            }
+        }else{
+            tr.childNodes[2].className="ErrorCell";
+            tr.childNodes[3].innerHTML="无法加载脚本";
+        }
+    };
+    xhr.send();
+}
+
+function loadUserData(){
+    var userDataInput=document.getElementById("userDataInput");
+    var savedData=localStorage.getItem("userDataInput");
+    if(savedData){
+        userDataInput.value=savedData;
+    }
+}
+
+function saveUserData(){
+    localStorage.setItem("userDataInput", document.getElementById("userDataInput").value);
+}
+        </script>
+    </body>
+</html>
