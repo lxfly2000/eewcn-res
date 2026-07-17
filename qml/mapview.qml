@@ -2518,6 +2518,9 @@ Item {
             sBar.y=rectBorder.border.width+fillh-sBar.height;
         }else if(barItems[eventId]!==undefined){
             numberBarMapView.removeMapItem(barItems[eventId]);
+            barItems[eventId].sourceItem.children[0].destroy();
+            barItems[eventId].sourceItem.children[1].destroy();
+            barItems[eventId].sourceItem.destroy();
             barItems[eventId].destroy();
             delete barItems[eventId];
         }
@@ -2545,6 +2548,7 @@ Item {
         swaveItems[eventId].destroy();
         delete swaveItems[eventId];
         delete swaveIntensities[eventId];
+        numberItems[eventId].sourceItem.destroy();
         numberItems[eventId].destroy();
         delete numberItems[eventId];
         if(Object.keys(pwaveItems).length===0){
@@ -3003,6 +3007,9 @@ Item {
         supplementMapView.fitViewportToMapItems();
         focusLocation(supplementMapView.center.latitude,supplementMapView.center.longitude,supplementMapView.zoomLevel);
         supplementMapView.clearMapItems();
+        img.destroy();
+        epiItem.destroy();
+        supGeoItem.destroy();
     }
 
     function resizeStationItemsCount(count){
@@ -3010,6 +3017,10 @@ Item {
             var removedItems=stationItems.splice(count,stationItems.length-count);
             for(var item of removedItems){
                 stationMarkMapView.removeMapItem(item);
+                item.sourceItem.children[0].destroy();
+                item.sourceItem.children[1].destroy();
+                item.sourceItem.children[2].destroy();
+                item.sourceItem.destroy();
                 item.destroy();
             }
         }else{
@@ -3085,6 +3096,10 @@ Item {
         if(supplementMapView.mapItems.length>0){
             supplementMapView.fitViewportToMapItems();
             focusLocation(supplementMapView.center.latitude,supplementMapView.center.longitude,Math.min(supplementMapView.zoomLevel,maxZoomLevel));
+            for(var item of supplementMapView.mapItems){
+                item.sourceItem.destroy();
+                item.destroy();
+            }
             supplementMapView.clearMapItems();
         }
     }
