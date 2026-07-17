@@ -2614,9 +2614,9 @@ Item {
             }else{
                 maplibreStyle.value="https://lxfly2000.github.io/eewcn-res/qml/kanameishi-style.json";
                 if(isBuiltIn){
-                    showWarningCenter(true,"程序内置的Mapbox Token暂时不可用，\n请更换Token.\n"+
+                    /*showWarningCenter(true,"程序内置的Mapbox Token暂时不可用，\n请更换Token.\n"+
                         "The built-in Mapbox token is currently unavailable,\nplease use another token.\n"+
-                        "ご使用中の内蔵Mapbox Tokenは現在利用できません。\n別のTokenに交換してください。");
+                        "ご使用中の内蔵Mapbox Tokenは現在利用できません。\n別のTokenに交換してください。");*/
                 }else{
                     showWarningCenter(true,"无法获取地图样式。\n"+
                         "Cannot get map style.\n"+
