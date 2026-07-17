@@ -2608,11 +2608,11 @@ Item {
                     styleJson.glyphs="https://api.mapbox.com/fonts/v1/"+styleJson.glyphs.substr(styleJson.glyphs.indexOf("/fonts/")+7)+"?access_token="+a;
                     //maplibreStyle.value="data:application/json,"+JSON.stringify(styleJson);//TODO：注意这里这样做没有效果，需要修正
                     mapboxStyleJson=JSON.stringify(styleJson);
-                    maplibreStyle.value="https://demotiles.maplibre.org/style.json";
+                    maplibreStyle.value="https://lxfly2000.github.io/eewcn-res/qml/kanameishi-style.json";
                     showWarningCenter(true,"不支持mapbox://链接。\nmapbox:// URL is not supported.\nmapbox:// URLは使用できません。");
                 }
             }else{
-                //maplibreStyle.value="https://demotiles.maplibre.org/style.json";
+                maplibreStyle.value="https://lxfly2000.github.io/eewcn-res/qml/kanameishi-style.json";
                 if(isBuiltIn){
                     showWarningCenter(true,"程序内置的Mapbox Token暂时不可用，\n请更换Token.\n"+
                         "The built-in Mapbox token is currently unavailable,\nplease use another token.\n"+
